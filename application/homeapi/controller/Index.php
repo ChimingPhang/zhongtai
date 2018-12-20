@@ -11,6 +11,7 @@ use app\api\model\GoodsCategory;
 use app\api\model\Navigation;
 use app\api\model\Goods;
 use think\Controller;
+use think\Log;
 
 class Index extends Base{
 
@@ -86,13 +87,19 @@ class Index extends Base{
 
 //        $this->json('0000','ok',$data);
 
+
         $this->assign('hot_car', $hot_car);
+	    $this->assign('data',  $data);
         $this->assign('test', '我是一个测试');
         return $this->fetch('dist/home');
     }
 
     public function home()
     {
+	    $data = [];
+    	//广告
+	    $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+	    $data['top_ads'] = $top_ads['result'];
         //热卖车型
         $goods_model = new Goods();
         $goods_where['is_on_sale'] = 1;
@@ -105,6 +112,7 @@ class Index extends Base{
 //        $this->json('0000','ok',$data);
 
         $this->assign('hot_car', $hot_car);
+	    $this->assign('data',  $data);
         $this->assign('test', '我是一个测试');
         return $this->fetch('dist/home');
     }

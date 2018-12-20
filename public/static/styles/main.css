@@ -10555,7 +10555,7 @@ table {
 }
 
 .footer-feature-icon span {
-  background-image: url("../static/assets/images/common/icon-features.jpg");
+  background-image: url("../assets/images/common/icon-features.jpg");
   display: inline-block;
   width: 46px;
   height: 46px;
@@ -10729,7 +10729,7 @@ table {
   height: 30px;
   width: 163px;
   margin-top: 28px;
-  background-image: url("../static/assets/images/logo.png");
+  background-image: url("../assets/images/logo.png");
   background-repeat: no-repeat;
   background-position: 0 -31px;
 }
@@ -10949,11 +10949,11 @@ table {
 }
 
 .page-item .page-link.icon-prev {
-  background-image: url(../static/assets/images/common/icon-page-arrow-l.png);
+  background-image: url(../assets/images/common/icon-page-arrow-l.png);
 }
 
 .page-item .page-link.icon-next {
-  background-image: url(../static/assets/images/common/icon-page-arrow-r.png);
+  background-image: url(../assets/images/common/icon-page-arrow-r.png);
 }
 
 .page-extra {
@@ -11606,7 +11606,7 @@ table {
   background-repeat: no-repeat;
   background-position: center top;
   background-size: 100% auto;
-  background-image: url("../static/assets/images/user-bg.jpg");
+  background-image: url("../assets/images/user-bg.jpg");
 }
 
 .user-center .user-info__header {

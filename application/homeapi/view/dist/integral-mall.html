@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <title>积分商城 - 众泰商城</title>
-    <link rel="stylesheet" property="stylesheet" href="styles/main.css" type="text/css">
+    <link rel="stylesheet" property="stylesheet" href="__STATIC__/styles/main.css" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>document.querySelector('html').classList.remove('no-js');</script>
-    <script src="scripts/vendor.js" defer></script>
+    <script src="__STATIC__/scripts/vendor.js" defer></script>
 
-    <script src="scripts/home.bundle.js" defer></script>
-    <script src="scripts/integral-mall-detail.bundle.js" defer></script>
+    <script src="__STATIC__/scripts/home.bundle.js" defer></script>
+    <script src="__STATIC__/scripts/integral-mall-detail.bundle.js" defer></script>
 
   </head>
 
@@ -21,11 +21,11 @@
         </a>
 
         <ul class="navbar-nav float-right">
-          <li><a class="nav-item " href="home.html">首页</a></li>
-          <li><a class="nav-item " href="brand-models.html">品牌车型</a></li>
-          <li><a class="nav-item active" href="integral-mall.html">积分商城</a></li>
-          <li><a class="nav-item " href="parts.html">精品配件</a></li>
-          <li><a class="nav-item " href="user-center.html">个人中心</a></li>
+          <li><a class="nav-item " href="__URL__/home.html">首页</a></li>
+          <li><a class="nav-item " href="__URL__/brand_models.html">品牌车型</a></li>
+          <li><a class="nav-item active" href="__URL__/integral_mall.html">积分商城</a></li>
+          <li><a class="nav-item " href="__URL__/parts.html">精品配件</a></li>
+          <li><a class="nav-item " href="__URL__/user_center.html">个人中心</a></li>
           <li>
             <div class="btn-combine"><a href="user-center.html">登录</a><a href="user-center.html" class="color-dark"><span>注册</span></a></div>
           </li>
@@ -39,9 +39,9 @@
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
           <!-- Slides -->
-          <div class="swiper-slide"><img src="./assets/images/temp/banner1.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="./assets/images/temp/banner1.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="./assets/images/temp/banner1.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="__STATIC__/assets/images/temp/banner1.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="__STATIC__/assets/images/temp/banner1.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="__STATIC__/assets/images/temp/banner1.jpg" alt=""></div>
         </div>
         <!-- If we need pagination -->
         <div class="swiper-pagination"></div>
@@ -58,17 +58,17 @@
           <div class="row">
             <div class="col">
               <div class="three-box-item text-center">
-                <a href="one-dollar.html"><img src="assets/images/ad-1.jpg" alt=""></a>
+                <a href="one-dollar.html"><img src="__STATIC__/assets/images/ad-1.jpg" alt=""></a>
               </div>
             </div>
             <div class="col text-center">
               <div class="three-box-item text-center">
-                <a href="special-offer.html"><img src="assets/images/ad-2.jpg" alt=""></a>
+                <a href="special-offer.html"><img src="__STATIC__/assets/images/ad-2.jpg" alt=""></a>
               </div>
             </div>
             <div class="col text-center">
               <div class="three-box-item text-center">
-                <a href="integral-mall-exchange.html"><img src="assets/images/ad-3.jpg" alt=""></a>
+                <a href="integral-mall-exchange.html"><img src="__STATIC__/assets/images/ad-3.jpg" alt=""></a>
               </div>
             </div>
           </div>
@@ -80,27 +80,52 @@
 
           <div class="integral-top">
             <div class="integral-top-img">
-              <img src="./assets/images/temp/integral-top.png" alt="">
+              <img src="{$recommend_car.original_img}" alt="">
             </div>
 
             <div class="integral-top-content">
-              <h3>名称：<label>豪华音响</label> <span>剩余时间: <em class="color-primary">3天23小时55分</em></span></h3>
-              <p>最高端的车型，近期有传言，新款长城哈佛H9将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理，还有就是排挡区做了从头的规划最高端的车型，近期有传言，新款长城哈佛H9将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理，还有就是排挡区做了从头的规划</p>
+              <h3>名称：<label>{$recommend_car.goods_name}</label> <span>剩余时间: <em class="color-primary">3天23小时55分</em></span></h3>
+              <p>{$recommend_car.goods_remark}</p>
               <div class="clearfix">
-                <h3 class="d-inline text-remain">剩余：<label>10件</label></h3>
+                <h3 class="d-inline text-remain">剩余：<label>{$recommend_car.store_count}件</label></h3>
 
                 <a href="#" class="btn btn-danger text-center float-right">
                   立即兑换<br />
-                  <span>积分: 888积分</span>
+                  <span>积分: {$recommend_car.integral}积分</span>
                 </a>
               </div>
             </div>
           </div>
           <div class="product-card-list row">
+            {foreach $list as $gd}
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+                  <a href="#"><img src="{$gd.original_img}" alt=""></a>
+                </div>
+                <div class="product-card-content">
+                  <h2 class="product-card-title">
+                    {$gd.goods_name}
+                    <span class="float-right">剩余时间:<strong class="color-primary">1天23时22分</strong></span>
+                  </h2>
+                  <div class="product-card-intro"><strong>特点：</strong>{$gd.goods_remark}</div>
+                  <div class="product-card-btm clearfix">
+                    <div class="float-left product-card-price">
+                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
+                      <span>积分：<strong>{$gd.integral}</strong>积分</span>
+                      <span>剩余：<em>{$gd.store_count}</em></span>
+                    </div>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即兑换</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/foreach}
+            <!--
+            <div class="col col-4">
+              <div class="product-card">
+                <div class="product-card-img">
+                  <a href="#"><img src="__STATIC__/assets/images/temp/product-card-img.png" alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -110,7 +135,7 @@
                   <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
                   <div class="product-card-btm clearfix">
                     <div class="float-left product-card-price">
-                      <img src="assets/images/common/icon-integral.png" alt="">
+                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
                       <span>积分：<strong>2000</strong>积分</span>
                       <span>剩余：<em>368</em></span>
                     </div>
@@ -122,7 +147,7 @@
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+                  <a href="#"><img src="__STATIC__/assets/images/temp/product-card-img.png" alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -132,7 +157,7 @@
                   <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
                   <div class="product-card-btm clearfix">
                     <div class="float-left product-card-price">
-                      <img src="assets/images/common/icon-integral.png" alt="">
+                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
                       <span>积分：<strong>2000</strong>积分</span>
                       <span>剩余：<em>368</em></span>
                     </div>
@@ -144,7 +169,7 @@
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+                  <a href="#"><img src="__STATIC__/assets/images/temp/product-card-img.png" alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -154,7 +179,7 @@
                   <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
                   <div class="product-card-btm clearfix">
                     <div class="float-left product-card-price">
-                      <img src="assets/images/common/icon-integral.png" alt="">
+                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
                       <span>积分：<strong>2000</strong>积分</span>
                       <span>剩余：<em>368</em></span>
                     </div>
@@ -166,7 +191,7 @@
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+                  <a href="#"><img src="__STATIC__/assets/images/temp/product-card-img.png" alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -176,7 +201,7 @@
                   <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
                   <div class="product-card-btm clearfix">
                     <div class="float-left product-card-price">
-                      <img src="assets/images/common/icon-integral.png" alt="">
+                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
                       <span>积分：<strong>2000</strong>积分</span>
                       <span>剩余：<em>368</em></span>
                     </div>
@@ -188,7 +213,7 @@
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+                  <a href="#"><img src="__STATIC__/assets/images/temp/product-card-img.png" alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -198,7 +223,7 @@
                   <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
                   <div class="product-card-btm clearfix">
                     <div class="float-left product-card-price">
-                      <img src="assets/images/common/icon-integral.png" alt="">
+                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
                       <span>积分：<strong>2000</strong>积分</span>
                       <span>剩余：<em>368</em></span>
                     </div>
@@ -207,28 +232,7 @@
                 </div>
               </div>
             </div>
-            <div class="col col-4">
-              <div class="product-card">
-                <div class="product-card-img">
-                  <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
-                </div>
-                <div class="product-card-content">
-                  <h2 class="product-card-title">
-                    车内挂件
-                    <span class="float-right">剩余时间:<strong class="color-primary">1天23时22分</strong></span>
-                  </h2>
-                  <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
-                  <div class="product-card-btm clearfix">
-                    <div class="float-left product-card-price">
-                      <img src="assets/images/common/icon-integral.png" alt="">
-                      <span>积分：<strong>2000</strong>积分</span>
-                      <span>剩余：<em>368</em></span>
-                    </div>
-                    <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即兑换</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            -->
           </div>
           <div class="text-center">
             <nav aria-label="navigation pagination-box">
@@ -321,7 +325,7 @@
     <div class="side-btns">
       <div class="side-btns-item">
         <div class="side-btns-item__inner">
-          <img src="assets/images/common/icon-kefu.png" alt="">
+          <img src="__STATIC__/assets/images/common/icon-kefu.png" alt="">
           <p>客服咨询</p>
         </div>
 
@@ -329,21 +333,21 @@
 
       <div class="side-btns-item" data-toggle="modal" data-target="#testDriveForm">
         <div class="side-btns-item__inner">
-          <img src="assets/images/common/icon-test-drive.png" alt="">
+          <img src="__STATIC__/assets/images/common/icon-test-drive.png" alt="">
           <p>预约试驾</p>
         </div>
       </div>
 
       <div class="side-btns-item">
         <div class="side-btns-item__inner">
-          <img src="assets/images/common/icon-map.png" alt="">
+          <img src="__STATIC__/assets/images/common/icon-map.png" alt="">
           <p>销售网点</p>
         </div>
       </div>
 
       <div class="side-btns-item">
         <div class="side-btns-item__inner">
-          <img src="assets/images/common/icon-kefu.png" alt="">
+          <img src="__STATIC__/assets/images/common/icon-kefu.png" alt="">
           <p>公众号</p>
         </div>
       </div>
@@ -357,12 +361,12 @@
               <span class="navbar-brand navbar-brand__white"></span><span>预约试驾</span>
 
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <img src="assets/images/common/icon-close.png" alt="">
+                <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
               </button>
             </div>
             <div class="pop-up-content">
               <div class="form-group row">
-                <label class="col-sm-2 col-form-label"><img width="18" class="float-left" src="assets/images/common/icon-clock.png" />预约试驾：</label>
+                <label class="col-sm-2 col-form-label"><img width="18" class="float-left" src="__STATIC__/assets/images/common/icon-clock.png" />预约试驾：</label>
                 <div class="col-sm-10">
                   欢迎您在线预约试驾，众泰很重视您所提交的一切信息，这将令我们更了解您的需求和喜好，并为您提供更好的驾乘体验。
                 </div>
@@ -375,7 +379,7 @@
               </div>
               <hr>
               <div class="form-group row">
-                <label class="col-sm-2 col-form-label"><img width="18" class="float-left" src="assets/images/common/icon-user.png" />个人信息：</label>
+                <label class="col-sm-2 col-form-label"><img width="18" class="float-left" src="__STATIC__/assets/images/common/icon-user.png" />个人信息：</label>
                 <div class="col-sm-10">
                   （*为必填选项，请确保输入信息无误。）
                 </div>

@@ -1,0 +1,20 @@
+{
+  "app.bundle.full.js": "app-1ddd4935f2.bundle.full.js",
+  "app.bundle.js": "app-a8bb25b4c3.bundle.js",
+  "app.bundle.js.map": "app-5a009d8f3d.bundle.js.map",
+  "home.bundle.full.js": "home-1206db8460.bundle.full.js",
+  "home.bundle.js": "home-7f7b49885f.bundle.js",
+  "home.bundle.js.map": "home-e87eaac760.bundle.js.map",
+  "integral-mall-detail.bundle.full.js": "integral-mall-detail-0d5c5393b8.bundle.full.js",
+  "integral-mall-detail.bundle.js": "integral-mall-detail-68f32a40e4.bundle.js",
+  "integral-mall-detail.bundle.js.map": "integral-mall-detail-1604554cca.bundle.js.map",
+  "main.css": "main-4f3d9d5a38.css",
+  "main.css.map": "main-2c50921376.css.map",
+  "main.full.css": "main-673cf3e165.full.css",
+  "user-center.bundle.full.js": "user-center-a078b99492.bundle.full.js",
+  "user-center.bundle.js": "user-center-ab7e289de0.bundle.js",
+  "user-center.bundle.js.map": "user-center-fdbef59b72.bundle.js.map",
+  "vendor.full.js": "vendor-6a07da9fae.full.js",
+  "vendor.js": "vendor-ca744130c2.js",
+  "vendor.js.map": "vendor-32b1575f03.js.map"
+}

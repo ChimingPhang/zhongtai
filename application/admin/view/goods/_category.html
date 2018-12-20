@@ -1,0 +1,150 @@
+<include file="public/layout" />
+<script type="text/javascript" src="__PUBLIC__/static/js/perfect-scrollbar.min.js"></script>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+      <div class="subject">
+        <h3>商品车系 - 添加修改车系</h3>
+        <h5>添加或编辑商品车系</h5>
+      </div>
+    </div>
+  </div>
+  <div class="explanation" id="explanation">
+    <div class="title" id="checkZoom"><i class="fa fa-lightbulb-o"></i>
+      <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+      <span id="explanationZoom" title="收起提示"></span>
+    </div>
+    <ul>
+      <li>商品车系最多分为二级</li>
+      <li>商品车系可以关联商品类型</li>
+      <li>商品类型关联商品规格商品属性。</li>
+    </ul>
+  </div>
+  <form action="{:U('Goods/addEditCategory')}" method="post" class="form-horizontal" id="category_form">
+    <div class="ncap-form-default">
+      <dl class="row">
+        <dt class="tit">
+          <label><em>*</em>车系名称</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" placeholder="名称" class="input-txt" name="name" value="{$goods_category_info.name}">
+          <span class="err" id="err_name" style="color:#F00; display:none;"></span>
+          <p class="notic"></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit" colspan="2">
+          <label>上级车系</label>
+        </dt>
+        <dd class="opt">
+          <div id="gcategory">
+            <select name="parent_id_1" id="parent_id_1" onchange="get_category(this.value,'parent_id_2','0');" class="class-select valid">
+                <option value="0">顶级车系</option>
+                <foreach name="cat_list" item="v" >                                            
+                    <option value="{$v[id]}">{$v[name]}</option>
+                </foreach>                                            
+            </select>
+            <!--<select name="parent_id_2" id="parent_id_2"  class="class-select valid">-->
+                <!--<option value="0">请选择商品分类</option>-->
+            <!--</select>                      -->
+          </div>
+          <p class="notic">最多成为第二级,如果设置为第二级, 只选择第一级即可</p>
+        </dd>
+      </dl>
+	  <dl class="row">
+        <dt class="tit">
+          <label>导航显示</label>
+        </dt>
+        <dd class="opt">
+          <div class="onoff">
+            <label for="goods_category1" class="cb-enable <if condition="$goods_category_info[is_show] eq 1">selected</if>">是</label>
+            <label for="goods_category0" class="cb-disable <if condition="$goods_category_info[is_show] eq 0">selected</if>">否</label>
+            <input id="goods_category1" name="is_show" value="1" type="radio" <if condition="$goods_category_info[is_show] eq 1"> checked="checked"</if>>
+            <input id="goods_category0" name="is_show" value="0" type="radio" <if condition="$goods_category_info[is_show] eq 0"> checked="checked"</if>>
+          </div>
+          <p class="notic">是否在导航栏显示</p>
+        </dd>        
+      </dl>    
+
+      <dl class="row">
+        <dt class="tit">
+          <label>车系展示图片</label>
+        </dt>
+        <dd class="opt">
+          <div class="input-file-show">
+            <span class="show">
+                <a id="img_a" target="_blank" class="nyroModal" rel="gal" href="{$goods_category_info.image}">
+                  <i id="img_i" class="fa fa-picture-o" onmouseover="layer.tips('<img src={$goods_category_info.image}>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"></i>
+                </a>
+            </span>
+            <span class="type-file-box">
+                <input type="text" id="image" name="image" value="{$goods_category_info.image}" class="type-file-text">
+                <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+                <input class="type-file-file" onClick="GetUploadify(1,'','category','img_call_back')" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+            </span>
+          </div>
+          <span class="err"></span>
+          <p class="notic">请上传图片格式文件</p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="t_sort">排序</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" class="t_mane" name="sort_order" id="t_sort" value="{$goods_category_info.sort_order}" onpaste="this.value=this.value.replace(/[^\d.]/g,'')" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" maxlength="2">
+          <span class="err" style="color:#F00; display:none;" id="err_sort_order"></span>
+          <p class="notic">根据排序进行由小到大排列显示。</p>
+        </dd>
+      </dl>
+
+      <div class="bot"><a id="submitBtn" class="ncap-btn-big ncap-btn-green" href="JavaScript:void(0);" onclick="ajax_submit_form('category_form','{:U('Goods/addEditCategory?is_ajax=1')}');">确认提交</a></div>
+    </div>
+    <input type="hidden" name="id" value="{$goods_category_info.id}">
+  </form>
+</div>
+<script>
+    function img_call_back(fileurl_tmp)
+    {
+        $("#image").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+/** 以下是编辑时默认选中某个商品分类*/
+$(document).ready(function(){
+    if("{$level_cat['2']}" > 0 ){
+        // 如果当前是二级分类就让一级父id默认选中
+        $("#parent_id_1").val('{$level_cat[1]}');
+        get_category('{$level_cat[1]}','parent_id_2','0');
+    }
+//	<if condition="$level_cat['3'] gt 0">
+//		 // 如果当前是三级分类就一级和二级父id默认 都选中
+//		 $("#parent_id_1").val('{$level_cat[1]}');
+//		 get_category('{$level_cat[1]}','parent_id_2','{$level_cat[2]}');
+//	</if>
+
+ 
+  // 将品牌滚动条里面的 对应分类移动到 最上面
+  //javascript:document.getElementById('category_id_3').scrollIntoView();
+  var typeScroll = 0;
+  function spec_scroll(o){
+      var id = $(o).val();
+      //if(!$('#type_id_'+id).is('dt')){
+          //return false;
+      //}
+      $('#ajax_brandList').scrollTop(-typeScroll);
+      var sp_top = $('#type_id_'+id).offset().top; // 标题自身往上的 top
+      var div_top = $('#ajax_brandList').offset().top; // div 自身往上的top
+      $('#ajax_brandList').scrollTop(sp_top-div_top); // div 移动
+      typeScroll = sp_top-div_top;
+  }
+
+
+
+});
+</script>
+</body>
+</html>

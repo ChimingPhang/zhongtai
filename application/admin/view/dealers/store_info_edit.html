@@ -1,0 +1,287 @@
+<include file="public/layout" />
+<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+<script type="text/javascript" src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/js/perfect-scrollbar.min.js"></script>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+	<div class="fixed-bar">
+		<div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+			<div class="subject">
+				<h3>经销商管理 - 编辑经销商</h3>
+				<h5>网站系统编辑店铺</h5>
+			</div>
+			<ul class="tab-base nc-row">
+				<li><a class="current" onclick="$('#tab_store').show();$('#tab_info').hide();$(this).parent().parent().find('a').removeClass('current');$(this).addClass('current');"><span>经销商信息</span></a></li>
+			</ul>
+		</div>
+	</div>
+	<form class="form-horizontal" method="post" id="store_info">
+		<div class="ncap-form-default" id="tab_store">
+			<dl class="row">
+				<dt class="tit">
+					<label for="name"><em>*</em>经销商名称</label>
+				</dt>
+				<dd class="opt">
+					<input type="text" value="{$store.name}" id="name" name="name" class="input-txt" />
+					<span class="err"></span>
+					<p class="notic"></p>
+				</dd>
+			</dl>
+			<dl class="row">
+				<dt class="tit">
+					<label for="user_name"><em>*</em>经销商账号</label>
+				</dt>
+				<dd class="opt">
+					<input type="text" value="{$store.user_name}" id="user_name" name="user_name" class="input-txt" />
+					<span class="err"></span>
+					<p class="notic">用于登录经销商中心</p>
+				</dd>
+			</dl>
+			<!--<dl class="row">-->
+				<!--<dt class="tit">-->
+					<!--<label for="password"><em>*</em>登录密码</label>-->
+				<!--</dt>-->
+				<!--<dd class="opt">-->
+					<!--<input type="password" value="{$store.password}" id="password" name="password" class="input-txt" />-->
+					<!--<span class="err"></span>-->
+					<!--<p class="notic"></p>-->
+				<!--</dd>-->
+			<!--</dl>-->
+
+
+			<dl class="row">
+				<dt class="tit">
+					<label for="realname"><em>*</em>经销商真实姓名</label>
+				</dt>
+				<dd class="opt">
+					<input type="text" value="{$store.realname}" id="realname" name="realname" class="input-txt" />
+					<span class="err"></span>
+					<p class="notic"></p>
+				</dd>
+			</dl>
+
+			<dl class="row">
+				<dt class="tit">
+					<label for="name"><em>*</em>经销商手机号</label>
+				</dt>
+				<dd class="opt">
+					<input type="text" value="{$store.mobile}" id="mobile" name="mobile" class="input-txt" />
+					<span class="err"></span>
+					<p class="notic"></p>
+				</dd>
+			</dl>
+
+			<dl class="row">
+				<dt class="tit">
+					<label><em>*</em>经销商所在的城市</label>
+				</dt>
+				<dd class="opt">
+					<select name="province" id="province" onchange="getcity()"  class="small form-control">
+						<option value="0">请选择省份</option>
+						<foreach name="province" item="v" key="k" >
+							<option value="{$v['id']}"<if condition="$v['id'] eq $store['province']">selected="selected"</if> >{$v['name']}</option>
+						</foreach>
+					</select>
+					<select  id="city" name="city">
+						<foreach name="city" item="v" key="k" >
+							<option value="{$v['id']}"<if condition="$v['id'] eq $store['city']">selected="selected"</if> >{$v['name']}</option>
+						</foreach>
+					</select>
+				</dd>
+			</dl>
+			<dl class="row">
+				<dt class="tit">
+					<label for="address"><em>*</em>经销商详细地址</label>
+				</dt>
+				<dd class="opt">
+					<input type="text" value="{$store.address}" id="address" name="address" class="input-txt" />
+					<span class="err"></span>
+				</dd>
+			</dl>
+
+			<dl class="row">
+				<dt class="tit">
+					<label for="start_time"><em>*</em>营业开始时间</label>
+				</dt>
+				<dd class="opt">
+					<input id="start_time" onclick="laydates(this)" name="start_time" value="{$store.start_time}" class="input-txt" type="time" />
+					<p class="notic">营业开始时间</p>
+				</dd>
+			</dl>
+			<dl class="row">
+				<dt class="tit">
+					<label for="end_time"><em>*</em>营业结束时间</label>
+				</dt>
+				<dd class="opt">
+					<input id="end_time" onclick="laydates(this)" name="end_time" value="{$store.end_time}" class="input-txt" type="time" />
+					<p class="notic">营业结束时间</p>
+				</dd>
+			</dl>
+			<dl class="row">
+				<dt class="tit">
+					<label>开启状态</label>
+				</dt>
+				<dd class="opt">
+					<input type="radio" name="status" value="0" <if condition="$store[status] eq 0">checked="checked"</if>/>关闭
+					<input type="radio" name="status" value="1" <if condition="$store[status] eq 1">checked="checked"</if> />开启
+				</dd>
+			</dl>
+			<dl class="row">
+				<dt class="tit">
+					<label for="longitude"><em>*</em>经销商经纬度</label>
+				</dt>
+				<dd class="opt">
+					<input type="text" value="{$store.longitude}" id="longitude" name="longitude" class="input-txt" />
+					<span class="err"></span>
+				</dd>
+			</dl>
+
+			<dl class="row" style="height: 800px">
+				<div id="container"></div>
+				<div id="myPageTop">
+					<table>
+						<tr>
+							<td>
+								<label>按关键字搜索：</label>
+							</td>
+							<td class="column2">
+								<label>左击获取经纬度：</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" placeholder="请输入关键字进行搜索" id="tipinput">
+							</td>
+							<td class="column2">
+								<input type="text" readonly="true" id="lnglat">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</dl>
+			<div class="bot"><a href="JavaScript:void(0);" onclick="actsubmit();" class="ncap-btn-big ncap-btn-green">确认提交</a></div>
+		</div>
+
+		<input type="hidden" name="id" value="{$store.id}">
+	</form>
+</div>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=7794ab41cfb05a5b8a1e4fb6c3f9ed32&plugin=AMap.Autocomplete"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script src="/public/laydate/laydate.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+	laydate.render({
+		elem:'#start_time'
+		,type: 'time'
+	});
+	laydate.render({
+		elem:'#end_time'
+		,type: 'time'
+	});
+
+	var map = new AMap.Map("container", {
+		resizeEnable: true
+	});
+	//为地图注册click事件获取鼠标点击出的经纬度坐标
+	var clickEventListener = map.on('click', function(e) {
+		document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
+	});
+	var auto = new AMap.Autocomplete({
+		input: "tipinput"
+	});
+	AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+	function select(e) {
+		if (e.poi && e.poi.location) {
+			map.setZoom(15);
+			map.setCenter(e.poi.location);
+		}
+	}
+
+	function getcity()
+	{
+		var pid = $('#province').val();
+		$.ajax({
+			type:"POST",
+			url:"{:U('Dealers/get_city')}",
+			data:"pid="+pid,
+			success:function(msg)
+			{
+				console.log(msg);
+				$("#city").html(msg);
+			}
+		})
+	}
+
+	var flag = true;
+	function actsubmit(){
+		if($('input[name=name]').val() == ''){
+			layer.msg("店铺名称不能为空", {icon: 2,time: 2000});
+			return;
+		}
+
+		if($('input[name=user_name]').val() == ''){
+			layer.msg("经销商账号不能为空", {icon: 2,time: 2000});
+			return;
+		}
+//		var password = $("#password").val();
+//		if(password == '' || password.length < 6){
+//			layer.msg("登陆密码不能为空且不能少于6个字符", {icon: 2,time: 2000});
+//			return;
+//		}
+
+		if($('input[name=realname]').val() == ''){
+			layer.msg("经销商真实姓名不能为空", {icon: 2,time: 2000});
+			return;
+		}
+
+		if($('input[name=mobile]').val() == ''){
+			layer.msg("经销商手机号不能为空", {icon: 2,time: 2000});
+			return;
+		}
+
+		if($('#province').val() == ''){
+			layer.msg("经销商省份不能为空", {icon: 2,time: 2000});
+			return;
+		}
+
+		if($('#city').val() == ''){
+			layer.msg("经销商城市不能为空", {icon: 2,time: 2000});
+			return;
+		}
+		if($('input[name=start_time]').val() == ''){
+			layer.msg("经销商营业开始时间不能为空", {icon: 2,time: 2000});
+			return;
+		}
+		if($('input[name=end_time]').val() == ''){
+			layer.msg("经销商营业结束时间不能为空", {icon: 2,time: 2000});
+			return;
+		}
+
+		if($('input[name=longitude]').val() == ''){
+			layer.msg("经销商经纬度不能为空", {icon: 2,time: 2000});
+			return;
+		}
+
+		if(flag){
+			$('#store_info').submit();
+		}else{
+			layer.msg("请检查重新提交", {icon: 2,time: 2000});
+		}
+	}
+
+	var tmp_type = '';
+	function upload_img(cert_type){
+		tmp_type = cert_type;
+		GetUploadify(1,'store','cert','callback');
+	}
+
+	function callback(img_str){
+		$('#'+tmp_type).attr('src',img_str);
+		$('input[name='+tmp_type+']').val(img_str);
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<include file="public/layout" />
+<script type="text/javascript" src="__PUBLIC__/static/js/perfect-scrollbar.min.js"></script>
+<body style="background-color: #FFF; overflow: auto;">
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>标签详情</h3>
+                <h5>标签添加与管理</h5>
+            </div>
+        </div>
+    </div>
+    <!--表单数据-->
+    <form method="post" id="addEditBrandForm" onsubmit="return checkName();">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label><em>*</em>标签名称</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" placeholder="名称" class="input-txt" name="name" value="{$brand.name}">
+                    <span class="err" id="err_name" style="color:#F00; display:none;">标签名称不能为空</span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="tit">
+                    <label>排序</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" placeholder="排序" name="sort" value="{$brand.sort}" class="input-txt" onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" >
+                    <span class="err"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label>开启状态</label>
+                </dt>
+                <dd class="opt">
+                    <input type="radio" name="status" value="0" <if condition="$brand[status] eq 0">checked="checked"</if>/>关闭
+                    <input type="radio" name="status" value="1" <if condition="$brand[status] eq 1">checked="checked"</if> />开启
+                </dd>
+            </dl>
+
+            <div class="bot"><a href="JavaScript:void(0);" onClick="$('#addEditBrandForm').submit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
+        </div>
+        <input type="hidden" name="id" value="{$brand.id}">
+        <input type="hidden" name="p" value="{$_GET[p]}">
+    </form>
+</div>
+<script>
+    // 判断输入框是否为空
+    function checkName(){
+        var name = $("#addEditBrandForm").find("input[name='name']").val();
+        if($.trim(name) == '')
+        {
+            $("#err_name").show();
+            return false;
+        }
+        return true;
+    }
+
+    window.onload = function(){
+
+        var brand_cat_id2 = parseInt('{$brand.cat_id2}');
+        if(brand_cat_id2 > 0 ){
+            get_category($("#cat_id1").val(),'cat_id2',brand_cat_id2);
+        }
+    }
+    function img_call_back(fileurl_tmp)
+    {
+        $("#logo").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+</script>
+</body>
+</html>

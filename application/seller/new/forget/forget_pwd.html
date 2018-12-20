@@ -1,0 +1,168 @@
+<include file="public/header"/>
+<div class="ncsc-layout wrapper">
+
+    <div id="layoutRight" class="ncsc-layout-right">
+        <div class="ncsc-path"><i class="icon-desktop"></i>经销商管理中心<i class="icon-angle-right"></i>账号<i class="icon-angle-right"></i>修改密码</div>
+        <div class="main-content" id="mainContent">
+            <div class="item-publish">
+                <form method="post" id="adminHandle" >
+                    <div class="ncsc-form-goods">
+                        <h3 id="demo1">管理员修改密码</h3>
+                            <dl>
+                                <dt><i class="required">*</i> 账号：</dt>
+                                <dd>
+                                    <input type="text" value="" name="user_name" id="user_name" class="text w400">
+                                    <p class="hint">登录的账号</p>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt><i class="required">*</i> 手机号：</dt>
+                                <dd>
+                                    <input type="mobile" value="" name="mobile" id="mobile" class="text w400">
+                                    <p class="hint">账号绑定的手机号</p>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt><i class="required">*</i> 短信验证码：</dt>
+                                <dd>
+                                    <input type="password" value="" name="code" id="code" class="text w400" placeholder="请输入短信验证码">
+                                    <input class="btn btn-primary btn-get-code" type="button" value="获取验证码" id='nam' style="width:101px;height:30px"/>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt><i class="required">*</i> 新密码：</dt>
+                                <dd>
+                                    <input type="password" value="" name="new_password" id="new_password" class="text w400">
+                                    <p class="hint">密码长度至少6个字符</p>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt><i class="required">*</i> 确定新密码：</dt>
+                                <dd>
+                                    <input type="password" value="" name="verify_password" id="verify_password" class="text w400">
+                                    <p class="hint">密码长度至少6个字符</p>
+                                </dd>
+                            </dl>
+                    </div>
+                    <div class="bottom tc hr32">
+                        <label class="submit-border">
+                            <input class="submit" value="保存" type="button" onclick="adsubmit();">
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="public/foot"/>
+<script>
+
+    //手机验证
+    $('#nam').click(function(){
+        var loginphone = $('#mobile').val();
+        var reg = /(^1[3|4|5|7|8][0-9]{9}$)/;
+        if(loginphone == ''){
+            layer.msg('手机号不能为空！', {icon: 2, time: 1000});//alert('少年，密码不能为空！');
+            return false;
+        }
+        if(!reg.test(loginphone)){
+            layer.msg('手机号格式不匹配！', {icon: 2, time: 1000});//alert('少年，密码不能为空！');
+            return false;
+        }
+        var user_name = $("#user_name").val();
+        if(user_name == ''){
+            layer.msg('账号不能为空！', {icon: 2, time: 1000});//alert('少年，密码不能为空！');
+            return false;
+        }
+
+        var url = "/index.php?m=Seller&c=Forget&a=send_validate_code&user_name="+user_name+"&mobile="+loginphone;
+        $.ajax({
+            type : "GET",
+            url:url,
+            dataType: "json",
+            success: function(data){
+                console.log(data);
+                if(data.status == 1){
+                    $('#nam').attr("disabled","disabled").css('background','gray');
+                    settimes();  //倒计时
+                    layer.msg(data.msg, {icon: 1, time: 1000});//alert('少年，密码不能为空！');
+                }else{
+                    layer.msg(data.msg, {icon: 1, time: 1000});//alert('少年，密码不能为空！');
+                }
+            },
+
+        });
+    });
+    //倒计时
+    var countdown=60;
+    function settimes() {
+        var val = $('#nam');
+
+        console.log(countdown);
+        if (countdown == 0) {
+            val.prop("disabled", false);
+            // val.value="获取验证码";
+            val.css('background','#ee5408');
+            val.val('获取验证码');
+            countdown = 60;
+            clearTimeout($time1);
+        } else {
+            val.prop("disabled", true);
+            val.css('background','border-box');
+            // val.value="重新发送(" + countdown + ")";
+            val.val("重新发送(" + countdown + ")");
+
+            countdown--;
+            $time1 = setTimeout(function() {
+                settimes()
+            },1000)
+        }
+    }
+
+    function adsubmit() {
+        var user_name = $('#user_name').val();
+        if (user_name == '') {
+            layer.msg('账号不能为空！', {icon: 2, time: 1000});//alert('少年，密码不能为空！');
+            return false;
+        }
+
+
+        var new_password = $('#new_password').val();
+        var verify_password = $('#verify_password').val();
+        if (new_password == '') {
+            layer.msg('新密码不能为空！', {icon: 2, time: 1000});//alert('少年，密码不能为空！');
+            return false;
+        }
+        if (verify_password != new_password) {
+            layer.msg('两次新密码不一致！', {icon: 2, time: 1000});//alert('少年，密码不能为空！');
+            return false;
+        }
+        var code = $('#code').val();
+        if (code == '') {
+            layer.msg('验证码不能为空！', {icon: 2, time: 1000});//alert('少年，密码不能为空！');
+            return false;
+        }
+
+        $.ajax({
+            url:"{:U('Seller/Forget/new_pwd')}",
+            type:'POST',
+            dataType:'JSON',
+            data:$('#adminHandle').serialize(),
+            success:function(data){
+                if(data.status == 1){
+                    layer.msg(data.msg, {icon: 1},function(){
+                        location.href = data.url;
+                    });
+                }else{
+                    layer.alert(data.msg, {icon: 2});
+                }
+            },
+            error : function() {
+                layer.alert('网络失败，请刷新页面后重试', {icon: 2});
+            }
+        })
+    }
+</script>
+</body>
+</html>

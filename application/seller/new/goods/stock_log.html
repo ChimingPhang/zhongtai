@@ -1,0 +1,92 @@
+<include file="public/head"/>
+<div class="ncsc-layout wrapper">
+    <include file="public/left"/>
+    <div id="layoutRight" class="ncsc-layout-right">
+        <div class="ncsc-path"><i class="icon-desktop"></i>商家管理中心<i class="icon-angle-right"></i>商品<i class="icon-angle-right"></i>商品规格库存
+        </div>
+        <div class="main-content" id="mainContent">
+            <div class="tabmenu">
+                <ul class="tab pngFix">
+                    <li ><a href="{:U('Goods/stock_list')}">库存列表</a></li>
+                    <li class="active"><a href="{:U('Goods/stock_log')}">库存日志</a></li>
+                </ul>
+            </div>
+            <form id="search-form2" method="post" action="">
+                <input type="hidden" name="ctime" id="ctime" value="{$ctime}">
+                <table class="search-form">
+                    <tr>
+                        <td></td>
+                        <th class="w70">商品名称</th>
+                        <td class="w100"><input style="width: 90px;" class="text" type="text" value="{$_REQUEST[goods_name]}" name="goods_name"/></td>
+                        <td class="w70 tc"><label class="submit-border"><input type="button" onclick="check_form();" class="submit" value="搜索" /></label></td>
+                    </tr>
+                </table>
+            </form>
+            <table class="ncsc-default-table">
+                <thead>
+                <tr>
+                    <th class="w10"></th>
+                    <th class="w50">商品ID</th>
+                    <th class="w200">商品名称</th>
+                    <th class="w200">商品规格</th>
+                    <th class="w100">订单号</th>
+                    <th class="w50">库存数量</th>
+                    <th class="w10">时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <empty name="stock_list">
+			        <tr>
+			            <td colspan="20" class="norecord"><div class="warning-option"><i class="icon-warning-sign"></i><span>暂无符合条件的数据记录</span></div></td>
+			        </tr>
+			    <else/>
+                <volist name="stock_list" id="v">
+                    <tr class="bd-line">
+                        <td></td>
+                        <td>{$v.goods_id}</td>
+                        <td>{$v.goods_name}</td>
+                        <td>{$v.goods_spec}</td>
+                        <td>{$v.order_sn}</td>
+                        <td>{$v.stock}</td>
+                    	<td>{:date('Y-m-d H:i',$v.ctime)}</td>
+                    </tr>
+                </volist>
+                </empty>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="20">
+                        {$page}
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<include file="public/foot"/>
+<script>
+
+    function check_form() {
+        $('#search-form2').submit();
+    }
+    
+    function updateStock(obj){
+        $.ajax({
+            type:'GET',
+            url:"{:U('Goods/updateGoodsStock')}",
+            data:{item_id:$(obj).attr('data-id'),store_count:$(obj).val(),old_stock:$(obj).attr('old-stock')},
+            dataType:'json',
+            success:function(data){
+                if(data.status == 1){
+                    layer.msg(data.msg, {icon: 1});
+                    window.location.reload();
+                }else{
+                    layer.msg(data.msg, {icon: 2});
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

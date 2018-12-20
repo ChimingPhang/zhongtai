@@ -1,0 +1,58 @@
+<table>
+    <tbody>
+    <empty name="goodsList">
+        <tr>
+            <td class="no-data" align="center" axis="col0" colspan="50">
+                <i class="fa fa-exclamation-circle"></i>没有符合条件的记录
+            </td>
+        </tr>
+        <else/>
+        <volist name="goodsList" id="list">
+            <tr>
+                <td align="center" axis="col0">
+                    <div style="width: 50px;">
+                        <input type="checkbox" name="goods_id[]" value="{$list.goods_id}"/>{$list.goods_id}
+                    </div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: left; width: 200px;">{$list.goods_name|getSubstr=0,33}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: left; width: 100px;">{$list.spec_key_name}</div>
+                </td>
+
+                <td align="center" axis="col0">
+                    <div style="text-align: left; width: 50px;">
+                        {$prom_type[$list['type']]}
+                    </div>
+                </td>
+
+                <td align="center" axis="col0">
+                    <div style="text-align: left; width: 100px;">
+                        <input type="text" value="{$list.sort}" onblur="changeTableVal('goods_special','id','{$list.id}','sort',this)" />
+                    </div>
+                </td>
+
+
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 100px; max-width:100px;">
+                        <a class="btn red" href="javascript:void(0);" onclick="del(this)" goods_id="{$list['id']}"><i
+                                class="fa fa-trash-o"></i>删除</a>
+                    </div>
+                </td>
+                <td align="" class="" style="width: 100%;">
+                    <div>&nbsp;</div>
+                </td>
+            </tr>
+        </volist>
+    </empty>
+    </tbody>
+</table>
+<!--分页位置--> {$page}
+<script>
+    // 点击分页触发的事件
+    $(".pagination  a").click(function(){
+        cur_page = $(this).data('p');
+        ajax_get_table('search-form2',cur_page);
+    });
+</script>

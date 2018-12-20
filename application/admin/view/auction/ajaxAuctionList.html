@@ -1,0 +1,148 @@
+<table>
+    <tbody>
+    <empty name="goodsList">
+        <tr>
+            <td class="no-data" align="center" axis="col0" colspan="50">
+                <i class="fa fa-exclamation-circle"></i>没有符合条件的记录
+            </td>
+        </tr>
+        <else/>
+        <volist name="goodsList" id="list">
+            <tr>
+                <td align="center" axis="col0">
+                    <div style="width: 50px;">
+                        <!--<input type="checkbox" name="id[]" value="{$list.id}"/>-->{$list.id}
+                    </div>
+                </td>
+                <!--<td align="center" axis="col0">
+                    <div style="text-align: left; width: 50px;">{$list.goods_id}</div>
+                </td>-->
+                <td align="center" axis="col0">
+                    <div style="text-align: left; width: 200px;">{$list.goods_name|getSubstr=0,33}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: left; width: 200px;">{$list.spec_key_name|getSubstr=0,33}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 80px;">{$list.start_price}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 80px;">{$list.markup_price}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 80px;">{$list.reserve_price}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 80px;">{$list.bail_price}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 100px;">{$list.preheat_time|date='m-d H:i',###}</div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 100px;">{$list.start_time|date='m-d H:i',###}</div>
+                </td>
+                <!--<td align="center" axis="col0">
+                    <div style="text-align: center; width: 100px;"><if condition="$list[on_time] gt 0">{$list.end_time|date='m-d H:i',###}</if></div>
+                </td>-->
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 50px;">{$list.delay_time}分/次</div>
+                </td>
+               <!-- <td align="center" axis="col0">
+                  <div style="text-align: center; width: 50px;">
+                    <if condition='$list[is_recommend] eq 1'>
+                      <span class="yes" onClick="changeTableVal('goods','goods_id','{$list.goods_id}','is_recommend',this)" ><i class="fa fa-check-circle"></i>是</span>
+                      <else />
+                      <span class="no" onClick="changeTableVal('goods','goods_id','{$list.goods_id}','is_recommend',this)" ><i class="fa fa-ban"></i>否</span>
+                    </if>
+                  </div>
+                </td>
+                <td align="center" axis="col0">
+                  <div style="text-align: center; width: 50px;">
+                    <if condition='$list[is_new] eq 1'>
+                      <span class="yes" onClick="changeTableVal('goods','goods_id','{$list.goods_id}','is_new',this)" ><i class="fa fa-check-circle"></i>是</span>
+                      <else />
+                      <span class="no" onClick="changeTableVal('goods','goods_id','{$list.goods_id}','is_new',this)" ><i class="fa fa-ban"></i>否</span>
+                    </if>
+                  </div>
+                </td>
+                <td align="center" axis="col0">
+                  <div style="text-align: center; width: 50px;">
+                    <if condition='$list[is_hot] eq 1'>
+                      <span class="yes" onClick="changeTableVal('goods','goods_id','{$list.goods_id}','is_hot',this)" ><i class="fa fa-check-circle"></i>是</span>
+                      <else />
+                      <span class="no" onClick="changeTableVal('goods','goods_id','{$list.goods_id}','is_hot',this)" ><i class="fa fa-ban"></i>否</span>
+                    </if>
+                  </div>
+                </td>-->
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 60px;">
+                        <if condition="$list[is_on_sale] eq 0">未上架</if>
+                        <if condition="$list[is_on_sale] eq 1"><if condition="$list[preheat_time] gt time()">
+                            <span style="color: #0ba4da">等待中</span>
+                            <elseif condition="$list[start_time] gt time()" />
+                            <span style="color: #0ba4da">预约中</span>
+                            <elseif condition="$list[is_end] eq 1" />已结束
+                            <elseif condition="$list[is_end] eq 2" /><span style="color: #ff563f">已流拍</span>
+                            <else /><span style="color: #0ba4da">拍卖中</span></if></if>
+                        <if condition="$list[is_on_sale] eq 2"><span style="color: #ff0000" title="{$list[close_reason]}">已停止</span></if>
+
+
+                    </div>
+                </td>
+                <td align="center" axis="col0">
+                    <div style="text-align: center; width: 250px; max-width:250px;">
+                        <!--<if condition="$list.is_on_sale eq 1">
+                            <a class="btn red" href="javascript:void(0);" onclick="takeoff(this)" goods_id="{$list['id']}" goods_sn="{$list['goods_sn']}" goods_name="{$list['goods_name']}">
+                                <i class="fa fa-ban" style="color: #ff0000"></i>下架</a>
+                        </if>-->
+                        <if condition="$list.is_on_sale neq 1">
+                            <a class="btn blue" href="javascript:void(0);" onclick="takeup_goods(this)" goods_id="{$list['id']}" goods_sn="{$list['goods_sn']}" goods_name="{$list['goods_name']}">
+                            <i class="fa fa-check-circle"></i>上架</a>
+                        <else />
+                            <a class="btn red" href="javascript:void(0);" onclick="takeoff_goods(this)" goods_id="{$list['id']}" goods_sn="{$list['goods_sn']}" goods_name="{$list['goods_name']}">
+                            <i class="fa fa-ban" style="color: #ff0000"></i>下架</a>
+                        </if>
+                        <if condition="$list.is_end eq 0 && $list.is_on_sale neq 1">
+                            <a class="btn blue" href="{:U('Admin/Auction/auctionEdit',array('id'=>$list['id']))}"><i
+                                    class="fa fa-search"></i>编辑</a>
+                        </if>
+                        <!--<a class="btn blue" href="{:U('Admin/Car/carSpecList',array('goods_id'=>$list['goods_id']))}"><i
+                                class="fa fa-edit"></i>规格</a>-->
+                        <a class="btn red" href="javascript:void(0);" onclick="del(this)" goods_id="{$list['id']}"><i
+                                class="fa fa-trash-o"></i>删除</a>
+                    </div>
+                </td>
+                <td align="" class="" style="width: 100%;">
+                    <div>&nbsp;</div>
+                </td>
+            </tr>
+        </volist>
+        <tr class="spe_select">
+            <td colspan="14">
+                <!--<div class="col-sm-3 form-inline">
+                    全选
+                    <input type="checkbox" onclick="$('input[name=\'id\[\]\']').prop('checked', this.checked);">
+
+                    <select id="func_id" class="form-control" style="width: 120px;" onblur="fuc_change(this);">
+                        <option value="-1">请选择...</option>
+                        <option value="0">推荐</option>
+                        <option value="1">新品</option>
+                        <option value="2">热卖</option>
+                        <option value="3">上架</option>
+                        <option value="4">停售</option>
+                    </select>
+                    <a id="act_button" href="javascript:;" onclick="act_submit();" style="color:#FFF;" class="ncap-btn-mini ncap-btn-green disabled"><i class="fa"></i> 确定</a>
+                </div>-->
+            </td>
+        </tr>
+    </empty>
+    </tbody>
+</table>
+<!--分页位置--> {$page}
+<script>
+    // 点击分页触发的事件
+    $(".pagination  a").click(function(){
+        cur_page = $(this).data('p');
+        ajax_get_table('search-form2',cur_page);
+    });
+</script>

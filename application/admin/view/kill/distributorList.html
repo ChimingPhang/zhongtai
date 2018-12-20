@@ -1,0 +1,50 @@
+<style>
+    .ncap-account-container-list li label{
+        cursor:pointer;
+    }
+    .ncap-account-container-list li{
+        width: 25%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        cursor:pointer;
+    }
+    .ncap-account-container-list{
+        width:85%;
+    }
+</style>
+<dl class="row">
+    <dt class="tit">
+
+        <label for="allDistributor"><input id="allDistributor" cka="mod-0" type="checkbox">全部</label>
+    </dt>
+    <dd class="opt">
+        <ul class="ncap-account-container-list">
+            <foreach name="distributorList" item="list" key="kk">
+                <li title="{$list.name}">
+                    <label for="num-{$kk}">
+                        <input id="num-{$kk}" class="checkbox" name="dealersAuction[]" value="{$list.id}"  <in name="$list['id']" value="$distributorAuction">checked</in> ck="mod-0" type="checkbox">
+                        {$list.name}
+                    </label>
+
+                </li>
+            </foreach>
+        </ul>
+    </dd>
+</dl>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(":checkbox[cka]").click(function(){
+            var $cks = $(":checkbox[ck='"+$(this).attr("cka")+"']");
+            if($(this).is(':checked')){
+                $cks.each(function(){$(this).prop("checked",true);});
+            }else{
+                $cks.each(function(){$(this).removeAttr('checked');});
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

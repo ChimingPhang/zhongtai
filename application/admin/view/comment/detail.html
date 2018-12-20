@@ -1,0 +1,183 @@
+<include file="public/layout" />
+
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+  <div class="fixed-bar">
+    <div class="item-title">
+      <div class="subject">
+        <h3>评价管理</h3>
+        <h5>商品交易评价管理</h5>
+      </div>
+    </div>
+  </div>
+  <!-- 操作说明 -->
+  <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+    <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+      <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+      <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+    </div>
+     <ul>
+      <li>买家可在订单完成后对订单商品进行评价操作，评价信息将显示在对应的商品页面</li>
+    </ul>
+  </div>
+  <div class="flexigrid">
+    <div class="mDiv">
+      <div class="ftitle">
+        <h3>商品评价列表</h3>
+        <h5></h5>
+      </div>
+      <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+
+    </div>
+    <div class="hDiv">
+      <div class="hDivBox">
+        <table cellspacing="0" cellpadding="0">
+          <thead>
+	        	<tr>
+	              <th class="sign" axis="col0">
+	                <div style="width: 24px;"><i class="ico-check"></i></div>
+	              </th>
+	              <th align="left" abbr="order_sn" axis="col3" class="">
+	                <div style="text-align: left; width: 100px;" class="">商品名</div>
+	              </th>
+	              <th align="left" abbr="goods_rank" axis="col4" class="">
+	                <div style="text-align: left; width: 90px;" class="">商品图片</div>
+	              </th>
+					<!--<th align="left" abbr="goods_rank" axis="col4" class="">-->
+						<!--<div style="text-align: left; width: 90px;" class="">描述相符度</div>-->
+					<!--</th>-->
+					<th align="left" abbr="goods_rank" axis="col4" class="">
+						<div style="text-align: left; width: 90px;" class="">评价内容</div>
+					</th>
+					<th align="left" abbr="goods_rank" axis="col4" class="">
+						<div style="text-align: left; width: 90px;" class="">评价图片</div>
+					</th>
+					<!--<th align="left" abbr="goods_rank" axis="col4" class="">-->
+						<!--<div style="text-align: left; width: 90px;" class="">评价图片</div>-->
+					<!--</th>-->
+	              <th align="center" abbr="article_time" axis="col6" class="">
+	                <div style="text-align: center; width: 120px;" class="">评论时间</div>
+	              </th>
+
+	              <!--<th align="center" abbr="article_time" axis="col6" class="">-->
+	                <!--<div style="text-align: center; width: 200px;" class=""> 操作</div>-->
+	              <!--</th>-->
+	              <th style="width:100%" axis="col7">
+	                <div></div>
+	              </th>
+	            </tr>
+	          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="bDiv" style="height: auto;">
+      <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+		  <table>
+			  <tbody>
+		  <volist name="reply" id="list">
+			  <tr data-id="{$list.order_commemt_id}">
+				  <td class="sign" axis="col0">
+					  <div style="width: 24px;"><i class="ico-check" ></i></div>
+				  </td>
+				  <td align="left" abbr="nickname" axis="col3" class="">
+					  <div style="text-align: left; width: 100px;" class="">{$list.goods_name}</div>
+				  </td>
+				  <td align="left" abbr="nickname" axis="col3" class="">
+					  <div style="text-align: left; width: 100px;height: 70px" class=""><img src="{$list.original_img}" style="width: 100%"></div>
+				  </td>
+
+				  <td style="text-align: left; width: 90px;">
+					  <div style="text-align: left; width: 90px;">
+						 <span class="raty" data-score="{$list['describe_score']}" style="width: 100px;" id="ui-id-2">
+							<php>
+								for($i = 0;$i < $list['describe_score'];$i++){
+								echo "<i class='fa fa-star star-gray'></i>&nbsp;";
+								}
+							</php>
+						</span>
+					  </div>
+				  </td>
+				  <td align="left" abbr="nickname" axis="col3" class="">
+					  <div style="text-align: left; width: 100px;" class="">{$list.content}</div>
+				  </td>
+
+				  <!--<td align="left" abbr="nickname" axis="col3" class="">-->
+					  <!--<div style="text-align: left; width: 100px;" class="">{$list.content}</div>-->
+				  <!--</td>-->
+
+
+				  <td align="center" abbr="article_time" axis="col6" class="">
+					  <div style="text-align: center; width: 120px;" class="">{$list.commemt_time|date='Y-m-d H:i:s',###}</div>
+				  </td>
+
+				  <!--<td align="center" abbr="article_time" axis="col6" class="">-->
+					  <!--<div style="text-align: center; width: 200px;" class="">-->
+						  <!--<a class="btn green"   href="{:U('Admin/comment/detail',array('id'=>$list[order_commemt_id]))}"><i class="fa fa-list-alt"></i>查看</a>-->
+						  <!--<a class="btn red"  href="javascript:void(0);" data-href="{:U('Admin/comment/del',array('id'=>$list[order_commemt_id]))}" onclick="del('{$list[comment_id]}',this)" ><i class="fa fa-trash-o"></i>删除</a>-->
+					  <!--</div>-->
+				  <!--</td>-->
+				  <td align="" class="" style="width: 100%;">
+					  <div>&nbsp;</div>
+				  </td>
+			  </tr>
+		  </volist>
+			  </tbody>
+		  </table>
+      </div>
+      <div class="iDiv" style="display: none;"></div>
+    </div>
+    <!--分页位置--> 
+   	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+	
+	 	//点击刷新数据
+		$('.fa-refresh').click(function(){
+			location.href = location.href;
+		});
+	 
+		$('.ico-check ' , '.hDivBox').click(function(){
+			$('tr' ,'.hDivBox').toggleClass('trSelected' , function(index,currentclass){
+	    		var hasClass = $(this).hasClass('trSelected');
+	    		$('tr' , '#flexigrid').each(function(){
+	    			if(hasClass){
+	    				$(this).addClass('trSelected');
+	    			}else{
+	    				$(this).removeClass('trSelected');
+	    			}
+	    		});  
+	    	});
+		});
+	});
+    function op(){
+    	 
+        //获取操作
+        var op_type = $('#operate').find('option:selected').val();
+        if(op_type == 0){
+			layer.msg('请选择操作', {icon: 1,time: 1000});   //alert('请选择操作');
+            return;
+        }
+        //获取选择的id
+        //获取选择的id
+        var selected_id = new Array();
+    	$('.trSelected' , '#flexigrid').each(function(i){
+			selected_id[i] = $(this).attr('data-id');
+        });
+    	console.log(selected_id);
+        if(selected_id.length < 1){
+			layer.msg('请选择项目', {icon: 1,time: 1000}); //            alert('请选择项目');
+            return;
+        }
+       
+        $('#op').find('input[name="selected"]').val(selected_id);
+        $('#op').find('input[name="type"]').val(op_type);
+        $('#op').submit();
+    }
+
+</script>
+</body>
+</html>

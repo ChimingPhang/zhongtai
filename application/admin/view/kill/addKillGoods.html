@@ -1,0 +1,381 @@
+<include file="public/layout" />
+<script type="text/javascript" src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>
+<style type="text/css">
+    .flexigrid .bDiv{
+        min-height:50px;
+    }
+</style>
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit; min-width: 500px;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page" style="padding: 0px 1% 0 1%;">
+
+
+    <div class="flexigrid">
+        <!--表单数据-->
+
+            <div class="hDiv">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th align="left" abbr="article_title" axis="col3" class="">
+                                <div style="text-align: left; width: 300px;" class="">商品名</div>
+                            </th>
+                            <th align="left" abbr="article_title" axis="col3" class="">
+                                <div style="text-align: left; width: 100px;" class="">LOGO</div>
+                            </th>
+                            <th align="left" abbr="ac_id" axis="col4" class="">
+                                <div style="text-align: center; width: 80px;" class="">价格</div>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="bDiv">
+                <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td align="left" class="">
+                                <div style="text-align: left; width: 300px;">{$goodsInfo.goods_name}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: left; width: 100px;">
+                                    <a href="{$goodsInfo.original_img}" target="_blank"><img onmouseover="$(this).attr('width','80').attr('height','45');" onmouseout="$(this).attr('width','40').attr('height','30');" width="40" height="30" src="{$goodsInfo.original_img}"></a>
+                                </div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: left; width: 80px;">
+                                    {$goodsInfo.shop_price}
+                                </div>
+                            </td>
+                            <td align="" class="" style="width: 100%;">
+                                <div>&nbsp;</div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--<div class="mDiv">-->
+                <!--<div class="ftitle">-->
+                    <!--<h3>-->
+                        <!--此商品有({:count($goodsSpec)})个规格,商品有规格活动按规格价算-->
+                    <!--</h3>-->
+                    <!--<h5></h5>-->
+                <!--</div>-->
+            <!--</div>-->
+            <form method="post" id="addAuctionForm">
+
+                <!--通用信息-->
+                <div class="ncap-form-default tab_div_1">
+                    <dl class="row">
+                        <dt class="tit">
+                            <label for="record_no">商品名称</label>
+                        </dt>
+                        <dd class="opt">
+                            <input type="text" value="{$goodsInfo.goods_name}" name="goods_name" class="input-txt"/>
+                            <span class="err" id="err_goods_name" style="color:#F00; display:none;"></span>
+                        </dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="tit">
+                            <label for="record_no">商品介绍介绍</label>
+                        </dt>
+                        <dd class="opt">
+                            <input type="text" maxlength="10" value="{$goodsInfo.label}" name="label" class="input-txt"/>
+                            <p class="notic">最多10个字符</p>
+                            <span class="err" id="err_label" style="color:#F00; display:none;"></span>
+                        </dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="tit">
+                            <label for="record_no">商品规格</label>
+                        </dt>
+                        <dd class="opt">
+                            <volist  name="goodsSpec" id="spec" key="key">
+                                <p class="radioClass" style="cursor: pointer"><input type="radio" value="{$spec.spec_key_name}" name="spec_key_name" data-key="{$spec.spec_key}" <if condition="$key eq 1">checked="checked"</if>/>{$spec.spec_key_name}</p>
+                            </volist>
+                            <input type="hidden" name="spec_key" id="spec_key" value="{$goodsSpec[0][spec_key]}">
+                            <p class="notic">如果是本商场商品请勿修改</p>
+                            <span class="err" id="err_spec_key_name" style="color:#F00; display:none;"></span>
+                        </dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="tit">
+                            <label for="record_no">秒杀价</label>
+                        </dt>
+                        <dd class="opt">
+                            <input type="text" value="{$goodsInfo.price}" name="price" class="t_mane" onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" />
+                            <!--<p class="notic">此价格仅供参考，最终交易价以规格为准</p>-->
+                            <span class="err" id="err_price" style="color:#F00; display:none;"></span>
+                        </dd>
+                    </dl>
+
+                    <dl class="row">
+                        <dt class="tit">
+                            <label>开始时间</label>
+                        </dt>
+                        <dd class="opt">
+                            <input type="text" size="30" id="start_time" name="start_time" value="{$goodsInfo.start_time|date}" placeholder="开始时间" class="qsbox">
+                            <p class="notic"></p>
+                            <span class="err" id="err_start_time" style="color:#F00; display:none;">开始时间不能再当前时间之后</span>
+                        </dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="tit">
+                            <label>结束时间</label>
+                        </dt>
+                        <dd class="opt">
+                            <input type="text" size="30" id="end_time" name="end_time" value="{$goodsInfo.end_time}" placeholder="结束时间" class="qsbox">
+                            <p class="notic"></p>
+                            <span class="err" id="err_end_time" style="color:#F00; display:none;">开始时间不能大于结束时间</span>
+                        </dd>
+                    </dl>
+
+                    <!--上传照片-->
+                    <dl class="row">
+                        <dt class="tit">
+                            <label>封面图片</label>
+                        </dt>
+                        <dd class="opt">
+                            <div class="input-file-show">
+            <span class="show">
+                <a id="img_a" target="_blank" class="nyroModal" rel="gal" href="{$goodsInfo.original_img}">
+                    <i id="img_i" class="fa fa-picture-o" onmouseover="layer.tips('<img src={$goodsInfo.original_img}>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"></i>
+                </a>
+            </span>
+                                <span class="type-file-box">
+                <input type="text" id="imagetext" name="original_img" value="{$goodsInfo.original_img}" class="type-file-text">
+                <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+                <input class="type-file-file" onClick="GetUploadify(1,'','auction','img_call_back')" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+            </span>
+                            </div>
+                            <span class="err"></span>
+                            <p class="notic">请上传图片格式文件</p>
+                        </dd>
+                    </dl>
+
+                    <dl class="row">
+                        <dt class="tit">
+                            <label>物流方式</label>
+                        </dt>
+                        <dd class="opt">
+                            <div class="onoff">
+                                <label for="is_type1" class="cb-enable <if condition="$goodsInfo[type] eq 1">selected</if>">指定经销商提货</label>
+                                <label for="is_type0" class="cb-disable <if condition="$goodsInfo[type] eq 2">selected</if>">快递</label>
+                                <input id="is_type1" name="type" value="1" type="radio" <if condition="$goodsInfo[type] eq 1"> checked="checked"</if>>
+                                <input id="is_type0" name="type" value="2" type="radio" <if condition="$goodsInfo[type] eq 2"> checked="checked"</if>>
+                            </div>
+                            <p class="notic"></p>
+                        </dd>
+                        <div class="distributor" id="distributorList"></div>
+                    </dl>
+                </div>
+                <!--通用信息-->
+
+                <div class="ncap-form-default">
+                    <div class="bot">
+                        <input type="hidden" name="goods_id" value="{$goodsInfo.goods_id}">
+                        <input type="hidden" name="__token__" value="{$Request.token}" />
+                        <a href="JavaScript:void(0);" id="submit" class="ncap-btn-big ncap-btn-green" >确认提交</a>
+                    </div>
+                </div>
+            </form>
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        laydate.skin('molv');//选择肤色
+        // 预约位置日历控件
+
+        // 起始位置日历控件
+        laydate({
+            elem: '#start_time',
+            format: 'YYYY-MM-DD hh:mm', // 分隔符可以任意定义，该例子表示只显示年月
+            festival: true, //显示节日
+            istime: true,
+            choose: function(datas){ //选择日期完毕的回调
+                compare_time1($('#start_time').val(),$('#end_time').val());
+//                $("#err_start_time").hide();
+            }
+        });
+
+        // 结束位置日历控件
+        laydate({
+            elem: '#end_time',
+            format: 'YYYY-MM-DD hh:mm', // 分隔符可以任意定义，该例子表示只显示年月
+            festival: true, //显示节日
+            istime: true,
+            choose: function(datas){ //选择日期完毕的回调
+                compare_time1($('#start_time').val(),$('#end_time').val());
+//                $("#err_end_time").hide();
+            }
+        });
+
+        function compare_time1(time2,time3)
+        {
+//        var time1 = time1.replace(/[\-:\s]/g, "");
+//        var time2 = time2.replace(/[\-:\s]/g, "");
+//        var time3 = time3.replace(/[\-:\s]/g, "");
+//        var myDate = new Date();
+//        var time = myDate.toLocaleDateString().replace(/[\-:\s]/g, "");
+
+//        if(time1.substring(0,4) <= time.substring(0,4))
+//        {
+//            layer.msg('开始时间不能在今天之前!', {
+//                //icon: 1,   // 成功图标
+//                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+//            });
+//         return false;
+//        }
+//        time1 = time1.substring(0,6);
+//        time2 = time2.substring(0,6);
+            time2 = Date.parse(new Date(time2));
+            time3 = Date.parse(new Date(time3));
+            time = Date.parse(new Date());
+            if((parseInt(time2) - parseInt(time)) < 0 )
+            {
+                $("#err_start_time").show();
+                layer.msg('开始时间请在当前时间之后!', {
+                    //icon: 1,   // 成功图标
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+                return false;
+            }
+            $("#err_start_time").hide();
+
+
+
+            if((parseInt(time3) - parseInt(time2)) < 0 )
+            {
+                $("#err_end_time").show();
+                layer.msg('开始时间不能大于结束时间!', {
+                    //icon: 1,   // 成功图标
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+                return false;
+            }
+            $("#err_end_time").hide();
+        }
+
+        if("{$goodsInfo[type]}" == 1){
+            $('.distributor').show();
+            $.ajax({
+                type:'GET',
+                url:"{:U('Admin/Kill/distributorList')}",
+                data:{id: "{$goodsInfo.id}"},
+                success:function(ser){
+                    $("#distributorList").html(ser); // 删除完服务器的, 再删除 html上的图片
+                }
+            })
+        }
+    });
+    $(".onoff label").click(function () {
+        $('.onoff input').removeAttr("checked");
+        $("#"+$(this).attr('for')).attr("checked","checked");
+        if($(this).attr('for') == "is_type1"){
+            $('.distributor').show();
+            if($("#distributorList").html() == ''){
+                $.ajax({
+                    type:'GET',
+                    url:"{:U('Admin/Kill/distributorList')}",
+                    data:{id: "{$goodsInfo.id}"},
+                    success:function(ser){
+                        $("#distributorList").html(ser); // 删除完服务器的, 再删除 html上的图片
+                    }
+                })
+            }
+        }else{
+            $('.distributor').hide();
+        }
+    });
+    $("#submit").click(function(){
+
+        var status = true;
+//        var _this = $(this)
+        $(".opt .err").each(function(){
+            if($(this).css('display') == 'inline'){
+                //边缘弹出
+                layer.open({
+                    type: 1
+                    ,offset: 't' //具体配置参考：offset参数项
+                    ,content: '<div style="padding: 20px 80px;">'+$(this).parents('dl').find('label').text()+'项错误！</div>'
+                    ,btn: '关闭全部'
+                    ,btnAlign: 'c' //按钮居中
+                    ,shade: 0 //不显示遮罩
+                    ,yes: function(){
+                        layer.closeAll();
+                    }
+                });
+                status = false;
+                return false;
+            }
+        });
+        if(status)
+            $.ajax({
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "{:U('Kill/addAuctionForm',array('goods_id' => $goods['goods_id'],'is_ajax' => 1))}" ,//url
+                data: $('#addAuctionForm').serialize(),
+                success: function(v) {
+                    // 验证成功提交表单
+                    if(v.hasOwnProperty('status'))
+                    {
+                        if(v.status == 1)
+                        {
+                            //边缘弹出
+                            layer.open({
+                                type: 1
+                                ,offset: 't' //具体配置参考：offset参数项
+                                ,content: '<div style="padding: 20px 80px;">'+v.msg+'</div>'
+                                ,btn: '关闭全部'
+                                ,btnAlign: 'c' //按钮居中
+                                ,shade: 0 //不显示遮罩
+                                ,yes: function(){
+                                    parent.layer.closeAll();
+                                }
+                            });
+                        }
+                        if(v.status == 0)
+                        {
+                            layer.alert(v.msg,{icon:2});
+                            return false;
+                        }
+                        //return false;
+                    }
+                    // 验证失败提示错误
+                    for(var i in v['data'])
+                    {
+                        layer.alert(v['data'][i],{icon:2});
+                        $("#err_"+i).text(v['data'][i]).show(); // 显示对于的 错误提示
+                    }
+                },
+                error: function() {
+                    layer.alert("服务器繁忙, 请联系管理员!",{icon:2});
+                    return false;
+                }
+            });
+    });
+    $('input').change(function () {
+        if($(this).val())
+        $("#err_"+$(this).attr('name')).hide();
+    });
+    $('.radioClass').click(function () {
+        $('.radioClass input').removeAttr("checked");
+        $(this).find('input').attr("checked","checked");
+        $('#spec_key').val($(this).find('input').data('key'));
+    });
+    function img_call_back(fileurl_tmp)
+    {
+        $("#imagetext").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+
+</script>
+</body>

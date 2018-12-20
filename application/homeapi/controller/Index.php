@@ -171,6 +171,10 @@ class Index extends Base{
         return $this->fetch('dist/brand-models');
     }
 
+    /**
+     * 精品配件
+     * @return mixed
+     */
     public function parts()
     {
         //检测必传参数
@@ -232,8 +236,6 @@ class Index extends Base{
 
         $data['list'] = $activity_car;
         $this->assign('list', $activity_car);
-//        dump($activity_car);die;
-//        $this->json('0000','ok',$data);
 
         return $this->fetch('dist/integral-mall');
     }
@@ -254,8 +256,48 @@ class Index extends Base{
         return $this->fetch('dist/special-offer');
     }
 
+    /**
+     * 积分兑换商品
+     * @return mixed
+     */
     public function integral_mall_exchange()
     {
+        //检测必传参数
+        $categoryModel = new GoodsCategory();
+        $AccessoriesCategoryModel = new AccessoriesCategory();
+        //加载车系
+        $category = $categoryModel->get_name();
+        //加载分类
+        $class = $AccessoriesCategoryModel->get_name();
+        $this->assign('category', $category);
+        $this->assign('class', $class);
+
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('class_id', '')) && !is_numeric($class_id = I('class_id', 0)) && $this->errorMsg(2002, 'class_id');//选传
+        //empty($title = I('title', '')) && $this->errorMsg(2001, 'title'); //必传
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('integral', '')) && !in_array($integral = I('integral', ''),['asc','desc']) && $this->errorMsg(2002, 'integral');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+
+        //排序顺序
+        $order = [];
+        if(!$sales_sum && !$integral) $order['sort'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($integral) $order['integral'] = $integral;
+        //检索条件
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        if($class_id) $where['class_id'] = $class_id;
+        if ($price) $order['deposit_price'] = $price;
+        $where['exchange_integral'] = 2;
+        if(I('title')) $where['goods_name'] = ['like','%'.I('title').'%'];
+
+        $Goods = new Goods();
+        $field = "goods_id,goods_name,goods_remark,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral,sales_sum";
+        $data = $Goods->GoodsList($this->page, 0, $where, $order, 9, $field);
+        $this->assign('g_list', $data);
+//        $this->json(200, 'ok', $data);
         return $this->fetch('dist/integral-mall-exchange');
     }
 

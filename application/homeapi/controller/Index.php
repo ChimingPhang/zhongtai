@@ -195,6 +195,42 @@ class Index extends Base{
         return $this->fetch('dist/parts');
     }
 
+    /**
+     * 积分商城
+     */
+    public function integral_mall()
+    {
+        //首页轮播
+//        $top_ads = $this->ad_position(12,'ad_link,ad_code,ad_name','orderby desc');
+//        $data['top_ads'] = $top_ads['result'];
+
+        //精品推荐
+        $goods_model = new Goods();
+
+        $goods_where['is_on_sale'] = 1;
+        $goods_where['state'] = 1;
+        $goods_where['is_recommend'] = 1;           //推荐商品
+        $goods_where['exchange_integral'] = 2;      //纯积分商品
+        $recommend_car = $goods_model->GoodsList(1,'',$goods_where,['sort'=>'desc'],1,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type,store_count');
+        $data['recommend_car'] = $recommend_car;
+        $this->assign('recommend_car', $recommend_car);
+
+        //活动介绍
+        $where['is_on_sale'] = 1;
+        $where['state'] = 1;
+        //$where['is_recommend'] = 0;           //推荐商品
+        $where['exchange_integral'] = 2;      //纯积分商品
+        $activity_car = $goods_model->GoodsList($this->page,'',$where,['sort'=>'desc'], 6, 'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type,store_count');
+
+        $data['list'] = $activity_car;
+        $this->assign('list', $activity_car);
+//        dump($activity_car);die;
+//        $this->json('0000','ok',$data);
+
+        return $this->fetch('dist/integral-mall');
+    }
+
+
     public function user_center()
     {
         return $this->fetch('dist/user-center');

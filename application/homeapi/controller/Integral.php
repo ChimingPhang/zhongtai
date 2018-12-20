@@ -40,18 +40,22 @@ class Integral extends Base {
         //首页轮播
         $top_ads = $this->ad_position(12,'ad_link,ad_code,ad_name','orderby desc');
         $data['top_ads'] = $top_ads['result'];
+
         //积分商城上面10个的导航
-        $data['height'] = M('integral_title')->where(['is_show'=>1,'type'=>0])->field('name,image,url,title')->limit(10)->select();
+        //$data['height'] = M('integral_title')->where(['is_show'=>1,'type'=>0])->field('name,image,url,title')->limit(10)->select();
         //积分商城下面的2个导航
-        $data['low'] = M('integral_title')->where(['is_show'=>1,'type'=>1])->field('name,image,url,title')->limit(10)->select();
+        //$data['low'] = M('integral_title')->where(['is_show'=>1,'type'=>1])->field('name,image,url,title')->limit(10)->select();
+
         //精品推荐
         $goods_model = new Goods();
+
         $goods_where['is_on_sale'] = 1;
         $goods_where['state'] = 1;
         $goods_where['is_recommend'] = 1;           //推荐商品
         $goods_where['exchange_integral'] = 2;      //纯积分商品
         $recommend_car = $goods_model->GoodsList(1,'',$goods_where,['sort'=>'desc'],4,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type');
         $data['recommend_car'] = $recommend_car;
+
         //获取首页第二个图片
         $second_ads = $this->ad_position(5,'ad_link,ad_code,ad_name','orderby desc');
         $data['second_ads'] = $second_ads['result'];
@@ -59,9 +63,9 @@ class Integral extends Base {
         //活动介绍
         $where['is_on_sale'] = 1;
         $where['state'] = 1;
-        $where['is_recommend'] = 0;           //推荐商品
+        //$where['is_recommend'] = 0;           //推荐商品
         $where['exchange_integral'] = 2;      //纯积分商品
-        $activity_car = $goods_model->GoodsList(1,'',$where,['sort'=>'desc'],4,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type');
+        $activity_car = $goods_model->GoodsList(1,'',$where,['sort'=>'desc'],4,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type,store_count');
         $data['activity_car'] = $activity_car;
 
         $this->json('0000','ok',$data);

@@ -86,6 +86,17 @@
               </select>
             </div>
 
+            {foreach $category as $data}
+            <div class="type-filter-row">
+              <label>{$data['name']}:</label>
+              <ul>
+                {foreach $data['list'] as $list}
+                <li><a href="__URL__/integral_mall_exchange.html?cat_id={$list['id']}">{$list['name']}</a></li>
+                {/foreach}
+              </ul>
+            </div>
+            {/foreach}
+            <!--
             <div class="type-filter-row">
               <label>Z系列:</label>
               <ul>
@@ -109,7 +120,7 @@
                 <li><a href="">T900</a></li>
               </ul>
             </div>
-
+          -->
             <div class="type-filter-row">
               <label>分类默认:</label>
               <ul>
@@ -120,6 +131,30 @@
             </div>
           </div>
           <div class="product-card-list row">
+            {foreach $g_list as $gd}
+            <div class="col col-4">
+              <div class="product-card">
+                <div class="product-card-img">
+                  <a href="#"><img src="{$gd.original_img}" alt=""></a>
+                </div>
+                <div class="product-card-content">
+                  <h2 class="product-card-title">
+                    {$gd.goods_name}
+                    <span class="float-right">已兑换:<strong class="color-primary">{$gd.sales_sum}</strong>件</span>
+                  </h2>
+                  <div class="product-card-intro"><strong>特点：</strong>{$gd.goods_remark}</div>
+                  <div class="product-card-btm clearfix">
+                    <div class="float-left product-card-price">
+                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
+                      <span>积分：<strong>{$gd.integral}</strong>积分</span>
+                    </div>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即兑换</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/foreach}
+            <!--
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
@@ -288,27 +323,7 @@
                 </div>
               </div>
             </div>
-            <div class="col col-4">
-              <div class="product-card">
-                <div class="product-card-img">
-                  <a href="#"><img src="__STATIC__/assets/images/temp/product-card-img.png" alt=""></a>
-                </div>
-                <div class="product-card-content">
-                  <h2 class="product-card-title">
-                    车内挂件
-                    <span class="float-right">已兑换:<strong class="color-primary">69213</strong>件</span>
-                  </h2>
-                  <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
-                  <div class="product-card-btm clearfix">
-                    <div class="float-left product-card-price">
-                      <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
-                      <span>积分：<strong>2000</strong>积分</span>
-                    </div>
-                    <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即兑换</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            -->
           </div>
           <div class="text-center">
             <nav aria-label="navigation pagination-box">

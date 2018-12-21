@@ -112,7 +112,7 @@ class Index extends Base{
 //        $this->json('0000','ok',$data);
 
         $this->assign('hot_car', $hot_car);
-	    $this->assign('data',  $data);
+	    $this->assign('top_ads',  $data['top_ads']);
         $this->assign('test', '我是一个测试');
         return $this->fetch('dist/home');
     }
@@ -212,9 +212,10 @@ class Index extends Base{
      */
     public function integral_mall()
     {
+    	$data = [];
         //首页轮播
-//        $top_ads = $this->ad_position(12,'ad_link,ad_code,ad_name','orderby desc');
-//        $data['top_ads'] = $top_ads['result'];
+        $top_ads = $this->ad_position(12,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
 
         //精品推荐
         $goods_model = new Goods();
@@ -236,6 +237,7 @@ class Index extends Base{
 
         $data['list'] = $activity_car;
         $this->assign('list', $activity_car);
+        $this->assign('top_ads', $data['top_ads']);
 
         return $this->fetch('dist/integral-mall');
     }

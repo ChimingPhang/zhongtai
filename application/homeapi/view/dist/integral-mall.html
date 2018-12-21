@@ -39,9 +39,14 @@
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
           <!-- Slides -->
-          <div class="swiper-slide"><img src="__STATIC__/assets/images/temp/banner1.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="__STATIC__/assets/images/temp/banner1.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="__STATIC__/assets/images/temp/banner1.jpg" alt=""></div>
+          {foreach $top_ads as $key=>$vo}
+          <div class="swiper-slide">
+            <a href="{$vo.ad_link}">
+              {$vo[bgcolor]}
+              <img src="{$vo[ad_code]}" title="{$vo[title]}" width="100%" style="" alt="" />
+            </a>
+          </div>
+          {/foreach}
         </div>
         <!-- If we need pagination -->
         <div class="swiper-pagination"></div>

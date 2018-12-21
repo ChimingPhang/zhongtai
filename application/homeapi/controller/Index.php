@@ -19,7 +19,7 @@ use think\Controller;
 class Index extends Base{
 
     //每页显示数
-    private static $pageNum = 10;
+    private static $pageNum = 9;
     //页数
     public $page = 1;
 
@@ -352,7 +352,7 @@ class Index extends Base{
     }
 
     /**
-     * 拍卖商品类表
+     * 特价车型
      * @return mixed
      */
     public function special_offer()
@@ -368,14 +368,9 @@ class Index extends Base{
         $this->assign('class', $class);
 
         //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = ['is_on_sale' => 1, 'is_end' => 0];
-//        if (I('is_start')) {
-//            $where['start_time'] = ['elt', time()];
-//        } else {
-//            $where['start_time'] = ['gt', time()];
-//        }
 
 
         $order = [];
@@ -383,18 +378,76 @@ class Index extends Base{
         if ($sales_sum) $order['sales_sum'] = $sales_sum;
         if ($price) $order['deposit_price'] = $price;
 
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        $where['exchange_integral'] = array('neq',2);
+
+        $special = M('goods_special')->order('sort desc')->select();
+        $goodsId = array_column($special, 'goods_id');
+        if (count($goodsId)) {
+            $where['goods_id'] = ['in', $goodsId];
+
+            $Goods = new Goods();
+            $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+            $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        } else {
+            $car_list = [];
+        }
+
+        $this->assign('car_list', $car_list);
+//        $this->json('200', 'ok', $car_list);
+        return $this->fetch('dist/special-offer');
+    }
+
+    /**
+     * 特价车型拍卖会
+     */
+    public function special_auction()
+    {
+        //验证参数
+//        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+//        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+        $where = ['is_on_sale' => 1, 'is_end' => 0];
+        if (I('is_start')) {
+            $where['start_time'] = ['elt', time()];
+        } else {
+            $where['start_time'] = ['gt', time()];
+        }
+
+//        $order = [];
+//        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+//        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+//        if ($price) $order['deposit_price'] = $price;
+        $order['on_time'] = 'desc';
+
         $Goods = new GoodsAuction();
         $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
         video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-        $data = $Goods->GoodsList($this->page, 1, $where, $order, 9, $field);
-        //推荐
-//        $where['is_recommend'] = 1;
-//        $data['recommend'] = $Goods->GoodsList(1, 1, $where, $order, self::$pageNum, $field);
+        $data = $Goods->GoodsList($this->page, 1, $where, $order, 6, $field);
 
-//        if(!$data) $this->errorMsg(8910);
-//        $this->json("0000", "加载成功", $data);
-        $this->assign('g_list', $data);
-        return $this->fetch('dist/special-offer');
+        $this->assign('data', $data);
+        return $this->fetch('dist/special_auction');
+    }
+
+    /**
+     * 特价车型拍卖会列表
+     */
+    public function special_auction_list()
+    {
+        //验证参数
+        $where = ['is_on_sale' => 1, 'is_end' => 0];
+        if (I('is_start')) {
+            $where['start_time'] = ['elt', time()];
+        } else {
+            $where['start_time'] = ['gt', time()];
+        }
+        $order['on_time'] = 'desc';
+
+        $Goods = new GoodsAuction();
+        $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
+        video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
+        $data = $Goods->GoodsList($this->page, 1, $where, $order, 6, $field);
+        $this->json('200', 'ok', $data);
     }
 
     /**

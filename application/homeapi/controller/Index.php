@@ -91,6 +91,9 @@ class Index extends Base{
      */
     public function home()
     {
+	    //顶部广告
+	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+	    $top_ads = $top_ads_result['result'];
         //拍卖车
         $Goods = new GoodsAuction();
         //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
@@ -131,9 +134,10 @@ class Index extends Base{
         $goods_field = implode(',', $goods_field);
         $hot_car = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
         $this->assign('hot_car', $hot_car);
-
+		$this->assign('top_ads', $top_ads);
+	    $this->assign('auc_car', $auc_car);
 //        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
-        return $this->fetch('dist/home');
+        return $this->fetch('index/home');
     }
 
     /**

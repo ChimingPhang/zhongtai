@@ -189,9 +189,11 @@ class Index extends Base{
      */
     public function brand_models_detail()
     {
+        $this->assign('input', I(''));
         !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
         $Goods = new Goods();
-        if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);
+        if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);//不是汽车
+
         $GoodsLogic = new GoodsLogic();
         $SonOrderComment = new SonOrderComment();
         //增加点击数
@@ -204,11 +206,11 @@ class Index extends Base{
         $where['goods_id'] = $goods_id;
         $field = "goods_id,goods_name,equity_content,label,equity_desc,goods_remark,price,deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,integral_money as integrals_moneys,video";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
-//        $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
-//        $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
-//        $data->equity_content = str_replace("", "<br/>", $data->equity_content);
-//        $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
-//        $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
+        $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
+        $data->equity_content = str_replace("", "<br/>", $data->equity_content);
+        $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
+        $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
         //价格表
         $price_list = $GoodsLogic->priceList($goods_id);
         //$this->assign('price_list', $price_list);
@@ -243,14 +245,12 @@ class Index extends Base{
         $appearance['interior'] = $GoodsLogic->get_sku($goods_id, $appearance['model'][0]['id'], 'interior');//内饰颜色
         $appearance['province'] = $GoodsLogic->get_sku($goods_id, $appearance['interior'][0]['id'], 'province');//城市
         $appearance['city'] = $GoodsLogic->get_sku($goods_id, $appearance['province'][0]['id'], 'city', $appearance['interior'][0]['id']);//城市
-        $appearance['distribu'] = $GoodsLogic->get_sku($goods_id, $appearance['city'][0]['id'], 'distribu', $appearance['interior'][0]['id']);//城市
+        $appearance['distribu'] = $GoodsLogic->get_sku($goods_id, $appearance['city'][0]['id'], 'distribu', $appearance['interior'][0]['id']);//经销商
         $data['appearance'] = $appearance;
         $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
         $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-
 //        $this->json("0000", "加载成功", $data);
-//        return $this->fetch('dist/parts');
         return $this->fetch('dist/brand-models-detail');
     }
 

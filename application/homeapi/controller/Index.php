@@ -255,6 +255,7 @@ class Index extends Base{
         $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
 //        $this->json("0000", "加载成功", $data);
+        $this->assign('data', $data);
         return $this->fetch('dist/brand-models-detail');
     }
 
@@ -304,7 +305,6 @@ class Index extends Base{
         $Goods = new Goods();
         $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 2, $where, $order, self::$pageNum, $field);
-//        if(!$data) $this->errorMsg(8910);
 //        $this->json("0000", "加载成功", $data);
         $this->assign('parts_list', $data);
 

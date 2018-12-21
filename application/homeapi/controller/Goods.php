@@ -17,7 +17,7 @@ use app\api\logic\GoodsLogic;
  */
 class Goods extends Base {
     //每页显示数
-    private static $pageNum = 10;
+    private static $pageNum = 9;
     //页数
     public $page = 1;
 
@@ -64,8 +64,7 @@ class Goods extends Base {
     }
 
     /**
-     * todo
-     * [品牌车型]
+     * [车型列表——全部汽车&精品推荐&热卖&特价]
      * @Auther tao.chen
      * @DateTime
      */
@@ -95,15 +94,10 @@ class Goods extends Base {
 
         if($cat_id) $where['cat_id2'] = $cat_id;
         $where['exchange_integral'] = array('neq',2);
-
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
-//        foreach($data as $key=>$value){
-//            if($value['exchange_integral'] == '0,1'){
-//                $data[$key]['exchange_integral'] = 2;
-//            }
-//        }
+
         if(!$data) $this->errorMsg(8910);
         $this->json("0000", "加载成功", $data);
     }

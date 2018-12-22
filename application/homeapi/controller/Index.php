@@ -19,7 +19,7 @@ use think\Controller;
 class Index extends Base{
 
     //每页显示数
-    private static $pageNum = 10;
+    private static $pageNum = 9;
     //页数
     public $page = 1;
 
@@ -161,22 +161,13 @@ class Index extends Base{
         !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = [];
-//        if(I('is_hot')) $where['is_hot'] = 1;
-//        if(I('is_recommend')) $where['is_recommend'] = 1;
-//        if(I('is_special')) {
-//            $special = M('goods_special')->order('sort desc')->limit(8)->select();
-//            $goodsId = array_column($special, 'goods_id');
-//            if (count($goodsId)) {
-//                $where['goods_id'] = ['in', $goodsId];
-//            }
-//        }
 
         $order = [];
         if(!$sales_sum && !$price) $order['on_time'] = 'desc';
         if ($sales_sum) $order['sales_sum'] = $sales_sum;
         if ($price) $order['deposit_price'] = $price;
 
+        $where = [];
         if($cat_id) $where['cat_id2'] = $cat_id;
         $where['exchange_integral'] = array('neq',2);
 
@@ -185,17 +176,34 @@ class Index extends Base{
         $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $this->assign('car_list', $car_list);
 
-
-//        $this->json(200, 'ok', ['category' => $category, 'class' => $class, 'car_list' => $car_list]);
         return $this->fetch('dist/brand-models');
     }
 
     /**
-     * 品牌车详情
+     * 品牌车详情页面
      */
     public function brand_models_detail()
     {
-        $this->assign('input', I(''));
+        $data = $this->get_car_detail();
+        $this->assign('data', $data);
+//        $this->json('200', 'ok', $data);
+        return $this->fetch('dist/brand-models-detail');
+    }
+
+    /**
+     * 汽车购买详情页面
+     * @return mixed
+     */
+    public function brand_models_buy()
+    {
+        $data = $this->get_car_detail();
+        $this->assign('data', $data);
+//        $this->json('200', 'ok', $data);
+        return $this->fetch('dist/brand_models_buy');
+    }
+
+    private function get_car_detail()
+    {
         !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
         $Goods = new Goods();
         if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);//不是汽车
@@ -207,10 +215,13 @@ class Index extends Base{
         //加载商品轮播
         $banner = (new GoodsImages())->getImage($goods_id);
         //$this->assign('banner', $banner);
+        $data['banner'] = $banner;
 
         //商品详情
         $where['goods_id'] = $goods_id;
-        $field = "goods_id,goods_name,equity_content,label,equity_desc,goods_remark,price,deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,integral_money as integrals_moneys,video";
+        $field = "goods_id,goods_name,equity_content,label,equity_desc,goods_remark,price,
+        deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,
+        integral_money as integrals_moneys,video";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
         $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
         $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
@@ -220,16 +231,17 @@ class Index extends Base{
         //价格表
         $price_list = $GoodsLogic->priceList($goods_id);
         //$this->assign('price_list', $price_list);
+        $data['price_list'] = $price_list;
 
         //求这个商品需要多少积分
-        $exchange_integral = I('exchange_integral')??0;
-        if($exchange_integral == 0){
+//        $exchange_integral = I('exchange_integral')??0;
+        if($data['exchange_integral'] == 0){        //纯现金
             $data['most_point'] = 0;
             $data['minimum_point'] = 0;
-        }elseif($exchange_integral == 1){
+        }elseif($data['exchange_integral'] == 1){   //积分+现金
             $data['most_point'] = $data['integral'];
             $data['minimum_point'] = 1;
-        }elseif($exchange_integral == 2){
+        }elseif($data['exchange_integral'] == 2){   //纯积分
             $data['most_point'] = $data['integral'];
             $data['minimum_point'] = $data['integral'];
         }
@@ -256,9 +268,148 @@ class Index extends Base{
         $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
         $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-//        $this->json("0000", "加载成功", $data);
+
+        return $data;
+    }
+
+    /**
+     * 热卖车型
+     * @return mixed
+     */
+    public function hot_car()
+    {
+        //检测必传参数
+        $categoryModel = new GoodsCategory();
+        $AccessoriesCategoryModel = new AccessoriesCategory();
+        //加载车系
+        $category = $categoryModel->get_name();
+        //加载分类
+        $class = $AccessoriesCategoryModel->get_name();
+        $this->assign('category', $category);
+        $this->assign('class', $class);
+
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+
+
+        $order = [];
+        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($price) $order['deposit_price'] = $price;
+
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        $where['exchange_integral'] = array('neq',2);
+        if(I('is_hot')) $where['is_hot'] = 1;
+
+        $Goods = new Goods();
+        $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+        $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+
+        $this->assign('car_list', $car_list);
+//        $this->json('200', 'ok', $car_list);
+        return $this->fetch('dist/special-offer');
+    }
+
+    /**
+     * 特价车型
+     * @return mixed
+     */
+    public function special_offer()
+    {
+        //检测必传参数
+        $categoryModel = new GoodsCategory();
+        $AccessoriesCategoryModel = new AccessoriesCategory();
+        //加载车系
+        $category = $categoryModel->get_name();
+        //加载分类
+        $class = $AccessoriesCategoryModel->get_name();
+        $this->assign('category', $category);
+        $this->assign('class', $class);
+
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+
+
+        $order = [];
+        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($price) $order['deposit_price'] = $price;
+
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        $where['exchange_integral'] = array('neq',2);
+
+        $special = M('goods_special')->order('sort desc')->select();
+        $goodsId = array_column($special, 'goods_id');
+        if (count($goodsId)) {
+            $where['goods_id'] = ['in', $goodsId];
+
+            $Goods = new Goods();
+            $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+            $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        } else {
+            $car_list = [];
+        }
+
+        $this->assign('car_list', $car_list);
+//        $this->json('200', 'ok', $car_list);
+        return $this->fetch('dist/special-offer');
+    }
+
+    /**
+     * 特价车型拍卖会
+     */
+    public function special_auction()
+    {
+        //验证参数
+//        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+//        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+        $where = ['is_on_sale' => 1, 'is_end' => 0];
+        if (I('is_start')) {
+            $where['start_time'] = ['elt', time()];
+        } else {
+            $where['start_time'] = ['gt', time()];
+        }
+
+//        $order = [];
+//        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+//        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+//        if ($price) $order['deposit_price'] = $price;
+        $order['on_time'] = 'desc';
+
+        $Goods = new GoodsAuction();
+        $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
+        video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
+        $data = $Goods->GoodsList($this->page, 1, $where, $order, 6, $field);
+
         $this->assign('data', $data);
-        return $this->fetch('dist/brand-models-detail');
+        return $this->fetch('dist/special_auction');
+    }
+
+    /**
+     * 特价车型拍卖会列表API
+     */
+    public function special_auction_list()
+    {
+        //验证参数
+        $where = ['is_on_sale' => 1, 'is_end' => 0];
+        if (I('is_start')) {
+            $where['start_time'] = ['elt', time()];
+        } else {
+            $where['start_time'] = ['gt', time()];
+        }
+        $order['on_time'] = 'desc';
+
+        $Goods = new GoodsAuction();
+        $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
+        video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
+        $data = $Goods->GoodsList($this->page, 1, $where, $order, 6, $field);
+        $this->json('200', 'ok', $data);
     }
 
     /**
@@ -359,51 +510,7 @@ class Index extends Base{
         return $this->fetch('dist/one-dollar');
     }
 
-    /**
-     * 拍卖商品类表
-     * @return mixed
-     */
-    public function special_offer()
-    {
-        //检测必传参数
-        $categoryModel = new GoodsCategory();
-        $AccessoriesCategoryModel = new AccessoriesCategory();
-        //加载车系
-        $category = $categoryModel->get_name();
-        //加载分类
-        $class = $AccessoriesCategoryModel->get_name();
-        $this->assign('category', $category);
-        $this->assign('class', $class);
 
-        //验证参数
-        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
-        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = ['is_on_sale' => 1, 'is_end' => 0];
-//        if (I('is_start')) {
-//            $where['start_time'] = ['elt', time()];
-//        } else {
-//            $where['start_time'] = ['gt', time()];
-//        }
-
-
-        $order = [];
-        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
-        if ($sales_sum) $order['sales_sum'] = $sales_sum;
-        if ($price) $order['deposit_price'] = $price;
-
-        $Goods = new GoodsAuction();
-        $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
-        video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-        $data = $Goods->GoodsList($this->page, 1, $where, $order, 9, $field);
-        //推荐
-//        $where['is_recommend'] = 1;
-//        $data['recommend'] = $Goods->GoodsList(1, 1, $where, $order, self::$pageNum, $field);
-
-//        if(!$data) $this->errorMsg(8910);
-//        $this->json("0000", "加载成功", $data);
-        $this->assign('g_list', $data);
-        return $this->fetch('dist/special-offer');
-    }
 
     /**
      * 积分兑换商品

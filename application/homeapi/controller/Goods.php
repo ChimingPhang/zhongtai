@@ -165,34 +165,7 @@ class Goods extends Base {
     }
 
 
-    /**
-     * [精品配件]
-     * @Auther 蒋峰
-     * @DateTime
-     */
-    public function parts()
-    {
-        //验证参数
-        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
-        !empty(I('class_id', '')) && !is_numeric($class_id = I('class_id', 0)) && $this->errorMsg(2002, 'class_id');//选传
 
-        $where = [];
-        if($cat_id) $where['cat_id2'] = $cat_id;
-        if($class_id) $where['class_id'] = $class_id;
-        $where['exchange_integral'] = array('neq',2);
-        $order = ['goods_id' => 'desc'];
-
-        $Goods = new GoodsModel();
-        $field = "goods_id,goods_name,price,original_img,is_recommend,is_new,is_hot,exchange_integral";
-        $data = $Goods->GoodsList($this->page, 2, $where, $order, self::$pageNum, $field);
-//        foreach($data as $key=>$value){
-//            if($value['exchange_integral'] == '0,1'){
-//                $data[$key]['exchange_integral'] = 2;
-//            }
-//        }
-        if(!$data) $this->errorMsg(8910);
-        $this->json("0000", "加载成功", $data);
-    }
 
     /**
      * [收藏]
@@ -405,11 +378,48 @@ class Goods extends Base {
     }
 
     /**
-     * [配件详情]
+     * [精品配件]
      * @Auther 蒋峰
      * @DateTime
      */
-    public function partsInfo()
+    public function parts()
+    {
+        //检测必传参数
+        $categoryModel = new GoodsCategory();
+        $AccessoriesCategoryModel = new AccessoriesCategory();
+        //加载车系
+        $category = $categoryModel->get_name();
+        //加载分类
+        $class = $AccessoriesCategoryModel->get_name();
+        $this->assign('category', $category);
+        $this->assign('class', $class);
+
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('class_id', '')) && !is_numeric($class_id = I('class_id', 0)) && $this->errorMsg(2002, 'class_id');//选传
+
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        if($class_id) $where['class_id'] = $class_id;
+        $where['exchange_integral'] = array('neq',2);
+        $order = ['goods_id' => 'desc'];
+
+        $Goods = new GoodsModel();
+        $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
+
+        $data = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
+//        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'parts_lis' => $data]);
+
+        $this->assign('parts_list', $data);
+        return $this->fetch('dist/parts');
+    }
+
+    /**
+     * [配件详情页面]
+     * @Auther 蒋峰
+     * @DateTime
+     */
+    public function parts_detail()
     {
         !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
         $Goods = new GoodsModel();
@@ -456,8 +466,89 @@ class Goods extends Base {
         $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
         $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-        $this->json("0000", "加载成功", $data);
 
+
+        $recommend_where['is_recommend'] = 1;
+        $recommend_where['exchange_integral'] = array('neq',2);
+        $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
+        $data['recommend_list'] = $Goods->GoodsList(1, 2, $recommend_where, ['goods_id' => 'desc'], 6, $field);
+
+        $this->assign('data', $data);
+//        $this->json("0000", "加载成功", $data);
+
+        return $this->fetch('dist/parts-detail');
+    }
+
+    /**
+     * 精品配件推荐——API
+     */
+    public function parts_recommend()
+    {
+        $where['is_recommend'] = 1;
+        $where['exchange_integral'] = array('neq',2);
+        $order = ['goods_id' => 'desc'];
+
+        $Goods = new GoodsModel();
+        $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
+        $data = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
+        $this->json(200, 'ok', $data);
+    }
+
+    /**
+     * [配件购买页面]
+     * @Auther 蒋峰
+     * @DateTime
+     */
+    public function parts_buy()
+    {
+        !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
+        $Goods = new GoodsModel();
+        if($Goods->goodsType($goods_id) != 2) $this->errorMsg(9999);
+        $GoodsLogic = new GoodsLogic();
+        $SonOrderComment = new SonOrderComment();
+        //增加点击数
+        $Goods->addClickCount($goods_id);
+        //加载商品轮播
+        $banner = (new GoodsImages())->getImage($goods_id);
+        //商品详情
+        $where['goods_id'] = $goods_id;
+        $field = "goods_id,goods_name,goods_remark,price,label,store_count,sales_sum,goods_content,integral,moren_integral,equity_content,equity_desc,type,video";
+        $data = $Goods->GoodsList($this->page, 2, $where, [], 1, $field);
+        $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        //价格表
+        $price_list = $GoodsLogic->priceList($goods_id);
+
+        //求这个商品需要多少积分
+        $exchange_integral = I('exchange_integral')??0;
+        if($exchange_integral == 0){
+            $data['most_point'] = 0;
+            $data['minimum_point'] = 0;
+        }elseif($exchange_integral == 1){
+            $data['most_point'] = $data['integral'];
+            $data['minimum_point'] = 1;
+        }elseif($exchange_integral == 2){
+            $data['most_point'] = $data['integral'];
+            $data['minimum_point'] = $data['integral'];
+        }
+        $point_rate = tpCache('shopping.point_rate'); //兑换比例
+        $data['integral_money'] = round($data['most_point']/$point_rate,2);  //积分最高可以抵多少钱
+
+        //获取这个用户还有多少积分
+        if(I('token')){
+            $user_id = $this->checkToken(I('token'));
+            $data['userIntegral'] = getIntegral($user_id);
+        }
+
+        $data["banner"] = $banner;
+        $data["price_list"] = $price_list;
+        $data['spec'] = $GoodsLogic->get_spec($goods_id);
+        $data['spec_price'] = $GoodsLogic->get_spec_goods_price($goods_id);
+        $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
+        $data['comment_count'] = $SonOrderComment->count;
+        $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
+//        $this->json("0000", "加载成功", $data);
+        $this->assign('data', $data);
+        return $this->fetch('dist/parts-buy');
     }
 
     /**

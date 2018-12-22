@@ -201,7 +201,7 @@ class Index extends Base{
     {
         !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
         $Goods = new Goods();
-        if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);//不是汽车
+//        if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);//不是汽车
 
         $GoodsLogic = new GoodsLogic();
         $SonOrderComment = new SonOrderComment();
@@ -218,11 +218,17 @@ class Index extends Base{
         deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,
         integral_money as integrals_moneys,video";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
-        $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
-        $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
-        $data->equity_content = str_replace("", "<br/>", $data->equity_content);
-        $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
-        $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        if (!empty($data->equity_desc)) {
+            $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
+            $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
+        }
+        if (!empty($data->equity_content)) {
+            $data->equity_content = str_replace("", "<br/>", $data->equity_content);
+            $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
+        }
+        if (!empty($data->goods_content)) {
+            $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        }
         //价格表
         $price_list = $GoodsLogic->priceList($goods_id);
         //$this->assign('price_list', $price_list);
@@ -459,41 +465,6 @@ class Index extends Base{
         $count = M('collection')->where(array('user_id' => $user_id, 'goods_id' => $goods_id,'deleted'=>0))->count();
         if($count) return 1;
         return 0;
-    }
-
-    /**
-     * 精品配件
-     * @return mixed
-     */
-    public function parts()
-    {
-        //检测必传参数
-        $categoryModel = new GoodsCategory();
-        $AccessoriesCategoryModel = new AccessoriesCategory();
-        //加载车系
-        $category = $categoryModel->get_name();
-        //加载分类
-        $class = $AccessoriesCategoryModel->get_name();
-        $this->assign('category', $category);
-        $this->assign('class', $class);
-
-        //验证参数
-        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
-        !empty(I('class_id', '')) && !is_numeric($class_id = I('class_id', 0)) && $this->errorMsg(2002, 'class_id');//选传
-
-        $where = [];
-        if($cat_id) $where['cat_id2'] = $cat_id;
-        if($class_id) $where['class_id'] = $class_id;
-        $where['exchange_integral'] = array('neq',2);
-        $order = ['goods_id' => 'desc'];
-
-        $Goods = new Goods();
-        $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
-        $data = $Goods->GoodsList($this->page, 2, $where, $order, self::$pageNum, $field);
-//        $this->json("0000", "加载成功", $data);
-        $this->assign('parts_list', $data);
-
-        return $this->fetch('dist/parts');
     }
 
     /**

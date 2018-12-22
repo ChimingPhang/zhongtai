@@ -112,7 +112,24 @@ class Integral extends Base {
         $where['exchange_integral'] = 2;
 
         $Goods = new Goods();
-        $field = "goods_id,goods_name,goods_remark,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral,sales_sum";
+        $field = [
+            'goods_id',
+            'goods_name',
+            'goods_remark',     //商品描述
+            'original_img',
+            'is_recommend',
+            'is_new',
+            'is_hot',
+            'type',             //1汽车,2配件,3其他
+            'sales_sum',        //销量
+            'store_count',      //库存量
+            'goods_content',    //商品详情描述
+            'equity_content',   //权益说明
+            'equity_desc',      //权益描述
+            'integral',         //可以使用积分
+            'moren_integral',   //配件商品的默认积分
+        ];
+        $field = implode(',', $field);
         $data = $Goods->GoodsList($this->page, 0, $where, [], 1, $field);
 
         //加载商品轮播
@@ -127,7 +144,7 @@ class Integral extends Base {
         $data['recommend_car'] = $recommend_car;
         $this->assign('recommend_car', $recommend_car);
 
-//        $this->json(200, 'ok', $data);
+        $this->json(200, 'ok', $data);
         return $this->fetch('dist/integral-mall-detail');
     }
 

@@ -103,34 +103,6 @@ class Goods extends Base {
     }
 
     /**
-     *
-     * [秒杀列表]
-     * @Auther ta0.chen
-     * @DateTime
-     */
-    public function carseckill()
-    {
-        //验证参数
-        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
-        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
-        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = [];
-        $order = [];
-        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
-        if ($sales_sum) $order['sales_sum'] = $sales_sum;
-        if ($price) $order['deposit_price'] = $price;
-
-        if($cat_id) $where['cat_id2'] = $cat_id;
-
-        $Goods = new GoodsSeckill();
-        $field = "goods_id,goods_name,goods_remark,sales_sum,price,label,original_img,is_recommend,is_new,is_hot";
-        $data = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
-
-        if(!$data) $this->errorMsg(8910);
-        $this->json("0000", "加载成功", $data);
-    }
-
-    /**
      * [拍卖列表]
      * @Auther tao.chen
      * @DateTime
@@ -163,8 +135,6 @@ class Goods extends Base {
         if(!$data) $this->errorMsg(8910);
         $this->json("0000", "加载成功", $data);
     }
-
-
 
 
     /**

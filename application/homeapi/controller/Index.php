@@ -506,9 +506,4 @@ class Index extends Base{
         return $this->fetch('dist/user-center');
     }
 
-    public function one_dollar()
-    {
-        return $this->fetch('dist/one-dollar');
-    }
-
 }

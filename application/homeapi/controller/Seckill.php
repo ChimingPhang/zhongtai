@@ -1,8 +1,11 @@
 <?php
-namespace app\api\controller;
+namespace app\homeapi\controller;
 
+use app\api\controller\Order;
 use app\api\logic\CartLogic;
 use app\api\logic\GoodsLogic;
+use app\api\model\AccessoriesCategory;
+use app\api\model\GoodsCategory;
 use app\api\model\GoodsSeckill;
 use app\api\logic\SecKillLogic;
 use app\common\logic\PlaceOrder;
@@ -17,7 +20,7 @@ use think\Db;
  */
 class Seckill extends Base {
     //每页显示数
-    private static $pageNum = 10;
+    private static $pageNum = 9;
     //页数
     public static $page = 1;
     private static $GoodsSecKill;
@@ -59,19 +62,54 @@ class Seckill extends Base {
     }
 
     /**
-     * [列表]
+     * [秒杀商品列表页面]
      * @Auther 蒋峰
      * @DateTime
      */
+    public function one_dollar()
+    {
+        //筛选条件
+        $types = [
+            ['id' => 1, 'name' => '汽车'],
+            ['id' => 2, 'name' => '配件'],
+            ['id' => 3, 'name' => '第三方'],
+        ];
+        $this->assign('type', $types);
+
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+        $type = I('type', 0);
+        if(!in_array($type, [0,1,2,3,])) $type = 0;
+
+        $order = [];
+        if ($price) $order['deposit_price'] = $price;
+
+        $field = "id,goods_name,goods_remark,sales_sum,price,label,type,original_img";
+        $list = self::$GoodsSecKill->GoodsList(self::$page, $type, [], $order, self::$pageNum, $field);
+        $this->assign('car_list', $list);
+
+//        $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
+
+        return $this->fetch('dist/one-dollar');
+    }
+
+    /**
+     * 秒杀商品列表
+     */
     public function lists()
     {
-        !in_array($sales_sum = I('sales_sum', ''),['','asc','desc']) && $this->errorMsg(2002, 'sales_sum');//必传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+        $type = I('type', 0);
+        if(!in_array($type, [0,1,2,3,])) $type = 0;
+
         $order = [];
-        if(empty($sales_sum)) $order['id'] = 'desc';
-        if ($sales_sum) $order['sales_sum'] = $sales_sum;
-        $field = "id,goods_name,sales_sum,price,label,type,original_img";
-        $list = self::$GoodsSecKill->GoodsList(self::$page, 0, [], $order, self::$pageNum, $field);
-        return $this->json("0000", 'ok', $list);
+        if ($price) $order['deposit_price'] = $price;
+
+        $field = "id,goods_name,goods_remark,sales_sum,price,label,type,original_img";
+        $list = self::$GoodsSecKill->GoodsList(self::$page, $type, [], $order, self::$pageNum, $field);
+        $this->assign('car_list', $list);
+
+        $this->json("0000", 'ok', $list);
+
     }
 
     /**
@@ -79,13 +117,16 @@ class Seckill extends Base {
      * @Auther 蒋峰
      * @DateTime
      */
-    public function info()
+    public function one_dollar_detail()
     {
         empty(I('seckill_id', '')) && $this->errorMsg(2001, 'seckill_id');//必传auction_id
         !is_numeric($seckill_id = I('seckill_id', 0)) && $this->errorMsg(2002, 'seckill_id');//必传
         !is_numeric($address_id = I('address_id', 0)) && $this->errorMsg(2002, 'address_id');//选传address_id
         $info = self::$GoodsSecKill->info($seckill_id, '*');
-        if(!$info) $this->errorMsg('9999');
+        if(!$info) {
+            $this->assign('data', $info);
+            return $this->fetch('dist/one-dollar-detail');
+        }
 
         //获取用户id
         $user_id = (new \app\api\model\Users())->getUserOnToken(I('token', '1'));
@@ -114,7 +155,14 @@ class Seckill extends Base {
         //查询这个用户是否已经参加秒杀活动
         $count = M('order')->where(['prom_type'=>8,'prom_id'=>$seckill_id,'user_id'=>$user_id])->count();
         $info->count = empty($count)?1:2;
-        return $this->json("0000", 'ok', $info);
+//        return $this->json("0000", 'ok', $info);
+
+
+        //todo 精品推荐3个
+
+
+        $this->assign('data', $info);
+        return $this->fetch('dist/one-dollar-detail');
     }
 
     /**

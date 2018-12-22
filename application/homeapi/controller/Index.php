@@ -146,6 +146,7 @@ class Index extends Base{
      */
     public function brand_models()
     {
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -183,6 +184,7 @@ class Index extends Base{
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $this->assign('car_list', $car_list);
+
 
 //        $this->json(200, 'ok', ['category' => $category, 'class' => $class, 'car_list' => $car_list]);
         return $this->fetch('dist/brand-models');
@@ -317,10 +319,11 @@ class Index extends Base{
     public function integral_mall()
     {
         //首页轮播
-//        $top_ads = $this->ad_position(12,'ad_link,ad_code,ad_name','orderby desc');
-//        $data['top_ads'] = $top_ads['result'];
+	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+	    $top_ads = $top_ads_result['result'];
 
-        //精品推荐
+
+	    //精品推荐
         $goods_model = new Goods();
 
         $goods_where['is_on_sale'] = 1;
@@ -340,6 +343,7 @@ class Index extends Base{
 
         $data['list'] = $activity_car;
         $this->assign('list', $activity_car);
+	    $this->assign('top_ads', $top_ads);
 
         return $this->fetch('dist/integral-mall');
     }

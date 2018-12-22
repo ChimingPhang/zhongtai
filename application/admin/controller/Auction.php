@@ -445,7 +445,7 @@ s.sku_name) AS sku_name,CONCAT(p.id, '_', s.id) AS spec_key	FROM tp_goods_sku AS
             $data_arr['start_price'] = $data['start_price']; //本店价
             $data_arr['bail_price'] = $data['bail_price']; //成本价
             $data_arr['markup_price'] = $data['markup_price']; //商品图片
-            $data_arr['brokerage_price'] = $data['brokerage_price']; //商品图片
+//            $data_arr['brokerage_price'] = $data['brokerage_price']; //商品图片
             $data_arr['reserve_price'] = $data['reserve_price']; //赠送积分
             $data_arr['preheat_time'] = strtotime($data['preheat_time']); //预热时间
             $data_arr['start_time'] = strtotime($data['start_time']); //关键字

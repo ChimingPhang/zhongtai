@@ -135,7 +135,7 @@ class AuctionLogic extends Model
      */
     public function isSignUp($auction_id, $user_id)
     {
-        return Db::name('auction_sign_up')->where(array('auction_id'=> $auction_id, 'user_id'=> $user_id, 'pay_status' => 1 ))->find();
+        return Db::name('auction_sign_up')->where(array('auction_id'=> $auction_id, 'user_id'=> $user_id))->find();
     }
 
     /**
@@ -160,7 +160,8 @@ class AuctionLogic extends Model
      */
     public function signUpNum($auction_id)
     {
-        return Db::name('auction_sign_up')->where(array('auction_id'=> $auction_id, 'pay_status' => 1 ))->count();
+//        return Db::name('auction_sign_up')->where(array('auction_id'=> $auction_id, 'pay_status' => 1 ))->count();
+        return Db::name('auction_sign_up')->where(array('auction_id'=> $auction_id))->count();
     }
 
     /**

@@ -206,7 +206,7 @@ class Index extends Base{
     {
         !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
         $Goods = new Goods();
-        if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);//不是汽车
+//        if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);//不是汽车
 
         $GoodsLogic = new GoodsLogic();
         $SonOrderComment = new SonOrderComment();
@@ -223,11 +223,17 @@ class Index extends Base{
         deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,
         integral_money as integrals_moneys,video";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
-        $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
-        $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
-        $data->equity_content = str_replace("", "<br/>", $data->equity_content);
-        $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
-        $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        if (!empty($data->equity_desc)) {
+            $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
+            $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
+        }
+        if (!empty($data->equity_content)) {
+            $data->equity_content = str_replace("", "<br/>", $data->equity_content);
+            $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
+        }
+        if (!empty($data->goods_content)) {
+            $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        }
         //价格表
         $price_list = $GoodsLogic->priceList($goods_id);
         //$this->assign('price_list', $price_list);
@@ -392,6 +398,43 @@ class Index extends Base{
     }
 
     /**
+     * 特价拍卖详情
+     */
+    public function special_auction_detail()
+    {
+        !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
+        $Goods = new GoodsAuction();
+        $GoodsLogic = new GoodsLogic();
+        $SonOrderComment = new SonOrderComment();
+        //增加点击数
+        $Goods->addClickCount($goods_id);
+        //加载商品轮播
+        $banner = (new GoodsImages())->getImage($goods_id);
+        $data['banner'] = $banner;
+
+        //商品详情
+        $where['id'] = $goods_id;
+        $field = "goods_id,goods_name,label,goods_remark,price,deposit_price,
+        store_count,sales_sum,integral,exchange_integral,
+        integral_money as integrals_moneys,video";
+        $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
+
+        if (count($data)) {
+            $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
+            $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
+            $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号
+            $appearance['interior'] = $GoodsLogic->get_sku($goods_id, $appearance['model'][0]['id'], 'interior');//内饰颜色
+            $appearance['distribu'] = $GoodsLogic->get_sku($goods_id, $appearance['city'][0]['id'], 'distribu', $appearance['interior'][0]['id']);//城市
+            $data['appearance'] = $appearance;
+            $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
+            $data['comment_count'] = $SonOrderComment->count;
+            $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
+        }
+
+        return $this->fetch('dist/special_auction_detail');
+    }
+
+    /**
      * 特价车型拍卖会列表API
      */
     public function special_auction_list()
@@ -427,41 +470,6 @@ class Index extends Base{
         $count = M('collection')->where(array('user_id' => $user_id, 'goods_id' => $goods_id,'deleted'=>0))->count();
         if($count) return 1;
         return 0;
-    }
-
-    /**
-     * 精品配件
-     * @return mixed
-     */
-    public function parts()
-    {
-        //检测必传参数
-        $categoryModel = new GoodsCategory();
-        $AccessoriesCategoryModel = new AccessoriesCategory();
-        //加载车系
-        $category = $categoryModel->get_name();
-        //加载分类
-        $class = $AccessoriesCategoryModel->get_name();
-        $this->assign('category', $category);
-        $this->assign('class', $class);
-
-        //验证参数
-        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
-        !empty(I('class_id', '')) && !is_numeric($class_id = I('class_id', 0)) && $this->errorMsg(2002, 'class_id');//选传
-
-        $where = [];
-        if($cat_id) $where['cat_id2'] = $cat_id;
-        if($class_id) $where['class_id'] = $class_id;
-        $where['exchange_integral'] = array('neq',2);
-        $order = ['goods_id' => 'desc'];
-
-        $Goods = new Goods();
-        $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
-        $data = $Goods->GoodsList($this->page, 2, $where, $order, self::$pageNum, $field);
-//        $this->json("0000", "加载成功", $data);
-        $this->assign('parts_list', $data);
-
-        return $this->fetch('dist/parts');
     }
 
     /**
@@ -503,58 +511,6 @@ class Index extends Base{
     public function user_center()
     {
         return $this->fetch('dist/user-center');
-    }
-
-    public function one_dollar()
-    {
-        return $this->fetch('dist/one-dollar');
-    }
-
-
-
-    /**
-     * 积分兑换商品
-     * @return mixed
-     */
-    public function integral_mall_exchange()
-    {
-        //检测必传参数
-        $categoryModel = new GoodsCategory();
-        $AccessoriesCategoryModel = new AccessoriesCategory();
-        //加载车系
-        $category = $categoryModel->get_name();
-        //加载分类
-        $class = $AccessoriesCategoryModel->get_name();
-        $this->assign('category', $category);
-        $this->assign('class', $class);
-
-        //验证参数
-        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
-        !empty(I('class_id', '')) && !is_numeric($class_id = I('class_id', 0)) && $this->errorMsg(2002, 'class_id');//选传
-        //empty($title = I('title', '')) && $this->errorMsg(2001, 'title'); //必传
-        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
-        !empty(I('integral', '')) && !in_array($integral = I('integral', ''),['asc','desc']) && $this->errorMsg(2002, 'integral');//选传
-        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-
-        //排序顺序
-        $order = [];
-        if(!$sales_sum && !$integral) $order['sort'] = 'desc';
-        if ($sales_sum) $order['sales_sum'] = $sales_sum;
-        if ($integral) $order['integral'] = $integral;
-        //检索条件
-        $where = [];
-        if($cat_id) $where['cat_id2'] = $cat_id;
-        if($class_id) $where['class_id'] = $class_id;
-        if ($price) $order['deposit_price'] = $price;
-        $where['exchange_integral'] = 2;
-        if(I('title')) $where['goods_name'] = ['like','%'.I('title').'%'];
-
-        $Goods = new Goods();
-        $field = "goods_id,goods_name,goods_remark,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral,sales_sum";
-        $data = $Goods->GoodsList($this->page, 0, $where, $order, 9, $field);
-        $this->assign('g_list', $data);
-//        $this->json(200, 'ok', $data);
-        return $this->fetch('dist/integral-mall-exchange');
     }
 
 }

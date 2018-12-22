@@ -5,6 +5,7 @@ use app\api\controller\Order;
 use app\api\logic\CartLogic;
 use app\api\logic\GoodsLogic;
 use app\api\model\AccessoriesCategory;
+use app\api\model\Goods;
 use app\api\model\GoodsCategory;
 use app\api\model\GoodsSeckill;
 use app\api\logic\SecKillLogic;
@@ -123,6 +124,7 @@ class Seckill extends Base {
         !is_numeric($seckill_id = I('seckill_id', 0)) && $this->errorMsg(2002, 'seckill_id');//必传
         !is_numeric($address_id = I('address_id', 0)) && $this->errorMsg(2002, 'address_id');//选传address_id
         $info = self::$GoodsSecKill->info($seckill_id, '*');
+
         if(!$info) {
             $this->assign('data', $info);
             return $this->fetch('dist/one-dollar-detail');
@@ -155,13 +157,17 @@ class Seckill extends Base {
         //查询这个用户是否已经参加秒杀活动
         $count = M('order')->where(['prom_type'=>8,'prom_id'=>$seckill_id,'user_id'=>$user_id])->count();
         $info->count = empty($count)?1:2;
-//        return $this->json("0000", 'ok', $info);
 
 
-        //todo 精品推荐3个
-
+        //精品推荐3个
+        $Goods = new Goods();
+        $where['is_recommend'] = 1;
+        $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+        $info['recommend'] = $Goods->GoodsList(1, 1, $where, [], 3, $field);
 
         $this->assign('data', $info);
+        $this->json(200, 'ok', $info);
+
         return $this->fetch('dist/one-dollar-detail');
     }
 

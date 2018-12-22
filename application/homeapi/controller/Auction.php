@@ -44,11 +44,11 @@ class Auction extends Base {
     }
 
     /**
-     * [推荐列表]
+     * [推荐列表]——特价车型拍卖会
      * @Auther 蒋峰
      * @DateTime
      */
-    public function recommendList()
+    public function special_auction()
     {
         // token page
         $where = " 1 = 1 ";
@@ -64,7 +64,7 @@ class Auction extends Base {
         $auctionList = M('Auction')->alias('a')->field($fields)
             ->where($where)
             ->order('on_time', 'desc')
-            ->limit((self::$page -1 ) * self::$pageNum, self::$pageNum)
+            ->limit((self::$page -1 ) * 6, 6)
             ->select();
 
         //查询用户设置提醒预约的商品
@@ -83,8 +83,56 @@ class Auction extends Base {
             if(in_array($value['id'], $signUp)) $value['sign_up_type'] = 1;
         }
 
-        if(!$auctionList) return $this->errorMsg(8910);
-        return $this->json("0000", '加载成功', $auctionList);
+//        $this->json("0000", '加载成功', $auctionList);
+        $this->assign('data', $auctionList);
+
+        return $this->fetch('dist/special_auction');
+
+    }
+
+    public function special_auction_list()
+    {
+        if (I('is_start')) {
+            // token page
+            $where = " 1 = 1 ";
+            $user_id = (new \app\api\model\Users())->getUserOnToken(I('token'));
+
+            if (!$user_id) $user_id = 0;
+            //查询拍卖商品
+            $fields = "a.id,a.goods_name,a.click_count,a.start_time,a.end_time,a.goods_remark,a.label,a.original_img,
+            a.spec_key_name,a.is_end,a.price,a.num as offer_num,
+            0 as bookings_type, 0 as sign_up_type";
+            $auctionList = M('Auction')->alias('a')->field($fields)
+                ->where($where)
+                ->order('on_time', 'desc')
+                ->limit((self::$page - 1) * 6, 6)
+                ->select();
+
+            //查询用户设置提醒预约的商品
+//        $remind = M('AuctionRemind')->where(array('user_id' => $user_id, 'status' => 0))->field('auction_id')->select();
+            $bookings = M('AuctionBookings')->where(array('user_id' => $user_id))->field('auction_id')->select();
+            $signUp = M('AuctionSignUp')->where(array('user_id' => $user_id))->field('auction_id')->select();
+//        $remind = array_column($remind, 'auction_id');
+            $bookings = array_column($bookings, 'auction_id');
+            $signUp = array_column($signUp, 'auction_id');
+
+            if ($auctionList)
+            foreach ($auctionList as &$value) {
+                $value['original_img'] = auction_thum_images($value['id'], 200, 150);
+                if (in_array($value['id'], $bookings)) $value['bookings_type'] = 1;
+                if (in_array($value['id'], $signUp)) $value['sign_up_type'] = 1;
+            }
+        } else {
+            $where['start_time'] = ['gt', time()];
+            $order['on_time'] = 'desc';
+
+            $Goods = new GoodsAuction();
+            $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
+            video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
+            $auctionList = $Goods->GoodsList(self::$page, 1, $where, $order, 6, $field);
+        }
+
+        $this->json(200, 'ok', $auctionList);
     }
 
     /**
@@ -100,7 +148,7 @@ class Auction extends Base {
         // token page
         $where = " 1 = 1 ";
         $where .= ' and a.start_time > '.time();
-        $where .= ' and a.preheat_time < '.time();
+//        $where .= ' and a.preheat_time < '.time();
 
         $auctionList = M('Auction')->alias('a')
             ->join('auction_remind r','`a`.`id` = `r`.`auction_id`','left')

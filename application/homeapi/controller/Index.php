@@ -387,6 +387,55 @@ class Index extends Base{
     }
 
     /**
+     * 特价拍卖详情
+     */
+    public function special_auction_detail()
+    {
+        !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
+        $Goods = new GoodsAuction();
+        $GoodsLogic = new GoodsLogic();
+        $SonOrderComment = new SonOrderComment();
+        //增加点击数
+        $Goods->addClickCount($goods_id);
+        //加载商品轮播
+        $banner = (new GoodsImages())->getImage($goods_id);
+        $data['banner'] = $banner;
+
+        //商品详情
+        $where['id'] = $goods_id;
+        $field = "goods_id,goods_name,label,goods_remark,price,deposit_price,
+        store_count,sales_sum,integral,exchange_integral,
+        integral_money as integrals_moneys,video";
+        $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
+
+        if (count($data)) {
+            $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
+            $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
+            $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号
+            $appearance['interior'] = $GoodsLogic->get_sku($goods_id, $appearance['model'][0]['id'], 'interior');//内饰颜色
+            $appearance['distribu'] = $GoodsLogic->get_sku($goods_id, $appearance['city'][0]['id'], 'distribu', $appearance['interior'][0]['id']);//城市
+            $data['appearance'] = $appearance;
+            $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
+            $data['comment_count'] = $SonOrderComment->count;
+            $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
+        }
+
+        return $this->fetch('dist/special_auction_detail');
+    }
+
+    /**
+     * [拍卖物品详情]
+     * @Auther chen.tao
+     * @DateTime
+     */
+    public function aucInfo()
+    {
+
+
+        $this->json("0000", "加载成功", $data);
+    }
+
+    /**
      * 特价车型拍卖会列表API
      */
     public function special_auction_list()

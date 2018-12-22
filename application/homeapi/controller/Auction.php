@@ -1,5 +1,5 @@
 <?php
-namespace app\api\controller;
+namespace app\homeapi\controller;
 
 use app\api\logic\SocketLogic;
 use app\api\model\GoodsAuction;
@@ -56,17 +56,21 @@ class Auction extends Base {
 
         if(!$user_id) $user_id = 0;
 //        if($user_id) $where .= " and r.user_id =".$user_id;
-        $where .= " and a.preheat_time < ". time();
+//        $where .= " and a.preheat_time < ". time();
         //查询拍卖商品
-        $auctionList = M('Auction')->alias('a')->field("a.id,a.goods_name,a.click_count,a.start_time,a.end_time,a.goods_remark,a.label,a.original_img,a.spec_key_name,a.is_end,a.price,a.num as offer_num, 0 as bookings_type, 0 as sign_up_type")
+        $fields = "a.id,a.goods_name,a.click_count,a.start_time,a.end_time,a.goods_remark,a.label,a.original_img,
+            a.spec_key_name,a.is_end,a.price,a.num as offer_num,
+            0 as bookings_type, 0 as sign_up_type";
+        $auctionList = M('Auction')->alias('a')->field($fields)
             ->where($where)
             ->order('on_time', 'desc')
             ->limit((self::$page -1 ) * self::$pageNum, self::$pageNum)
             ->select();
+
         //查询用户设置提醒预约的商品
 //        $remind = M('AuctionRemind')->where(array('user_id' => $user_id, 'status' => 0))->field('auction_id')->select();
         $bookings = M('AuctionBookings')->where(array('user_id' => $user_id))->field('auction_id')->select();
-        $signUp = M('AuctionSignUp')->where(array('user_id' => $user_id, 'pay_status' => 1))->field('auction_id')->select();
+        $signUp = M('AuctionSignUp')->where(array('user_id' => $user_id))->field('auction_id')->select();
 //        $remind = array_column($remind, 'auction_id');
         $bookings = array_column($bookings, 'auction_id');
         $signUp = array_column($signUp, 'auction_id');
@@ -133,14 +137,17 @@ class Auction extends Base {
      * @Auther 蒋峰
      * @DateTime
      */
-    public function auctionInfo()
+    public function special_auction_detail()
     {
         empty(I('auction_id', '')) && $this->errorMsg(2001, 'auction_id');//必传
         !is_numeric($auction_id = I('auction_id', 0)) && $this->errorMsg(2002, 'auction_id');//必传
         //获取用户id
         $user_id = (new \app\api\model\Users())->getUserOnToken(I('token', '1'));
         //获取拍卖详情信息
-        $auctionInfo = self::$AuctionModel->auctionInfo($auction_id, 'id,goods_name,click_count,start_price as now_price,price as start_price,bail_price,markup_price,reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,give_integral,type,label,banner_image,spec_key_name,is_end,num as offer_num');
+        $field = 'id,goods_name,click_count,start_price as now_price,price as start_price,bail_price,markup_price,
+        reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,give_integral,type,label,
+        banner_image,spec_key_name,is_end,num as offer_num';
+        $auctionInfo = self::$AuctionModel->auctionInfo($auction_id, $field);
         if(!$auctionInfo) $this->errorMsg('9999');
         //banner图
         $auctionInfo->banner_image =$this->bannerImage($auctionInfo->banner_image);
@@ -169,7 +176,8 @@ class Auction extends Base {
         $delayTime = self::$AuctionLogic->offerList($auction_id, 1, $user_id, 3);
         $auctionInfo->offer_list = $delayTime;
 
-        return $this->json('0000','加载成功', $auctionInfo);
+//        return $this->json('0000','加载成功', $auctionInfo);
+        return $this->fetch('dist/special_auction_detail');
     }
 
     /**

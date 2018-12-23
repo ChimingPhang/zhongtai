@@ -354,6 +354,11 @@ class Goods extends Base {
      */
     public function parts()
     {
+        //顶部广告
+	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $top_ads = $top_ads_result['result'];
+        $this->assign('top_ads', $top_ads);
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -381,7 +386,7 @@ class Goods extends Base {
 //        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'parts_lis' => $data]);
 
         $this->assign('parts_list', $data);
-        return $this->fetch('dist/parts');
+        return $this->fetch('parts/parts');
     }
 
     /**
@@ -446,7 +451,7 @@ class Goods extends Base {
         $this->assign('data', $data);
 //        $this->json("0000", "加载成功", $data);
 
-        return $this->fetch('dist/parts-detail');
+        return $this->fetch('parts/parts_detail');
     }
 
     /**
@@ -518,7 +523,7 @@ class Goods extends Base {
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
 //        $this->json("0000", "加载成功", $data);
         $this->assign('data', $data);
-        return $this->fetch('dist/parts-buy');
+        return $this->fetch('parts/parts_buy');
     }
 
     /**

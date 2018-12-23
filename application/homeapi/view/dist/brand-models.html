@@ -58,23 +58,28 @@
           <div class="type-filter car-type-filter">
             <div class="type-filter-row">
               <label>选择车型:</label>
-              <select name="" id="">
-                <option value="">全部</option>
-              </select>
+              <div class="d-inline">
+                <select class="selectpicker form-control form-control-sm" data-style="my-select"  data-width="100px">
+                  <option>众泰</option>
+                  <option>大迈</option>
+                  <option>2016</option>
+                </select>
+              </div>
             </div>
             {foreach $category as $data}
             <div class="type-filter-row">
               <label>{$data['name']}:</label>
-              <ul>
+              <ul class="filter" id="type-filter">
+                <li class="{$Think.get.cat_id? '' : 'active'}"><a href="__URL__/brand_models.html">全部</a></li>
                 {foreach $data['list'] as $list}
-                <li><a href="__URL__/brand_models.html?cat_id={$list['id']}">{$list['name']}</a></li>
+                <li class="{$Think.get.cat_id == $list['id'] ? 'active' : ''}"><a href="__URL__/brand_models.html?cat_id={$list['id']}">{$list['name']}</a></li>
                 {/foreach}
               </ul>
             </div>
             {/foreach}
             <div class="type-filter-row">
               <label>分类默认:</label>
-              <ul>
+              <ul class="filter">
                 <li><a href="" class="active">默认</a></li>
                 <li><a href="__URL__/brand_models.html?sales_sum=desc" class="btn-sort">销量</a></li>
                 <li><a href="__URL__/brand_models.html?price=desc" class="btn-sort">价格</a></li>

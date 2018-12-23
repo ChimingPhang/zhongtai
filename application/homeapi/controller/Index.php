@@ -93,7 +93,9 @@ class Index extends Base{
     {
 	    //顶部广告
 	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-	    $top_ads = $top_ads_result['result'];
+        $top_ads = $top_ads_result['result'];
+        $this->assign('top_ads', $top_ads);
+        
         //拍卖车
         $Goods = new GoodsAuction();
         //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
@@ -134,10 +136,9 @@ class Index extends Base{
         $goods_field = implode(',', $goods_field);
         $hot_car = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
         $this->assign('hot_car', $hot_car);
-		$this->assign('top_ads', $top_ads);
-	    $this->assign('auc_car', $auc_car);
+		
 //        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
-        return $this->fetch('index/home');
+        return $this->fetch('index/index');
     }
 
     /**
@@ -176,7 +177,7 @@ class Index extends Base{
         $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $this->assign('car_list', $car_list);
 
-        return $this->fetch('dist/brand-models');
+        return $this->fetch('brand_models/brand_models');
     }
 
     /**
@@ -372,6 +373,11 @@ class Index extends Base{
      */
     public function special_auction()
     {
+	    //顶部广告
+	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $top_ads = $top_ads_result['result'];
+        $this->assign('top_ads', $top_ads);
+        
         //验证参数
 //        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
 //        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
@@ -391,10 +397,11 @@ class Index extends Base{
         $Goods = new GoodsAuction();
         $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
         video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-        $data = $Goods->GoodsList($this->page, 1, $where, $order, 6, $field);
+        $data = $Goods->GoodsList($this->page, 1, $where, $order, 9, $field);
 
         $this->assign('data', $data);
-        return $this->fetch('dist/special_auction');
+	   
+        return $this->fetch('auction/special_auction');
     }
 
     /**
@@ -414,9 +421,7 @@ class Index extends Base{
 
         //商品详情
         $where['id'] = $goods_id;
-        $field = "goods_id,goods_name,label,goods_remark,price,deposit_price,
-        store_count,sales_sum,integral,exchange_integral,
-        integral_money as integrals_moneys,video";
+        $field = "goods_id,goods_name,start_price,bail_price,markup_price,brokerage_price,reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,type,label,banner_image,original_img,spec_key_name";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
 
         if (count($data)) {
@@ -429,9 +434,10 @@ class Index extends Base{
             $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
             $data['comment_count'] = $SonOrderComment->count;
             $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
+            $this->assign('data', $data);
         }
 
-        return $this->fetch('dist/special_auction_detail');
+        return $this->fetch('auction/special_auction_detail');
     }
 
     /**
@@ -504,7 +510,7 @@ class Index extends Base{
         $this->assign('list', $activity_car);
 	    $this->assign('top_ads', $top_ads);
 
-        return $this->fetch('dist/integral-mall');
+        return $this->fetch('integral_mall/integral_mall');
     }
 
 

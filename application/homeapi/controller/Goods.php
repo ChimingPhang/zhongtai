@@ -461,7 +461,8 @@ class Goods extends Base {
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
-        $this->json(200, 'ok', $data);
+        $count = $Goods->GoodsCount(2, $where);
+        $this->json(200, 'ok', ['total' => ceil($count/6), 'list' => $data]);
     }
 
     /**

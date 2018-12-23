@@ -66,6 +66,24 @@ class GoodsAuction extends Model {
 //        return $this->getLastSql();
     }
 
+    public function GoodsCount($type = 0, $where = []){
+        if(!is_array($where)) return array('status'=>2002,'msg'=>'where');
+
+        if( !isset($where['state']) ) $where['state'] = 1;
+        if( !isset($where['is_on_sale']) ) $where['is_on_sale'] = 1;
+
+        //商品类型
+        if($type) $where['type'] = $type;
+
+        //加入检索条件
+        $this->where($where);
+
+        $count = $this->count();
+
+        return $count;
+//        return $this->getLastSql();
+    }
+
     /**
      * [添加商品点击数]
      * @Auther 蒋峰

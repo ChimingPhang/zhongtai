@@ -107,6 +107,7 @@ class Auction extends Base {
                 ->order('on_time', 'desc')
                 ->limit((self::$page - 1) * 6, 6)
                 ->select();
+            $count =  M('Auction')->where($where)->count();
 
             //查询用户设置提醒预约的商品
 //        $remind = M('AuctionRemind')->where(array('user_id' => $user_id, 'status' => 0))->field('auction_id')->select();
@@ -129,10 +130,11 @@ class Auction extends Base {
             $Goods = new GoodsAuction();
             $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
             video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-            $auctionList = $Goods->GoodsList(self::$page, 1, $where, $order, 6, $field);
+            $auctionList = $Goods->GoodsList(self::$page, 0, $where, $order, 6, $field);
+            $count = $Goods->GoodsCount(0, $where);
         }
 
-        $this->json(200, 'ok', $auctionList);
+        $this->json(200, 'ok', ['total'=>ceil($count/6), 'list' => $auctionList]);
     }
 
     /**

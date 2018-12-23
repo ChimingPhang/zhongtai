@@ -91,6 +91,12 @@ class Index extends Base{
      */
     public function home()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
         //拍卖车
         $Goods = new GoodsAuction();
         //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
@@ -109,8 +115,8 @@ class Index extends Base{
         ];
         $field = implode(',', $field);
         $where = ['is_on_sale' => 1, 'is_end' => 0];
-        $auc_car = $Goods->GoodsList($this->page, 1, $where, ['on_time' => 'desc'], 6, $field);
-        $this->assign('auc_car', $auc_car);
+        $data['auc_car'] = $Goods->GoodsList($this->page, 1, $where, ['on_time' => 'desc'], 6, $field);
+        $this->assign('auc_car', $data['auc_car']);
 
         //热卖车型
         $goods_model = new Goods();
@@ -129,10 +135,10 @@ class Index extends Base{
             'label'         //标签
         ];
         $goods_field = implode(',', $goods_field);
-        $hot_car = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
-        $this->assign('hot_car', $hot_car);
+        $data['hot_car'] = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
+        $this->assign('hot_car', $data['hot_car']);
 
-//        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
+        $this->json('0000','ok', $data);
         return $this->fetch('dist/home');
     }
 

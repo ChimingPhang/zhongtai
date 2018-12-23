@@ -91,9 +91,15 @@ class Index extends Base{
      */
     public function home()
     {
-	    //顶部广告
-	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-	    $top_ads = $top_ads_result['result'];
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //拍卖车
         $Goods = new GoodsAuction();
         //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
@@ -108,12 +114,13 @@ class Index extends Base{
             "video",        //视频地址
             "spec_key",     //规格id
             "spec_key_name",//规格名
-            "original_img"  //图片地址
+            "original_img",  //图片地址
+            'banner_image', //banner图
+            'label',        //标签名
         ];
         $field = implode(',', $field);
         $where = ['is_on_sale' => 1, 'is_end' => 0];
-        $auc_car = $Goods->GoodsList($this->page, 1, $where, ['on_time' => 'desc'], 6, $field);
-        $this->assign('auc_car', $auc_car);
+        $data['auc_car'] = $Goods->GoodsList($this->page, 1, $where, ['on_time' => 'desc'], 5, $field);
 
         //热卖车型
         $goods_model = new Goods();
@@ -137,16 +144,14 @@ class Index extends Base{
 		$this->assign('top_ads', $top_ads);
 	    $this->assign('auc_car', $auc_car);
 //        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
-        return $this->fetch('index/home');
+        return $this->fetch('index/index');
     }
 
     /**
      * 品牌车型
      * @return mixed
      */
-    public function brand_models()
-    {
-
+    public function brand_models() {
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -173,9 +178,14 @@ class Index extends Base{
 
         $Goods = new Goods();
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
-        $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
-        $this->assign('car_list', $car_list);
+        $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $this->assign('car_list', $data['car_list']);
 
+        $count = $Goods->GoodsCount(1, $where);
+        $data['total'] = ceil($count/self::$pageNum);
+        $this->assign('total', $data['total']);
+
+//        $this->json('200','ok', $data);
         return $this->fetch('dist/brand-models');
     }
 
@@ -284,6 +294,15 @@ class Index extends Base{
      */
     public function hot_car()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -312,10 +331,14 @@ class Index extends Base{
 
         $Goods = new Goods();
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
-        $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $this->assign('car_list', $data['car_list']);
 
-        $this->assign('car_list', $car_list);
-//        $this->json('200', 'ok', $car_list);
+        $count = $Goods->GoodsCount(1, $where);
+        $data['total'] = ceil($count/self::$pageNum);
+        $this->assign('total', $data['total']);
+
+//        $this->json('200', 'ok', $data);
         return $this->fetch('dist/special-offer');
     }
 
@@ -325,6 +348,15 @@ class Index extends Base{
      */
     public function special_offer()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -357,17 +389,158 @@ class Index extends Base{
 
             $Goods = new Goods();
             $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
-            $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+            $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         } else {
-            $car_list = [];
+            $data['car_list'] = [];
         }
 
-        $this->assign('car_list', $car_list);
-//        $this->json('200', 'ok', $car_list);
+        $this->assign('car_list', $data['car_list']);
+//        $this->json('200', 'ok', $data);
         return $this->fetch('dist/special-offer');
     }
 
     /**
+     * 品牌车型列表——API
+     */
+    public function brand_models_list()
+    {
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+
+        $order = [];
+        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($price) $order['deposit_price'] = $price;
+
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        $where['exchange_integral'] = array('neq',2);
+
+        $Goods = new Goods();
+        $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+        $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $count = $Goods->GoodsCount(1, $where);
+        $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+    }
+
+    /**
+     * 汽车列表——API
+     */
+    public function hot_car_list()
+    {
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+
+
+        $order = [];
+        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($price) $order['deposit_price'] = $price;
+
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        $where['exchange_integral'] = array('neq',2);
+        $where['is_hot'] = 1;
+
+        $Goods = new Goods();
+        $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+        $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+
+        $count = $Goods->GoodsCount(1, $where);
+        $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+    }
+
+    /**
+     * 特价车型列表——API
+     */
+    public function special_offer_list()
+    {
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+
+
+        $order = [];
+        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($price) $order['deposit_price'] = $price;
+
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        $where['exchange_integral'] = array('neq',2);
+
+        $special = M('goods_special')->order('sort desc')->select();
+        $goodsId = array_column($special, 'goods_id');
+        if (count($goodsId)) {
+            $where['goods_id'] = ['in', $goodsId];
+
+            $Goods = new Goods();
+            $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+            $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+            $count = $Goods->GoodsCount(1, $where);
+        } else {
+            $data['car_list'] = [];
+            $count = 0;
+        }
+
+
+        $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+    }
+
+    /**
+     * 特价车型列表——API
+     */
+    public function car_list()
+    {
+        //验证参数
+        !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+
+
+        $order = [];
+        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($price) $order['deposit_price'] = $price;
+
+        $where = [];
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        $where['exchange_integral'] = array('neq',2);
+        if(I('is_hot')) $where['is_hot'] = 1;
+
+        if (I('is_special')) {
+            $special = M('goods_special')->order('sort desc')->select();
+            $goodsId = array_column($special, 'goods_id');
+
+            if (count($goodsId)) {
+                $where['goods_id'] = ['in', $goodsId];
+
+                $Goods = new Goods();
+                $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+                $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+                $count = $Goods->GoodsCount(1, $where);
+            } else {
+                $data['car_list'] = [];
+                $count = 0;
+            }
+            return $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+        }
+
+        $Goods = new Goods();
+        $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
+        $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $count = $Goods->GoodsCount(1, $where);
+
+        return $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+    }
+
+    /**
+     * TODO 废弃
      * 特价车型拍卖会
      */
     public function special_auction()
@@ -398,6 +571,7 @@ class Index extends Base{
     }
 
     /**
+     * TODO 废弃
      * 特价拍卖详情
      */
     public function special_auction_detail()
@@ -435,6 +609,7 @@ class Index extends Base{
     }
 
     /**
+     * TODO 废弃
      * 特价车型拍卖会列表API
      */
     public function special_auction_list()

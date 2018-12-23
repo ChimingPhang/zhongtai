@@ -45,11 +45,20 @@ class Auction extends Base {
 
     /**
      * [推荐列表]——特价车型拍卖会
-     * @Auther 蒋峰
+     * @Auther tao.chen
      * @DateTime
      */
     public function special_auction()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         // token page
         $where = " 1 = 1 ";
         $user_id = (new \app\api\model\Users())->getUserOnToken(I('token'));
@@ -90,6 +99,10 @@ class Auction extends Base {
 
     }
 
+    /**
+     * 拍卖商品列表
+     * @Auther tao.chen
+     */
     public function special_auction_list()
     {
         if (I('is_start')) {
@@ -107,6 +120,7 @@ class Auction extends Base {
                 ->order('on_time', 'desc')
                 ->limit((self::$page - 1) * 6, 6)
                 ->select();
+            $count =  M('Auction')->where($where)->count();
 
             //查询用户设置提醒预约的商品
 //        $remind = M('AuctionRemind')->where(array('user_id' => $user_id, 'status' => 0))->field('auction_id')->select();
@@ -129,10 +143,11 @@ class Auction extends Base {
             $Goods = new GoodsAuction();
             $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
             video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-            $auctionList = $Goods->GoodsList(self::$page, 1, $where, $order, 6, $field);
+            $auctionList = $Goods->GoodsList(self::$page, 0, $where, $order, 6, $field);
+            $count = $Goods->GoodsCount(0, $where);
         }
 
-        $this->json(200, 'ok', $auctionList);
+        $this->json(200, 'ok', ['total'=>ceil($count/6), 'list' => $auctionList]);
     }
 
     /**
@@ -182,7 +197,7 @@ class Auction extends Base {
 
     /**
      * [拍卖详情]
-     * @Auther 蒋峰
+     * @Auther tao.chen
      * @DateTime
      */
     public function special_auction_detail()

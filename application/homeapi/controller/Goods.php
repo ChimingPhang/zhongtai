@@ -74,35 +74,38 @@ class Goods extends Base {
         !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = [];
-        if(I('is_hot')) $where['is_hot'] = 1;
-        if(I('is_recommend')) $where['is_recommend'] = 1;
-        if(I('is_special')) {
-            $special = M('goods_special')->order('sort desc')->limit(8)->select();
-            $goodsId = array_column($special, 'goods_id');
-            if (count($goodsId)) {
-                $where['goods_id'] = ['in', $goodsId];
-            } else {
-                $this->json("0000", "加载成功", []);
-            }
-        }
 
         $order = [];
         if(!$sales_sum && !$price) $order['on_time'] = 'desc';
         if ($sales_sum) $order['sales_sum'] = $sales_sum;
         if ($price) $order['deposit_price'] = $price;
 
-        if($cat_id) $where['cat_id2'] = $cat_id;
+
+        $where = [];
         $where['exchange_integral'] = array('neq',2);
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        if(I('is_hot')) $where['is_hot'] = 1;
+        if(I('is_recommend')) $where['is_recommend'] = 1;
+        if(I('is_special')) {
+            $special = M('goods_special')->select();
+            $goodsId = array_column($special, 'goods_id');
+            if (count($goodsId)) {
+                $where['goods_id'] = ['in', $goodsId];
+            } else {
+                return $this->json(200, 'ok', ['total'=>0, 'list' => []]);
+            }
+        }
+
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $count = $Goods->GoodsCount(1, $where);
 
-        if(!$data) $this->errorMsg(8910);
-        $this->json("0000", "加载成功", $data);
+        return $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data]);
     }
 
     /**
+     * TODO 废弃
      * [拍卖列表]
      * @Auther tao.chen
      * @DateTime
@@ -307,6 +310,7 @@ class Goods extends Base {
     }
 
     /**
+     * TODO 废弃
      * [拍卖物品详情]
      * @Auther chen.tao
      * @DateTime
@@ -354,6 +358,15 @@ class Goods extends Base {
      */
     public function parts()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -377,10 +390,13 @@ class Goods extends Base {
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
 
-        $data = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
-//        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'parts_lis' => $data]);
+        $data['parts_list'] = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
+        $this->assign('parts_list', $data['parts_list']);
 
-        $this->assign('parts_list', $data);
+        $count = $Goods->GoodsCount(2, $where);
+        $data['total'] = ceil($count/6);
+        $this->assign('total', $data['total']);
+//        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'total'=>$data['total'], 'parts_list' => $data['parts_list']]);
         return $this->fetch('dist/parts');
     }
 
@@ -461,7 +477,8 @@ class Goods extends Base {
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
-        $this->json(200, 'ok', $data);
+        $count = $Goods->GoodsCount(2, $where);
+        $this->json(200, 'ok', ['total' => ceil($count/6), 'list' => $data]);
     }
 
     /**

@@ -158,8 +158,8 @@ class Integral extends Base {
         $goods_where['is_recommend'] = 1;           //推荐商品
         $goods_where['exchange_integral'] = 2;      //纯积分商品
         $recommend_car = $Goods->GoodsList($this->page,'',$goods_where,['sort'=>'desc'],6,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type,store_count');
-        $data['recommend_car'] = $recommend_car;
-        $this->json(200, 'ok', $recommend_car);
+        $count = $Goods->GoodsCount(0, $goods_where);
+        $this->json(200, 'ok', ['total'=> ceil($count/6), 'list' => $recommend_car]);
     }
 
 

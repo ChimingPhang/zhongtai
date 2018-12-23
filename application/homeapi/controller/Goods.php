@@ -105,6 +105,7 @@ class Goods extends Base {
     }
 
     /**
+     * TODO 废弃
      * [拍卖列表]
      * @Auther tao.chen
      * @DateTime
@@ -309,6 +310,7 @@ class Goods extends Base {
     }
 
     /**
+     * TODO 废弃
      * [拍卖物品详情]
      * @Auther chen.tao
      * @DateTime
@@ -388,10 +390,13 @@ class Goods extends Base {
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
 
-        $data = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
-//        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'parts_lis' => $data]);
+        $data['parts_list'] = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
+        $this->assign('parts_list', $data['parts_list']);
 
-        $this->assign('parts_list', $data);
+        $count = $Goods->GoodsCount(2, $where);
+        $data['total'] = ceil($count/6);
+        $this->assign('total', $data['total']);
+//        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'total'=>$data['total'], 'parts_list' => $data['parts_list']]);
         return $this->fetch('dist/parts');
     }
 

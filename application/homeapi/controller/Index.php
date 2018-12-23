@@ -114,7 +114,9 @@ class Index extends Base{
             "video",        //视频地址
             "spec_key",     //规格id
             "spec_key_name",//规格名
-            "original_img"  //图片地址
+            "original_img",  //图片地址
+            'banner_image', //banner图
+            'label',        //标签名
         ];
         $field = implode(',', $field);
         $where = ['is_on_sale' => 1, 'is_end' => 0];
@@ -141,7 +143,7 @@ class Index extends Base{
         $data['hot_car'] = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
         $this->assign('hot_car', $data['hot_car']);
 
-//        $this->json('200','ok', $data);
+        $this->json('200','ok', $data);
         return $this->fetch('dist/home');
     }
 

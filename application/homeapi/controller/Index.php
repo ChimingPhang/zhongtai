@@ -94,9 +94,12 @@ class Index extends Base{
         //获取首页顶部轮播
         $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
         $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
         //获取底部的广告图片
         $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
         $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //拍卖车
         $Goods = new GoodsAuction();
         //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
@@ -138,7 +141,7 @@ class Index extends Base{
         $data['hot_car'] = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
         $this->assign('hot_car', $data['hot_car']);
 
-        $this->json('0000','ok', $data);
+//        $this->json('200','ok', $data);
         return $this->fetch('dist/home');
     }
 
@@ -148,6 +151,15 @@ class Index extends Base{
      */
     public function brand_models()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -174,9 +186,10 @@ class Index extends Base{
 
         $Goods = new Goods();
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
-        $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
-        $this->assign('car_list', $car_list);
+        $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $this->assign('car_list', $data['car_list']);
 
+//        $this->json('200','ok', $data);
         return $this->fetch('dist/brand-models');
     }
 
@@ -285,6 +298,15 @@ class Index extends Base{
      */
     public function hot_car()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -313,10 +335,10 @@ class Index extends Base{
 
         $Goods = new Goods();
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
-        $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
 
-        $this->assign('car_list', $car_list);
-//        $this->json('200', 'ok', $car_list);
+        $this->assign('car_list', $data['car_list']);
+//        $this->json('200', 'ok', $data);
         return $this->fetch('dist/special-offer');
     }
 
@@ -326,6 +348,15 @@ class Index extends Base{
      */
     public function special_offer()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -358,17 +389,18 @@ class Index extends Base{
 
             $Goods = new Goods();
             $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
-            $car_list = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+            $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         } else {
-            $car_list = [];
+            $data['car_list'] = [];
         }
 
-        $this->assign('car_list', $car_list);
-//        $this->json('200', 'ok', $car_list);
+        $this->assign('car_list', $data['car_list']);
+//        $this->json('200', 'ok', $data);
         return $this->fetch('dist/special-offer');
     }
 
     /**
+     * TODO 废弃
      * 特价车型拍卖会
      */
     public function special_auction()
@@ -399,6 +431,7 @@ class Index extends Base{
     }
 
     /**
+     * TODO 废弃
      * 特价拍卖详情
      */
     public function special_auction_detail()
@@ -436,6 +469,7 @@ class Index extends Base{
     }
 
     /**
+     * TODO 废弃
      * 特价车型拍卖会列表API
      */
     public function special_auction_list()

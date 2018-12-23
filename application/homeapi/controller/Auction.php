@@ -45,11 +45,20 @@ class Auction extends Base {
 
     /**
      * [推荐列表]——特价车型拍卖会
-     * @Auther 蒋峰
+     * @Auther tao.chen
      * @DateTime
      */
     public function special_auction()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
+        //获取底部的广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $data['footer_ads'] = $footer_ads['result'];
+        $this->assign('footer_ads', $data['footer_ads']);
+
         // token page
         $where = " 1 = 1 ";
         $user_id = (new \app\api\model\Users())->getUserOnToken(I('token'));
@@ -90,6 +99,10 @@ class Auction extends Base {
 
     }
 
+    /**
+     * 拍卖商品列表
+     * @Auther tao.chen
+     */
     public function special_auction_list()
     {
         if (I('is_start')) {
@@ -184,7 +197,7 @@ class Auction extends Base {
 
     /**
      * [拍卖详情]
-     * @Auther 蒋峰
+     * @Auther tao.chen
      * @DateTime
      */
     public function special_auction_detail()

@@ -118,7 +118,7 @@ class Index extends Base{
         ];
         $field = implode(',', $field);
         $where = ['is_on_sale' => 1, 'is_end' => 0];
-        $data['auc_car'] = $Goods->GoodsList($this->page, 1, $where, ['on_time' => 'desc'], 6, $field);
+        $data['auc_car'] = $Goods->GoodsList($this->page, 1, $where, ['on_time' => 'desc'], 5, $field);
         $this->assign('auc_car', $data['auc_car']);
 
         //热卖车型

@@ -74,32 +74,34 @@ class Goods extends Base {
         !empty(I('cat_id', '')) && !is_numeric($cat_id = I('cat_id', 0)) && $this->errorMsg(2002, 'cat_id');//选传
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = [];
-        if(I('is_hot')) $where['is_hot'] = 1;
-        if(I('is_recommend')) $where['is_recommend'] = 1;
-        if(I('is_special')) {
-            $special = M('goods_special')->order('sort desc')->limit(8)->select();
-            $goodsId = array_column($special, 'goods_id');
-            if (count($goodsId)) {
-                $where['goods_id'] = ['in', $goodsId];
-            } else {
-                $this->json("0000", "加载成功", []);
-            }
-        }
 
         $order = [];
         if(!$sales_sum && !$price) $order['on_time'] = 'desc';
         if ($sales_sum) $order['sales_sum'] = $sales_sum;
         if ($price) $order['deposit_price'] = $price;
 
-        if($cat_id) $where['cat_id2'] = $cat_id;
+
+        $where = [];
         $where['exchange_integral'] = array('neq',2);
+        if($cat_id) $where['cat_id2'] = $cat_id;
+        if(I('is_hot')) $where['is_hot'] = 1;
+        if(I('is_recommend')) $where['is_recommend'] = 1;
+        if(I('is_special')) {
+            $special = M('goods_special')->select();
+            $goodsId = array_column($special, 'goods_id');
+            if (count($goodsId)) {
+                $where['goods_id'] = ['in', $goodsId];
+            } else {
+                return $this->json(200, 'ok', ['total'=>0, 'list' => []]);
+            }
+        }
+
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+        $count = $Goods->GoodsCount(1, $where);
 
-        if(!$data) $this->errorMsg(8910);
-        $this->json("0000", "加载成功", $data);
+        return $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data]);
     }
 
     /**

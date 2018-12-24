@@ -4,6 +4,7 @@ namespace app\homeapi\controller;
 use app\api\logic\SocketLogic;
 use app\api\model\GoodsAuction;
 use app\api\logic\AuctionLogic;
+use app\api\model\GoodsImages;
 use app\api\model\Auction as AuctionModel;
 use think\Request;
 use think\Cache;
@@ -95,7 +96,7 @@ class Auction extends Base {
 //        $this->json("0000", '加载成功', $auctionList);
         $this->assign('data', $auctionList);
 
-        return $this->fetch('dist/special_auction');
+        return $this->fetch('auction/special_auction');
 
     }
 
@@ -209,7 +210,7 @@ class Auction extends Base {
         //获取拍卖详情信息
         $field = 'id,goods_name,click_count,start_price as now_price,price as start_price,bail_price,markup_price,
         reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,give_integral,type,label,
-        banner_image,spec_key_name,is_end,num as offer_num';
+        banner_image,spec_key_name,is_end, num as offer_num';
         $auctionInfo = self::$AuctionModel->auctionInfo($auction_id, $field);
         if(!$auctionInfo) $this->errorMsg('9999');
         //banner图
@@ -239,8 +240,10 @@ class Auction extends Base {
         $delayTime = self::$AuctionLogic->offerList($auction_id, 1, $user_id, 3);
         $auctionInfo->offer_list = $delayTime;
 
-//        return $this->json('0000','加载成功', $auctionInfo);
-        return $this->fetch('dist/special_auction_detail');
+        //加载商品轮播
+        $this->assign('banner', $auctionInfo->banner_image);
+        $this->assign('data',  $auctionInfo);
+        return $this->fetch('auction/special_auction_detail');
     }
 
     /**

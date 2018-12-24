@@ -69,6 +69,10 @@ class Seckill extends Base {
      */
     public function one_dollar()
     {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
         //筛选条件
         $types = [
             ['id' => 1, 'name' => '汽车'],
@@ -87,10 +91,11 @@ class Seckill extends Base {
         $field = "id,goods_name,goods_remark,sales_sum,price,label,type,original_img";
         $list = self::$GoodsSecKill->GoodsList(self::$page, $type, [], $order, self::$pageNum, $field);
         $this->assign('car_list', $list);
+        $this->assign('total', sizeof($list));
+        
+        $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
 
-//        $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
-
-        return $this->fetch('dist/one-dollar');
+        return $this->fetch('one_dollar/one_dollar');
     }
 
     /**
@@ -166,9 +171,9 @@ class Seckill extends Base {
         $info['recommend'] = $Goods->GoodsList(1, 1, $where, [], 3, $field);
 
         $this->assign('data', $info);
-        $this->json(200, 'ok', $info);
+        // $this->json(200, 'ok', $info);
 
-        return $this->fetch('dist/one-dollar-detail');
+        return $this->fetch('one_dollar/one_dollar_detail');
     }
 
     /**

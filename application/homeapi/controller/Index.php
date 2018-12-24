@@ -14,8 +14,8 @@ use app\api\model\GoodsCategory;
 use app\api\model\GoodsImages;
 use app\api\model\Navigation;
 use app\api\model\Goods;
-use app\api\model\SonOrderComment;
 use app\api\model\Users;
+use app\api\model\SonOrderComment;
 use app\api\model\UserSignLog;
 use Prophecy\Argument\Token\IdenticalValueToken;
 use think\Controller;
@@ -28,7 +28,8 @@ class Index extends Base{
     public $page = 1;
     public $token;
     public $is_login = 0;
-
+    public $cartype_list = [];
+    public $is_sign = 0;
     public function __construct()
     {
         parent::__construct();
@@ -37,9 +38,17 @@ class Index extends Base{
         $this->token = I('token')? I('token') : session('token');
         if (!empty($this->token)) {
             $user_id = $this->checkToken($this->token);
+
+            $SignLog = new UserSignLog();
+            $res = $SignLog->toSign($this->userInfo['user_id'],date('Y/m/d'), 0);
+            if(!$res) $this->is_sign = 1;
             if ($user_id) $this->is_login = 1;
         }
+        $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
+        $this->assign('cartype_list', $this->cartype_list);
         $this->assign('is_login', $this->is_login);
+        $this->assign('is_sign', $this->is_sign);
+        
     }
 
     /**
@@ -152,28 +161,22 @@ class Index extends Base{
             'label'         //标签
         ];
         $goods_field = implode(',', $goods_field);
-        $data['hot_car'] = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
-        $this->assign('hot_car', $data['hot_car']);
-
-//        $this->json('200','ok', $data);
-        return $this->fetch('dist/home');
+        $hot_car = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
+        $this->assign('hot_car', $hot_car);
+        
+		
+//        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
+        return $this->fetch('index/index');
     }
 
     /**
      * 品牌车型
      * @return mixed
      */
-    public function brand_models()
-    {
+    public function brand_models() {
         //获取首页顶部轮播
         $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
-        //获取底部的广告图片
-        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
-        $data['footer_ads'] = $footer_ads['result'];
-        $this->assign('footer_ads', $data['footer_ads']);
-
+        $this->assign('top_ads', $top_ads['result']);
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -202,13 +205,11 @@ class Index extends Base{
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $this->assign('car_list', $data['car_list']);
-
-        $count = $Goods->GoodsCount(1, $where);
-        $data['total'] = ceil($count/self::$pageNum);
-        $this->assign('total', $data['total']);
+        
+        $this->assign('total', sizeof($data['car_list']));
 
 //        $this->json('200','ok', $data);
-        return $this->fetch('dist/brand-models');
+        return $this->fetch('brand_models/brand_models');
     }
 
     /**
@@ -216,22 +217,11 @@ class Index extends Base{
      */
     public function brand_models_detail()
     {
-        $data = $this->get_car_detail();
-        $this->assign('data', $data);
-//        $this->json('200', 'ok', $data);
-        return $this->fetch('dist/brand-models-detail');
-    }
 
-    /**
-     * 汽车购买详情页面
-     * @return mixed
-     */
-    public function brand_models_buy()
-    {
         $data = $this->get_car_detail();
         $this->assign('data', $data);
-//        $this->json('200', 'ok', $data);
-        return $this->fetch('dist/brand_models_buy');
+        //$this->json('200', 'ok', $data['appearance']['province']);
+        return $this->fetch('brand_models/brand_models_detail');
     }
 
     private function get_car_detail()
@@ -567,6 +557,11 @@ class Index extends Base{
      */
     public function special_auction()
     {
+	    //顶部广告
+	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $top_ads = $top_ads_result['result'];
+        $this->assign('top_ads', $top_ads);
+        
         //验证参数
 //        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
 //        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
@@ -586,10 +581,11 @@ class Index extends Base{
         $Goods = new GoodsAuction();
         $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
         video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-        $data = $Goods->GoodsList($this->page, 1, $where, $order, 6, $field);
+        $data = $Goods->GoodsList($this->page, 1, $where, $order, 9, $field);
 
         $this->assign('data', $data);
-        return $this->fetch('dist/special_auction');
+	   
+        return $this->fetch('auction/special_auction');
     }
 
     /**
@@ -607,12 +603,10 @@ class Index extends Base{
         //加载商品轮播
         $banner = (new GoodsImages())->getImage($goods_id);
         $data['banner'] = $banner;
-
+        var_dump($data['banner']);
         //商品详情
         $where['id'] = $goods_id;
-        $field = "goods_id,goods_name,label,goods_remark,price,deposit_price,
-        store_count,sales_sum,integral,exchange_integral,
-        integral_money as integrals_moneys,video";
+        $field = "goods_id,goods_name,start_price,bail_price,markup_price,brokerage_price,reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,type,label,banner_image,original_img,spec_key_name";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
 
         if (count($data)) {
@@ -625,9 +619,10 @@ class Index extends Base{
             $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
             $data['comment_count'] = $SonOrderComment->count;
             $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
+            
         }
-
-        return $this->fetch('dist/special_auction_detail');
+        $this->assign('data', $data);
+        return $this->fetch('auction/special_auction_detail');
     }
 
     /**
@@ -675,10 +670,11 @@ class Index extends Base{
     public function integral_mall()
     {
         //首页轮播
-//        $top_ads = $this->ad_position(12,'ad_link,ad_code,ad_name','orderby desc');
-//        $data['top_ads'] = $top_ads['result'];
+	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+	    $top_ads = $top_ads_result['result'];
 
-        //精品推荐
+
+	    //精品推荐
         $goods_model = new Goods();
 
         $goods_where['is_on_sale'] = 1;
@@ -698,8 +694,10 @@ class Index extends Base{
 
         $data['list'] = $activity_car;
         $this->assign('list', $activity_car);
+        $this->assign('total', sizeof($activity_car));
+	    $this->assign('top_ads', $top_ads);
 
-        return $this->fetch('dist/integral-mall');
+        return $this->fetch('integral_mall/integral_mall');
     }
 
 
@@ -716,13 +714,14 @@ class Index extends Base{
             'email',
             'birthday',
         ];
+        
         $user = $model->get_user($user_id, $fields);
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
 
         $order = (new Order())->getUserOrder($user_id);
         $this->assign('order', $order);
-        return $this->fetch('dist/user-center');
+        return $this->fetch('usercenter/user_center');
     }
 
 }

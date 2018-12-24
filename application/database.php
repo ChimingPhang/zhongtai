@@ -23,9 +23,9 @@ return [
     'username'       => 'root',
     // 密码
 //    'password'       => '123456',
-    'password'       => 'root',
+    'password'       => '',
     // 端口
-    'hostport'       => '8889',
+    'hostport'       => '3306',
     // 连接dsn
     'dsn'            => '',
     // 数据库连接参数

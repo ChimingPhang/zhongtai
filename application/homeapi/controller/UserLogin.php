@@ -34,6 +34,17 @@ class UserLogin extends Base {
       else $this->json('0000','登录成功',['token'=>$res['result']['token']]);
     }
 
+    public function logout()
+    {
+        session_unset();
+        session_destroy();
+        setcookie('cn', '', time() - 3600, '/');
+        setcookie('user_id', '', time() - 3600, '/');
+        //$this->success("退出成功",U('Mobile/Index/index'));
+        header("Location:" . U('Mobile/Index/index'));
+        exit();
+    }
+
     /**
      * 忘记密码
      * [forgot_password description]

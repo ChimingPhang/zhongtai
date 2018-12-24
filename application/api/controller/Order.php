@@ -636,6 +636,124 @@ class Order extends Base
         $this->json('0000','获取成功',$arr);
     }
 
+    public function getUserOrder(){
+        //goods_id 164 item_id 5 token 20e157278056257c71fead302face897
+        $order_type = I("order_type/d", 1); // 商品id
+        $page = I("page/d",'1');// 商品数量
+        $token = I("token");
+        $user_id = $this->checkToken($token);
+        $order = new \app\common\model\Order();
+        $select_year = select_year(); // 查询 三个月,今年内,2016年等....订单
+        $where = ' user_id=:user_id';
+        $bind['user_id'] = $user_id;
+        $whereSon = [];
+        $type = 0;
+        switch ($order_type) {
+            //全部订单
+            case '1':
+                $where.=' and order_status <> 5 ';//作废订单不列出来
+                break;
+            //代付款订单
+            case '2':
+                $where.= C('WAITPAY');//作废订单不列出来
+                break;
+            //待收货订单
+            case '3':
+                $order_ids = Db::table('tp_order')->alias('o')->join('order_goods og','o.order_id=og.order_id', 'left')
+                    ->where('o.user_id',$user_id)->where('og.is_send', 1)->where('og.is_shouhuo', 0)
+                    ->group('o.order_id')->field('o.order_id')
+                    ->select();
+
+                if(!$order_ids) $this->json('0000','获取成功',[]);
+                //if(!$order_ids) return $this->errorMsg(8910);
+                $where .= " and order_id in(" . implode(',',array_column($order_ids, 'order_id'))  . ")";
+                $whereSon = [
+                    'is_send' => 1,
+                    'is_shouhuo' => 0,
+                ];
+                $type = 5;
+//            $where.=C('WAITRECEIVE');//作废订单不列出来
+                break;
+            //已完成订单
+            case '4':
+                $order_ids = Db::table('tp_order')->alias('o')->join('order_goods og','o.order_id=og.order_id', 'left')
+                    ->where('o.user_id',$user_id)->where('og.is_shouhuo', 1)
+                    ->group('o.order_id')->field('o.order_id')
+                    ->select();
+                if(!$order_ids) $this->json('0000','获取成功',[]);
+                //if(!$order_ids) return $this->errorMsg(8910);
+                $where .= " and order_id in(" . implode(',',array_column($order_ids, 'order_id'))  . ")";
+                $whereSon = [
+                    'is_shouhuo' => 1,
+                ];
+                $type = 3;
+
+//            $where.=C('FINISH');//作废订单不列出来
+                break;
+            //已取消订单
+            case '5':
+                $where.=C('CANCEL');//作废订单不列出来
+                break;
+            //待评价订单
+            case '6':
+                $order_ids = Db::table('tp_order')->alias('o')->join('order_goods og','o.order_id=og.order_id', 'left')
+                    ->where('o.user_id',$user_id)->where('og.is_shouhuo', 1)->where('og.is_comment',0)->where(['og.is_send'=>['lt',3]])
+                    ->group('o.order_id')->field('o.order_id')
+                    ->select();
+                if(!$order_ids) $this->json('0000','获取成功',[]);
+                //if(!$order_ids) return $this->errorMsg(8910);
+                $where .= " and order_id in(" . implode(',',array_column($order_ids, 'order_id'))  . ")";
+                $whereSon = [
+                    'is_shouhuo' => 1,
+                    'is_comment' => 0
+                ];
+                $type = 2;
+//             $where.=C('WAITCCOMMENT');
+                break;
+            //待发货订单
+            case '7':
+                $where.=C('WAITSEND');
+                break;
+
+        }
+        $where.=' and deleted = 0 ';        //删除的订单不列出来
+        $limit = ($page - 1) * 10;
+        $order_str = "order_id DESC";
+        //获取订单
+        $order_list_obj = M('order')->order($order_str)->where($where)->bind($bind)->field('total_amount,master_order_sn,order_id,refund_status,order_status,pay_status,shipping_status,add_time,order_amount,type,dj,integral,prom_type,is_winning')->limit($limit,10)->select();
+        $arr = [];
+        if($order_list_obj){
+            foreach($order_list_obj as $k => $v)
+            {
+                $arr[$k]['order_type']= $type > 0 ? $type :$order->getOrderStatusDetailAttr(null,$v);
+                $arr[$k]['order_prices'] = $v['order_amount'];
+                $arr[$k]['integral'] = $v['integral'];
+                $arr[$k]['type'] = $v['type'];
+                $arr[$k]['order_id'] = $v['order_id'];
+                if($v['pay_status'] == 0 || $v['pay_status'] == 2){
+                    $arr[$k]['master_order_sn'] = substr($v['master_order_sn'],0,8)."****";
+                }else{
+                    $arr[$k]['master_order_sn'] = $v['master_order_sn'];
+                }
+                $arr[$k]['prom_type'] = $v['prom_type'];         //0 普通订单 7拍卖订单 8秒杀订单
+                $arr[$k]['is_winning'] = $v['is_winning'];      //1中奖的订单
+                if($v['order_status'] == 3){
+                    $arr[$k]['cancle_order'] = 1;
+                }else{
+                    $arr[$k]['cancle_order'] = 0;
+                }
+                // $v['order_button'] = $order->getOrderButtonAttr(null,$v);
+                $arr[$k]['list'] = M('order_goods'.$select_year)->cache(true,3)->where($whereSon)->where('order_id = '.$v['order_id'])->field('goods_name,is_shouhuo,spec_key_name as spec,goods_num,final_price,rec_id,is_send,is_comment,goods_id,pay_integral,goods_price,all_point')->select();
+                foreach ($arr[$k]['list'] as $key => $value) {
+                    $arr[$k]['list'][$key]['goods_img'] = goods_thum_images($value['goods_id'],200,150);
+                }
+                // $v['store'] = M('store')->cache(true)->where('store_id = '.$v['store_id'])->field('store_id,store_name,store_qq')->find();
+            }
+
+        }
+        return $arr;
+    }
+
     /**
      * 订单详情
      * [detail description]

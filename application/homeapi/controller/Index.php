@@ -705,7 +705,7 @@ class Index extends Base{
 
     public function user_center()
     {
-        $token = I('token');
+        $token = I('token')? I('token') : session('token');
         $user_id = $this->checkToken($token);
         $model = new Users();
         $fields = [
@@ -720,7 +720,7 @@ class Index extends Base{
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
 
-        $order = (new Order())->getUserOrder();
+        $order = (new Order())->getUserOrder($user_id);
         $this->assign('order', $order);
         return $this->fetch('dist/user-center');
     }

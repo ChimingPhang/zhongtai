@@ -636,12 +636,9 @@ class Order extends Base
         $this->json('0000','获取成功',$arr);
     }
 
-    public function getUserOrder(){
-        //goods_id 164 item_id 5 token 20e157278056257c71fead302face897
+    public function getUserOrder($user_id){
         $order_type = I("order_type/d", 1); // 商品id
         $page = I("page/d",'1');// 商品数量
-        $token = I("token");
-        $user_id = $this->checkToken($token);
         $order = new \app\common\model\Order();
         $select_year = select_year(); // 查询 三个月,今年内,2016年等....订单
         $where = ' user_id=:user_id';

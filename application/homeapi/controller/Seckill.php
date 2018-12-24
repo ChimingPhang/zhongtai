@@ -93,7 +93,7 @@ class Seckill extends Base {
         $this->assign('car_list', $list);
         $this->assign('total', sizeof($list));
         
-        $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
+        // $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
 
         return $this->fetch('one_dollar/one_dollar');
     }

@@ -15,6 +15,7 @@ use app\api\model\Navigation;
 use app\api\model\Goods;
 use app\api\model\Users;
 use app\api\model\SonOrderComment;
+use app\api\model\UserSignLog;
 use think\Controller;
 
 class Index extends Base{
@@ -678,7 +679,22 @@ class Index extends Base{
 
 
     public function user_center()
-    {   
+    {
+        $token = I('token');
+        $user_id = $this->checkToken($token);
+        $model = new Users();
+//        $data = $model->get_userinfo($user_id);
+        $fields = [
+            'reg_time',     //最近浏览次数
+            'head_pic',     //头像
+            'mobile',       //手机号
+            'pay_points',   //我的积分
+            'email',
+            'birthday',
+        ];
+        $user = $model->get_user($user_id, $fields);
+        $data['is_sign'] = (new UserSignLog())->isSign($user_id);
+        $this->assign('user', $user);
         return $this->fetch('usercenter/user_center');
     }
 

@@ -41,6 +41,20 @@ class Users extends Model
     }
 
     /**
+     * 获取用户的信息
+     * @Autoh: 胡宝强
+     * Date: 2018/7/17 20:15
+     * @param $user_id      用户id
+     */
+    public function get_user($user_id, $fields){
+        $fields = implode(',', $fields);
+        $data = M($this->table)->where(['user_id'=>$user_id])->field($fields)->find();
+        $data['reg_time'] = $this->get_reg_time($data['reg_time']);
+        if($data['head_pic'] == null) $data['head_pic'] = '';
+        return $data;
+    }
+
+    /**
      * 获取用户注册到现在的时间
      * @Autoh: 胡宝强
      * Date: date

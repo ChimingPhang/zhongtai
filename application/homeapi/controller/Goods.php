@@ -393,9 +393,7 @@ class Goods extends Base {
         $data['parts_list'] = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
         $this->assign('parts_list', $data['parts_list']);
 
-        $count = $Goods->GoodsCount(2, $where);
-        $data['total'] = ceil($count/6);
-        $this->assign('total', $data['total']);
+        $this->assign('total', sizeof($data['parts_list']));
 //        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'total'=>$data['total'], 'parts_list' => $data['parts_list']]);
         return $this->fetch('parts/parts');
     }
@@ -460,7 +458,7 @@ class Goods extends Base {
         $data['recommend_list'] = $Goods->GoodsList(1, 2, $recommend_where, ['goods_id' => 'desc'], 6, $field);
 
         $this->assign('data', $data);
-//        $this->json("0000", "加载成功", $data);
+        // $this->json("0000", "加载成功", $data);
 
         return $this->fetch('parts/parts_detail');
     }
@@ -535,7 +533,7 @@ class Goods extends Base {
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
 //        $this->json("0000", "加载成功", $data);
         $this->assign('data', $data);
-        return $this->fetch('parts/parts_buy');
+        return $this->fetch('parts/parts_detail');
     }
 
     /**

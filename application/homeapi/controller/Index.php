@@ -13,6 +13,7 @@ use app\api\model\GoodsCategory;
 use app\api\model\GoodsImages;
 use app\api\model\Navigation;
 use app\api\model\Goods;
+use app\api\model\Users;
 use app\api\model\SonOrderComment;
 use think\Controller;
 
@@ -121,6 +122,7 @@ class Index extends Base{
         $field = implode(',', $field);
         $where = ['is_on_sale' => 1, 'is_end' => 0];
         $data['auc_car'] = $Goods->GoodsList($this->page, 1, $where, ['on_time' => 'desc'], 5, $field);
+        $this->assign('auc_car', $data['auc_car']);
 
         //热卖车型
         $goods_model = new Goods();
@@ -141,6 +143,7 @@ class Index extends Base{
         $goods_field = implode(',', $goods_field);
         $hot_car = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
         $this->assign('hot_car', $hot_car);
+        
 		
 //        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
         return $this->fetch('index/index');
@@ -179,10 +182,8 @@ class Index extends Base{
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $this->assign('car_list', $data['car_list']);
-
-        $count = $Goods->GoodsCount(1, $where);
-        $data['total'] = ceil($count/self::$pageNum);
-        $this->assign('total', $data['total']);
+        
+        $this->assign('total', sizeof($data['car_list']));
 
 //        $this->json('200','ok', $data);
         return $this->fetch('brand_models/brand_models');
@@ -195,20 +196,8 @@ class Index extends Base{
     {
         $data = $this->get_car_detail();
         $this->assign('data', $data);
-//        $this->json('200', 'ok', $data);
-        return $this->fetch('dist/brand-models-detail');
-    }
-
-    /**
-     * 汽车购买详情页面
-     * @return mixed
-     */
-    public function brand_models_buy()
-    {
-        $data = $this->get_car_detail();
-        $this->assign('data', $data);
-//        $this->json('200', 'ok', $data);
-        return $this->fetch('dist/brand_models_buy');
+        //$this->json('200', 'ok', $data['appearance']['province']);
+        return $this->fetch('brand_models/brand_models_detail');
     }
 
     private function get_car_detail()
@@ -590,7 +579,7 @@ class Index extends Base{
         //加载商品轮播
         $banner = (new GoodsImages())->getImage($goods_id);
         $data['banner'] = $banner;
-
+        var_dump($data['banner']);
         //商品详情
         $where['id'] = $goods_id;
         $field = "goods_id,goods_name,start_price,bail_price,markup_price,brokerage_price,reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,type,label,banner_image,original_img,spec_key_name";
@@ -606,9 +595,9 @@ class Index extends Base{
             $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
             $data['comment_count'] = $SonOrderComment->count;
             $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-            $this->assign('data', $data);
+            
         }
-
+        $this->assign('data', $data);
         return $this->fetch('auction/special_auction_detail');
     }
 
@@ -681,6 +670,7 @@ class Index extends Base{
 
         $data['list'] = $activity_car;
         $this->assign('list', $activity_car);
+        $this->assign('total', sizeof($activity_car));
 	    $this->assign('top_ads', $top_ads);
 
         return $this->fetch('integral_mall/integral_mall');
@@ -688,8 +678,8 @@ class Index extends Base{
 
 
     public function user_center()
-    {
-        return $this->fetch('dist/user-center');
+    {   
+        return $this->fetch('usercenter/user_center');
     }
 
 }

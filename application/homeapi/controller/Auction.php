@@ -4,6 +4,7 @@ namespace app\homeapi\controller;
 use app\api\logic\SocketLogic;
 use app\api\model\GoodsAuction;
 use app\api\logic\AuctionLogic;
+use app\api\model\GoodsImages;
 use app\api\model\Auction as AuctionModel;
 use think\Request;
 use think\Cache;
@@ -95,7 +96,7 @@ class Auction extends Base {
 //        $this->json("0000", '加载成功', $auctionList);
         $this->assign('data', $auctionList);
 
-        return $this->fetch('dist/special_auction');
+        return $this->fetch('auction/special_auction');
 
     }
 
@@ -202,6 +203,8 @@ class Auction extends Base {
      */
     public function special_auction_detail()
     {
+        
+
         empty(I('auction_id', '')) && $this->errorMsg(2001, 'auction_id');//必传
         !is_numeric($auction_id = I('auction_id', 0)) && $this->errorMsg(2002, 'auction_id');//必传
         //获取用户id
@@ -239,8 +242,10 @@ class Auction extends Base {
         $delayTime = self::$AuctionLogic->offerList($auction_id, 1, $user_id, 3);
         $auctionInfo->offer_list = $delayTime;
 
+        //加载商品轮播
+        $this->assign('banner', $auctionInfo->banner_image);
 //        return $this->json('0000','加载成功', $auctionInfo);
-        return $this->fetch('dist/special_auction_detail');
+        return $this->fetch('auction/special_auction_detail');
     }
 
     /**

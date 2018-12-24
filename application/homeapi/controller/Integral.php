@@ -76,7 +76,11 @@ class Integral extends Base {
      * Date: 2018/8/8 15:56
      */
     public function integral_mall_list()
-    {
+    {   
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
         //验证参数
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('integral', '')) && !in_array($integral = I('integral', ''),['asc','desc']) && $this->errorMsg(2002, 'integral');//选传
@@ -91,11 +95,11 @@ class Integral extends Base {
         $where['exchange_integral'] = 2;
 
         $Goods = new GoodsModel();
-        $field = "goods_id,goods_name,goods_remark,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral";
+        $field = "goods_id,goods_name,goods_remark,store_count,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral";
         $data = $Goods->GoodsList($this->page, 0, $where, $order, self::$pageNum, $field);
         $this->assign('data', $data);
 //        $this->json("0000", "加载成功", $data);
-        return $this->fetch('dist/integral-mall-list');
+        return $this->fetch('integral_mall/integral_mall_list');
     }
 
     /**
@@ -142,10 +146,10 @@ class Integral extends Base {
         $goods_where['exchange_integral'] = 2;      //纯积分商品
         $recommend_car = $Goods->GoodsList(1,'',$goods_where,['sort'=>'desc'],6,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type,store_count');
         $data['recommend_car'] = $recommend_car;
-        $this->assign('recommend_car', $recommend_car);
+        $this->assign('recommend_car', ['total' => sizeof($recommend_car), 'list' => $recommend_car]);
 
-        $this->json(200, 'ok', $data);
-        return $this->fetch('dist/integral-mall-detail');
+        // $this->json(200, 'ok', $data);
+        return $this->fetch('integral_mall/integral_mall_detail');
     }
 
     /**

@@ -203,8 +203,6 @@ class Auction extends Base {
      */
     public function special_auction_detail()
     {
-        
-
         empty(I('auction_id', '')) && $this->errorMsg(2001, 'auction_id');//必传
         !is_numeric($auction_id = I('auction_id', 0)) && $this->errorMsg(2002, 'auction_id');//必传
         //获取用户id
@@ -212,7 +210,7 @@ class Auction extends Base {
         //获取拍卖详情信息
         $field = 'id,goods_name,click_count,start_price as now_price,price as start_price,bail_price,markup_price,
         reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,give_integral,type,label,
-        banner_image,spec_key_name,is_end,num as offer_num';
+        banner_image,spec_key_name,is_end, num as offer_num';
         $auctionInfo = self::$AuctionModel->auctionInfo($auction_id, $field);
         if(!$auctionInfo) $this->errorMsg('9999');
         //banner图
@@ -244,7 +242,7 @@ class Auction extends Base {
 
         //加载商品轮播
         $this->assign('banner', $auctionInfo->banner_image);
-//        return $this->json('0000','加载成功', $auctionInfo);
+        $this->assign('data',  $auctionInfo);
         return $this->fetch('auction/special_auction_detail');
     }
 

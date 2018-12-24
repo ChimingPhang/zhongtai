@@ -29,7 +29,7 @@ class Index extends Base{
     public $token;
     public $is_login = 0;
     public $cartype_list = [];
-
+    public $is_sign = 0;
     public function __construct()
     {
         parent::__construct();
@@ -38,11 +38,17 @@ class Index extends Base{
         $this->token = I('token')? I('token') : session('token');
         if (!empty($this->token)) {
             $user_id = $this->checkToken($this->token);
+
+            $SignLog = new UserSignLog();
+            $res = $SignLog->toSign($this->userInfo['user_id'],date('Y/m/d'), 0);
+            if(!$res) $this->is_sign = 1;
             if ($user_id) $this->is_login = 1;
         }
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
         $this->assign('is_login', $this->is_login);
+        $this->assign('is_sign', $this->is_sign);
+        
     }
 
     /**
@@ -708,6 +714,7 @@ class Index extends Base{
             'email',
             'birthday',
         ];
+        
         $user = $model->get_user($user_id, $fields);
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);

@@ -80,4 +80,9 @@ class UserLogin extends Base {
             $this->throwError('对不起，暂未开启忘记密码手机验证码功能!');
         }
     }
+
+    public function logout()
+    {
+        session('token', null);
+    }
 }

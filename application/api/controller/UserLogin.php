@@ -84,5 +84,6 @@ class UserLogin extends Base {
     public function logout()
     {
         session('token', null);
+        $this->json(200, 'ok', true);
     }
 }

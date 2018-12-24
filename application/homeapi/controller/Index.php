@@ -6,6 +6,7 @@
  * collection_del   删除收藏
  */
 namespace app\homeapi\controller;
+use app\api\controller\Order;
 use app\api\logic\GoodsLogic;
 use app\api\model\AccessoriesCategory;
 use app\api\model\GoodsAuction;
@@ -683,7 +684,6 @@ class Index extends Base{
         $token = I('token');
         $user_id = $this->checkToken($token);
         $model = new Users();
-//        $data = $model->get_userinfo($user_id);
         $fields = [
             'reg_time',     //最近浏览次数
             'head_pic',     //头像
@@ -695,6 +695,9 @@ class Index extends Base{
         $user = $model->get_user($user_id, $fields);
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
+        
+        $order = (new Order())->getUserOrder();
+        $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }
 

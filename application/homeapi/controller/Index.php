@@ -28,6 +28,7 @@ class Index extends Base{
     public $page = 1;
     public $token;
     public $is_login = 0;
+    public $cartype_list = [];
 
     public function __construct()
     {
@@ -39,6 +40,8 @@ class Index extends Base{
             $user_id = $this->checkToken($this->token);
             if ($user_id) $this->is_login = 1;
         }
+        $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
+        $this->assign('cartype_list', $this->cartype_list);
         $this->assign('is_login', $this->is_login);
     }
 
@@ -165,6 +168,9 @@ class Index extends Base{
      * @return mixed
      */
     public function brand_models() {
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $this->assign('top_ads', $top_ads['result']);
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -205,6 +211,7 @@ class Index extends Base{
      */
     public function brand_models_detail()
     {
+
         $data = $this->get_car_detail();
         $this->assign('data', $data);
         //$this->json('200', 'ok', $data['appearance']['province']);
@@ -690,7 +697,7 @@ class Index extends Base{
 
     public function user_center()
     {
-        $token = I('token');
+        $token = I('token')? I('token') : session('token');
         $user_id = $this->checkToken($token);
         $model = new Users();
         $fields = [
@@ -704,8 +711,8 @@ class Index extends Base{
         $user = $model->get_user($user_id, $fields);
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
-        
-        $order = (new Order())->getUserOrder();
+
+        $order = (new Order())->getUserOrder($user_id);
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }

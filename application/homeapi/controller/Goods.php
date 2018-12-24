@@ -22,6 +22,7 @@ class Goods extends Base {
     public $page = 1;
     public $token;
     public $is_login = 0;
+    public $cartype_list = [];
 
     public function __construct()
     {
@@ -33,6 +34,8 @@ class Goods extends Base {
             $user_id = $this->checkToken($this->token);
             if ($user_id) $this->is_login = 1;
         }
+        $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
+        $this->assign('cartype_list', $this->cartype_list);
         $this->assign('is_login', $this->is_login);
     }
 

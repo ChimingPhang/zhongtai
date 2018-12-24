@@ -42,7 +42,16 @@ class Users extends Base{
         $token = I('token');
         $user_id = $this->checkToken($token);
         $model = new user();
-        $data = $model->get_userinfo($user_id);
+//        $data = $model->get_userinfo($user_id);
+        $fields = [
+            'reg_time',     //最近浏览次数
+            'head_pic',     //头像
+            'mobile',       //手机号
+            'pay_points',   //我的积分
+            'email',
+            'birthday',
+        ];
+        $data = $model->get_user($user_id, $fields);
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->json('0000','获取用户信息成功',$data);
     }

@@ -22,12 +22,21 @@ class Integral extends Base {
     private static $pageNum = 10;
     //页数
     public $page = 1;
+    public $token;
+    public $is_login = 0;
 
     public function __construct()
     {
         parent::__construct();
         //自动加载页数
         !is_numeric($this->page = I('page', 1)) && $this->errorMsg(2002, 'page');
+        !is_numeric($this->page = I('page', 1)) && $this->errorMsg(2002, 'page');
+        $this->token = I('token')? I('token') : session('token');
+        if (!empty($this->token)) {
+            $user_id = $this->checkToken($this->token);
+            if ($user_id) $this->is_login = 1;
+        }
+        $this->assign('is_login', $this->is_login);
     }
 
 

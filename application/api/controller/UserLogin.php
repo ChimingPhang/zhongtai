@@ -30,8 +30,12 @@ class UserLogin extends Base {
       $data = input('');
       $UserLogic = new \app\common\logic\UsersLogic;
       $res = $UserLogic->login($data['mobile'],$data['password']);
-      if($res['status']!=1)$this->throwError($res['msg']);
-      else $this->json('0000','登录成功',['token'=>$res['result']['token']]);
+      if($res['status']!=1) {
+          $this->throwError($res['msg']);
+      } else {
+          session('token', $res['result']['token']);
+          $this->json('0000', '登录成功', ['token' => $res['result']['token']]);
+      }
     }
 
     /**

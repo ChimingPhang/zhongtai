@@ -38,4 +38,20 @@
 
 </main>
 {include file="public/side_btns" /}
+
+<script>
+  var api = '../goods/car'
+  var url = api + "{$Think.get.sales_sum ? '&sales_sum='.$Think.get.sales_sum:''}{$Think.get.price?'&sales_sum='.$Think.get.price : ''}"
+
+  function getList(page) {
+    var newUrl = url + '?page=' + page
+    $.ajax(newUrl, {
+      type: 'POST',
+      success: function(data) {
+        console.log()
+      }
+    })
+  }
+</script>
+
 {include file="public/footer" /}

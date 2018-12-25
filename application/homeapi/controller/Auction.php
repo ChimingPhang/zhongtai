@@ -32,6 +32,8 @@ class Auction extends Base {
         //自动加载页数
         self::Initialization();
         !is_numeric(self::$page = I('page', 1)) && $this->errorMsg(2002, 'page');
+        $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
+        $this->assign('cartype_list', $this->cartype_list);
     }
 
     public static function Initialization()

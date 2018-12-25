@@ -40,6 +40,10 @@ class Integral extends Base {
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
         $this->assign('is_login', $this->is_login);
+        //获取首页顶部轮播
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $data['top_ads'] = $top_ads['result'];
+        $this->assign('top_ads', $data['top_ads']);
     }
 
 
@@ -89,10 +93,7 @@ class Integral extends Base {
      */
     public function integral_mall_list()
     {   
-        //获取首页顶部轮播
-        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
+        
         //验证参数
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('integral', '')) && !in_array($integral = I('integral', ''),['asc','desc']) && $this->errorMsg(2002, 'integral');//选传
@@ -110,7 +111,7 @@ class Integral extends Base {
         $field = "goods_id,goods_name,goods_remark,store_count,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral";
         $data = $Goods->GoodsList($this->page, 0, $where, $order, self::$pageNum, $field);
         $this->assign('data', $data);
-//        $this->json("0000", "加载成功", $data);
+        $this->assign('total',sizeof($data));
         return $this->fetch('integral_mall/integral_mall_list');
     }
 

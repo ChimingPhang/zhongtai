@@ -636,8 +636,10 @@ class Order extends Base
         $this->json('0000','获取成功',$arr);
     }
 
-    public function getUserOrder($user_id){
-        $order_type = I("order_type/d", 1); // 商品id
+    public function getUserOrder($user_id, $type){
+        if(empty($type)){
+            $order_type = I("order_type/d", 1); // 商品id
+        }
         $page = I("page/d",'1');// 商品数量
         $order = new \app\common\model\Order();
         $select_year = select_year(); // 查询 三个月,今年内,2016年等....订单

@@ -17,8 +17,6 @@ use app\api\model\Goods;
 use app\api\model\Users;
 use app\api\model\SonOrderComment;
 use app\api\model\UserSignLog;
-use Prophecy\Argument\Token\IdenticalValueToken;
-use think\Controller;
 
 class Index extends Base{
 

@@ -6,15 +6,11 @@
  */
 namespace app\homeapi\controller;
 
-use app\api\model\AccessoriesCategory;
-use app\api\model\GoodsCategory;
 use app\api\model\GoodsImages;
 use app\api\model\SonOrderComment;
 use app\api\model\Goods as GoodsModel;
 use app\api\logic\GoodsLogic;
-use app\api\model\Navigation;
 use app\api\model\Goods;
-use think\Request;
 
 
 class Integral extends Base {

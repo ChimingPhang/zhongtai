@@ -135,6 +135,30 @@
           </div>
           <div class="product-list">
             <div class="product-card-list row">
+                {foreach $info.recommend as $item}
+                <div class="col col-4">
+                  <div class="product-card">
+                    <div class="product-card-img">
+                      <a href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}"><img src="{$item.original_img}" width="100%" alt=""></a>
+                    </div>
+                    <div class="product-card-content">
+                      <h2 class="product-card-title">
+                        {$item.goods_name}
+                        <!-- <span class="float-right">剩余时间：<strong class="color-primary">1天23时22分</strong></span> -->
+                      </h2>
+                      <div class="product-card-intro"><strong>特点：</strong>{$item.goods_remark}</div>
+                      <div class="product-card-btm clearfix">
+                        <div class="float-left product-card-price">
+                          <img src="assets/images/common/icon-integral.png" class="icon" alt="">
+                          <span>积分：<strong>{$item.moren_integral}</strong>积分</span>
+                          <span>剩余：<em>{$item.store_count}</em></span>
+                        </div>
+                        <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}">立即兑换</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {/foreach}
               <div class="col col-4">
                 <div class="product-card">
                   <div class="product-card-img">

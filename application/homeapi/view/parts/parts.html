@@ -6,35 +6,7 @@
 
       <div class="container">
         <section class="section-block pb-5">
-          <div class="type-filter car-type-filter">
-            <div class="type-filter-row">
-              <label>选择车型:</label>
-              <div class="d-inline">
-                  <ul class="filter">
-                    <li class="{$Think.get.cat_id? '' : 'active'}"><a href="__URL__/parts.html">全部</a></li>
-                  </ul>
-                </div>
-            </div>
-
-            {foreach $category as $data}
-            <div class="type-filter-row">
-              <label>{$data['name']}:</label>
-              <ul class="filter" id="type-filter">
-                {foreach $data['list'] as $list}
-                <li class="{$Think.get.cat_id == $list['id'] ? 'active' : ''}"><a href="../goods/parts.html?cat_id={$list['id']}">{$list['name']}</a></li>
-                {/foreach}
-              </ul>
-            </div>
-            {/foreach}
-            <div class="type-filter-row">
-              <label>分类默认:</label>
-              <ul class="filter">
-                <li><a href="" class="active">默认</a></li>
-                <li><a href="__URL__/parts.html?sales_sum=desc" class="btn-sort">销量</a></li>
-                <li><a href="__URL__/parts.html?price=desc" class="btn-sort">价格</a></li>
-              </ul>
-            </div>
-          </div>
+          {include file="public/parts-type-filter"  /}
           <div class="product-card-list row">
             {foreach $parts_list as $key=>$vo}
               <div class="col col-4">

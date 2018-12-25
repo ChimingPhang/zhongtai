@@ -1,0 +1,24 @@
+{if [total] > [size]}
+<div class="text-center pt-3" >
+  <nav aria-label="navigation pagination-box">
+    <ul class="pagination justify-content-center">
+      <li class="page-item"><a class="page-link icon-link icon-prev " href="#"></a></li>
+      {php}
+        $page = ceil([total] / [size]);
+      {/php}
+      {for start="1" end="$page+1"}
+        <li class="page-item" data-page="{$i}"><a class="page-link {$i==1?'active':''}" href="#">{$i}</a></li>
+      {/for}
+      <li class="page-item page-extra">
+        &nbsp;
+        <select name="" id="">
+          <option value="">10条/页</option>
+        </select>
+        &nbsp;
+        <span>跳至</span>
+        <input value="5" class="form-control form-control-sm d-inline" /><span>&nbsp;页</span>
+      </li>
+    </ul>
+  </nav>
+</div>
+{/if}

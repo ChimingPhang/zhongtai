@@ -1,0 +1,61 @@
+{include file="public/header" title="特价拍卖" bundle="home" hasBanner="true" activeNav="home" /}
+
+<main class="o-wrapper">
+  <!--顶部广告-->
+  {include file="public/top_ads" /}
+  <div class="container">
+    <!--三大栏目-->
+    {include file="public/three_box" /}
+    <section class="section-block">
+      <div class="section-title clearfix">
+        <h1>拍卖专区</h1>
+      </div>
+      <div class="top-ad">
+        <a href="#"><img src="__STATIC__/assets/images/temp/three-block-banner.jpg" width="100%" alt=""/></a>
+      </div>
+
+      <ul class="tab-nav">
+        <li class="{$Think.get.is_start == 'true' ? 'active' : '' }"><a href="../auction/special_auction.html?is_start=true" >正在拍卖</a></li>
+        <li class="{$Think.get.is_start == 'false' ? 'active' : '' }"><a href="../auction/special_auction.html?is_start=false">待拍卖</a></li>
+      </ul>
+      <div class="pt-4">
+        <div class="product-card-list row">
+          {foreach $data as $key=>$vo}
+          <div class="col col-4">
+            <div class="product-card">
+              <div class="product-card-img">
+                <a  href="../auction/special_auction_detail.html?auction_id={$vo.id}"><img src="{$vo.original_img}" width="100%" alt=""></a>
+              </div>
+              <div class="product-card-content">
+                <h2 class="product-card-title">
+                  {$vo.goods_name}
+                  <span class="float-right">{$Think.get.is_start == 'false' ? date($vo.start_time).' 开始' : '预计 '.$vo.end_time.' 结束'}</span>
+                </h2>
+                <div class="product-card-btm clearfix">
+                  <div class="float-left product-card-price">
+                    <img src="__STATIC__/assets/images/common/icon-price.png" class="icon" alt="">
+                    <span>起拍价: <strong>{$vo.start_price / 10000}</strong>万元</span>
+                  </div>
+                  <a class="product-card-btn c-btn c-btn__primary float-right" href="../auction/special_auction_detail.html?auction_id={$vo.id}">{$Think.get.is_start == 'false' ? '立即预约' : '立即拍' }</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/foreach}
+        </div>
+      </div>
+
+      {include file="public/pagination" total="$total" size="6" /}
+    </section>
+
+    {include file="public/footer_ad" /}
+
+    {include file="public/footer-feature" /}
+
+
+  </div>
+
+</main>
+
+{include file="public/side_btns" /}
+{include file="public/footer" /}

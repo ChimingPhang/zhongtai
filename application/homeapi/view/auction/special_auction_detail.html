@@ -1,0 +1,202 @@
+{include file="public/header" title="特价拍卖" hasBanner="false" activeNav="home" /}
+
+<main class="o-wrapper">
+  <div class="container">
+    <section class="special-auction-detail">
+      <div class="product-photos">
+        <div class="car-slider">
+          <div class="view">
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                {foreach $banner as $item}
+                <div class="swiper-slide text-center">
+                  <img src="{$item.ad_code}" width="100%" alt="" />
+                </div>
+                {/foreach}
+              </div>
+            </div>
+          </div>
+          <div class="preview">
+            <div class="preview-wrapper">
+              <a class="arrow-left" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-l.png" width="8" alt="">
+              </a>
+              <a class="arrow-right" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-r.png" width="8" alt="">
+              </a>
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  {foreach $banner as $key=>$item}
+                  <div class="swiper-slide text-center {php} echo $key==0 ? 'active-nav' : '' {/php}">
+                    <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
+                  </div>
+                  {/foreach}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="product-des">
+        <div class="product card-yellowing">
+          <div class="product-dec__header" style="margin-bottom:0">
+            <div class="form-layout">
+              <div class="form-item row">
+                <div class="form-item-label col-1">
+                  <label>详情介绍：</label>
+                </div>
+                <div class="form-item-control-wrapper col-11">
+                  <div class="form-item-control">
+                    <div class="product--bling">{$data.goods_name}</div>
+                    <div class="product--gray">{$data.goods_remark}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-item row">
+                <div class="form-item-label col-1">
+                  <label>购置优惠：</label>
+                </div>
+                <div class="form-item-control-wrapper col-11">
+                  <div class="form-item-control">
+                    <div class="product--bling">{$data.goods_remark}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-item row">
+                <div class="form-item-label col-1">
+                  <label>拍卖参数：</label>
+                </div>
+                <div class="form-item-control-wrapper col-11">
+                  <div class="form-item-control">
+                    <div class="product--bling">{$data.spec_key_name}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="section-block">
+        <div class="section-title clearfix">
+          <h1>拍卖流程</span></h1>
+        </div>
+        <div class="text-center">
+          <img src="__STATIC__/assets/images/img-aution-step.png" alt="">
+        </div>
+        <div class="product-des__txt">
+          最高端的车型，近期有传言，新款长城哈佛H9将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理，还有就是排挡区做了从头的规划最高端的车型，近期有传言，新款长城哈佛H9将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理，还有就是排挡区做了从头的规划
+        </div>
+      </section>
+
+      <div class="actions-wrapper">
+        <div class="product-actions">
+          <div class="actions__left">
+            <div class="collection">
+              <span class="icon float-left"></span>
+              收藏
+            </div>
+            <div class="product-additional">
+              <div class="additional-col">
+                <span class="additional-col__center">{$data.click_count}</span>
+                <span class="additional-col__right">人围观</span>
+              </div>
+            </div>
+          </div>
+          <div class="actions__right">
+            <div class="product-worth">
+              <div class="worth__main">
+                <img src="assets/images/common/icon-price.png" class="icon" alt="">
+                <span>当前价格:</span>
+                <span class="worth">{$data.start_price}</span>
+                <span>元</span>
+              </div>
+              <div class="worth__tip">
+                剩余时间：<span class="highlight">5</span> 时 <span class="highlight">23</span> 分 <span class="highlight">00</span>
+                秒
+              </div>
+            </div>
+            <a class="c-btn c-btn__primary markup-btn" href="javascript:;" data-toggle="modal" data-target="#joinModal">
+              竞拍加价
+              <div class="tip">保证金：{$data.bail_price}元</div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="joinModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog join" role="document">
+          <div class="modal-content">
+            <div class="modal-header join-header">
+              <span class="navbar-brand navbar-brand__white"></span><span>填写信息</span>
+            </div>
+            <div class="modal-body join-body">
+              <div class="form-layout">
+                <div class="form-item row">
+                  <div class="form-item-label col-5">
+                    <label>*姓名：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-7">
+                    <div class="form-item-control">
+                      <div class="input-wrapper">
+                        <input type="text" class="form-control form-control-sm">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item row">
+                  <div class="form-item-label col-5">
+                    <label>*联系电话：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-7">
+                    <div class="form-item-control">
+                      <div class="input-wrapper">
+                        <input type="text" class="form-control form-control-sm">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item row">
+                  <div class="form-item-label col-5">
+                    <label>*身份证类型：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-7">
+                    <div class="form-item-control">
+                      <div class="select-wrapper">
+                        <select class="selectpicker form-control form-control-sm" data-style="my-select">
+                          <option>2018</option>
+                          <option>2017</option>
+                          <option>2016</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item row">
+                  <div class="form-item-label col-5">
+                    <label>*身份证号码：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-7">
+                    <div class="form-item-control">
+                      <div class="input-wrapper">
+                        <input type="text" class="form-control form-control-sm">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="join-actions">
+                <a href="jacascript:;" style="color:#fff" class="btn c-btn__primary btn-lg btn-block">确定</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+{include file="public/footer" /}

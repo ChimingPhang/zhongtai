@@ -1,0 +1,22 @@
+<div class="swiper-container banner-slider">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    {foreach $top_ads as $key=>$vo}
+    <div class="swiper-slide">
+      <a href="{$vo[ad_link]}">
+        <img src="{$vo[ad_code]}" title="{$vo[title]}" width="100%" style="" alt=""/>
+      </a>
+    </div>
+    {/foreach}
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <div class="search-box">
+    <div class="search-box__inner">
+      <input type="text" placeholder="请输入关键词，例如：众泰T500">
+      <button>立即搜索</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,135 @@
+{include file="public/header" title="首页" bundle="brand-models-buy" hasBanner="false" activeNav="integral" /}
+<main class="o-wrapper">
+  <div class="container">
+    <section class="integral-mall-detail">
+      <div class="product-photos">
+        <div class="car-slider">
+          <div class="view">
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                  {foreach $detail.banner as $item}
+                    <div class="swiper-slide text-center">
+                      <img src="{$item.ad_code}" width="100%" alt="" />
+                    </div>
+                  {/foreach}
+              </div>
+            </div>
+          </div>
+          <div class="preview">
+            <div class="preview-wrapper">
+              <a class="arrow-left" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-l.png" width="8" alt="">
+              </a>
+              <a class="arrow-right" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-r.png" width="8" alt="">
+              </a>
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {foreach $detail.banner as $key=>$item}
+                    <div class="swiper-slide text-center {php} echo $key==0 ? 'active-nav' : '' {/php}">
+                      <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
+                    </div>
+                    {/foreach}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="product-des card-yellowing">
+        <div class="product-dec__header">
+          <div class="form-layout">
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+                <label>详情介绍：</label>
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <div class="product--bling">{$detail.goods_name}</div>
+                  <div class="product--gray">{$detail.goods_remark}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+                <label>兑换说明：</label>
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <div class="product--bling">
+                    {$detail.equity_desc}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="product-dec__body">
+          <div class="product-actions">
+            <div class="actions__left">
+              <div class="collection">
+                <span class="icon float-left"></span>
+                收藏
+              </div>
+              <div class="product-additional">
+                <div class="additional-col">
+                  <span class="additional-col__right">剩余兑换数:</span>
+                  <span class="additional-col__center">{$detail.store_count}</span>
+                </div>
+              </div>
+            </div>
+            <div class="actions__right">
+              <div class="product-worth">
+                <div class="worth__main">
+                  <img src="assets/images/common/icon-integral.png" class="icon" alt="">
+                  <span>所需积分:</span>
+                  <span class="worth">{$detail.moren_integral} 积分</span>
+                </div>
+              </div>
+              <a class="c-btn c-btn__primary c-btn--large appo" href="../integral/integral_mall_exchange.html?goods_id={$Think.get.goods_id}">
+                立即兑换
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title clearfix">
+        <h1>精品推荐</span></h1>
+      </div>
+      <div class="product-list">
+        <div class="product-card-list row">
+          
+          {foreach $recommend_car.list as $item}
+            <div class="col col-4">
+              <div class="product-card">
+                <div class="product-card-img">
+                  <a href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}"><img src="{$item.original_img}" width="100%" alt=""></a>
+                </div>
+                <div class="product-card-content">
+                  <h2 class="product-card-title">
+                    {$item.goods_name}
+                    <!-- <span class="float-right">剩余时间：<strong class="color-primary">1天23时22分</strong></span> -->
+                  </h2>
+                  <div class="product-card-intro"><strong>特点：</strong>{$item.goods_remark}</div>
+                  <div class="product-card-btm clearfix">
+                    <div class="float-left product-card-price">
+                      <img src="assets/images/common/icon-integral.png" class="icon" alt="">
+                      <span>积分：<strong>{$item.moren_integral}</strong>积分</span>
+                      <span>剩余：<em>{$item.store_count}</em></span>
+                    </div>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}">立即兑换</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {/foreach}
+        </div>
+      </div>
+      {include file="public/pagination" total="$recommend_car.total" size="6" /}
+    </section>
+
+  </div>
+
+</main>
+{include file="public/side_btns" /}
+{include file="public/footer" /}

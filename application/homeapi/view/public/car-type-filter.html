@@ -1,0 +1,46 @@
+<div class="type-filter car-type-filter">
+    <div class="type-filter-row">
+      <label>车系:</label>
+      <div class="d-inline">
+        <ul class="filter">
+          <li class="{$Think.get.cat_id? '' : 'active'}"><a href="__URL__/brand_models.html">全部</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {foreach $category as $data}
+    <div class="type-filter-row">
+      <label>{$data['name']}:</label>
+      <ul class="filter" id="type-filter">
+        
+        {foreach $data['list'] as $list}
+        <li class="{$Think.get.cat_id == $list['id'] ? 'active' : ''}"><a href="__URL__/brand_models.html?cat_id={$list['id']}">{$list['name']}</a></li>
+        {/foreach}
+      </ul>
+    </div>
+    {/foreach}
+    <div class="type-filter-row">
+      <label>分类默认:</label>
+      <ul class="filter">
+        <li class="active"><a href="" ></a>默认</a></li>
+        <li>
+          <div class="sort-wrapper">
+            <span class="sort-txt">销量</span>
+            <div class="lamp">
+              <div class="icon-arr icon-arr__up"></div>
+              <div class="icon-arr icon-arr__down"></div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="sort-wrapper">
+            <span class="sort-txt">价格</span>
+            <div class="lamp">
+              <div class="icon-arr icon-arr__up"></div>
+              <div class="icon-arr icon-arr__down"></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>

@@ -1,0 +1,128 @@
+<footer class="o-wrapper c-footer">
+  <div class="container">
+    <div class="row c-footer-links">
+      <div class="col">
+        <h5>品牌天地</h5>
+        <ul>
+          <li><a href="#">集团概述</a></li>
+          <li><a href="#">新闻资讯</a></li>
+          <li><a href="#">技术品牌</a></li>
+          <li><a href="#">企业文化</a></li>
+          <li><a href="#">众泰教育</a></li>
+          <li><a href="#">社会责任</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h5>热门车型</h5>
+        <ul>
+          <li><a href="#">众泰T700</a></li>
+          <li><a href="#">众泰T600</a></li>
+          <li><a href="#">众泰Z300</a></li>
+          <li><a href="#">众泰Z700</a></li>
+          <li><a href="#">众泰T700</a></li>
+          <li><a href="#">众泰T700</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h5>购车支持</h5>
+        <ul>
+          <li><a href="#">预约试驾</a></li>
+          <li><a href="#">经销商查询</a></li>
+          <li><a href="#">市场活动</a></li>
+          <li><a href="#">天猫旗舰店</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h5>车主服务</h5>
+        <ul>
+          <li><a href="#">服务活动</a></li>
+          <li><a href="#">关爱课堂</a></li>
+          <li><a href="#">服务介绍</a></li>
+          <li><a href="#">服务站查询</a></li>
+          <li><a href="#">G-LINK服务</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h5>商务合作</h5>
+        <ul>
+          <li><a href="#">众泰研发中心预约</a></li>
+          <li><a href="#">众泰汽车招商加盟</a></li>
+          <li><a href="#">众泰新能源招商加盟</a></li>
+          <li><a href="#">众泰招标采购平台</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="copyright text-center">Copyright &copy; 2018 www.zhongtia.com All Rights Reserved</div>
+</footer>
+<script>
+  function getProvince() {
+    $.post('/api/Drive/show_province', {}, function(res){
+      var result = JSON.parse(res);
+      var d=document.createDocumentFragment();
+      var list = document.getElementById('provinceList')
+      result.data.forEach(element => {
+        var e = document.createElement('option')
+        e.value = element.id
+        e.innerText = element.name
+        list.onchange = function(event) {
+          getCity(event.target.value, function() {
+            $(".selectpicker").selectpicker('refresh')
+          })
+        }
+        d.appendChild(e)
+      });
+      
+      $('#provinceList').html(d)
+    })
+  }
+
+  function getCity(id, cb) {
+    $.post('/api/Drive/check_children', {id: id}, function(res){
+      var result = JSON.parse(res);
+      var d=document.createDocumentFragment();
+      var list = document.getElementById('cityList')
+      result.data.forEach(element => {
+        var e = document.createElement('option')
+        e.value = element.id
+        e.innerText = element.name
+        list.onchange = function() {
+          getSales(function() {
+            $(".selectpicker").selectpicker('refresh')
+          })
+        }
+        d.appendChild(e)
+      });
+      
+      $('#cityList').html(d)
+      cb&&cb()
+    })
+  }
+
+  function getSales(cb) {
+    var cate_id2 = $('#catList').val()
+    var province = $('#provinceList').val()
+    var city = $('#cityList').val()
+    console.log(cate_id2, province, city)
+    $.post('/api/Drive/sales', {
+      cate_id2: cate_id2,
+      province: province,
+      city: city
+    }, function(res){
+      var result = JSON.parse(res);
+      var d=document.createDocumentFragment();
+      var list = document.getElementById('salesList')
+      result.data.forEach(element => {
+        var e = document.createElement('option')
+        e.value = element.id
+        e.innerText = element.name
+        d.appendChild(e)
+      });
+      
+      $('#salesList').html(d)
+      cb&&cb()
+    })
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{include file="public/header" title="一元秒杀" bundle="home" hasBanner="true" activeNav="home" /}
+
+
+    <main class="o-wrapper">
+      <!--顶部广告-->
+      {include file="public/top_ads" /}
+      <div class="container">
+         <!--三大栏目-->
+        {include file="public/three_box" /}
+        <div class="top-ad" style="padding-top:20px;">
+          <a href="#"><img src="./assets/images/temp/three-block-banner.jpg" width="100%" alt="" /></a>
+        </div>
+
+        <section class="section-block pb-3">
+          <div class="section-title clearfix">
+            <h1>一元秒杀<span class="section-subtitle">限时出售 | 一元购物</span></h1>
+          </div>
+
+          <div class="type-filter car-type-filter">
+            <div class="type-filter-row">
+              <label>选择车型:</label>
+              <div class="d-inline">
+                <select class="selectpicker form-control form-control-sm" data-style="my-select" data-width="100px">
+                  <option>众泰</option>
+                  <option>大迈</option>
+                  <option>2016</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="type-filter-row">
+              <label> </label>
+              <ul class="filter" id="type-filter">
+                <li>
+                  <a href="../seckill/one_dollar">全部</a>
+                </li>
+                {foreach $type as $item}
+                  <li>
+                    <a href="../seckill/one_dollar?type={$item.id}">{$item.name}</a>
+                  </li>
+                {/foreach}
+              </ul>
+            </div>
+          </div>
+          <div class="product-card-list row">
+            {foreach name="car_list" item="data"}
+            <div class="col col-4">
+              <div class="product-card">
+                <div class="product-card-img">
+                  <a href="../seckill/one_dollar_detail.html?seckill_id={$data.id}"><img src={$data['original_img']} alt=""></a>
+                </div>
+                <div class="product-card-content">
+                  <h2 class="product-card-title">
+                    {$data.goods_name}
+                    <span class="float-right">已订购:<strong class="color-primary">{$data['sales_sum']}</strong>台</span>
+                  </h2>
+                  <div class="product-card-intro"><strong>特点：</strong>{$data.goods_remark}</div>
+                  <div class="product-card-btm clearfix">
+                    <div class="float-left product-card-price">
+                      <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
+                      <span>价格：<strong>{$data.price}</strong>元</span>
+                    </div>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../seckill/one_dollar_detail.html?seckill_id={$data.id}">立即购买</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/foreach}
+          </div>
+          {include file="public/pagination" total="$total" size="9" /}
+        </section>
+
+        {include file="public/footer_ad" /}
+
+        {include file="public/footer-feature" /}
+
+  </div>
+
+</main>
+
+{include file="public/side_btns" /}
+{include file="public/footer" /}

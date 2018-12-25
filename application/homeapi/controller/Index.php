@@ -52,8 +52,19 @@ class Index extends Base{
         //获取广告图片
         $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
         $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $this->assign('top_ads', $top_ads['result']);
-        $this->assign('footer_ads', $footer_ads['result']);
+//        $this->assign('top_ads', @$top_ads['result']);
+//        $this->assign('footer_ads', @$footer_ads['result']);
+        if (isset($footer_ads['result'])) {
+            $this->assign('top_ads', $top_ads['result']);
+        } else {
+            $this->assign('top_ads', []);
+        }
+        if (isset($footer_ads['result'])) {
+            $this->assign('footer_ads', $footer_ads['result']);
+        } else {
+            $this->assign('footer_ads', []);
+        }
+//        dump($footer_ads);die;
     }
 
     /**

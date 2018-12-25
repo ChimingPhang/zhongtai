@@ -697,7 +697,13 @@ class Index extends Base{
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
 
-        $order = (new Order())->getUserOrder($user_id);
+        $order['all'] = (new Order())->getUserOrder($user_id, 1);
+        $order['notpay'] = (new Order())->getUserOrder($user_id, 2);
+        $order['sended'] = (new Order())->getUserOrder($user_id, 3);
+        $order['done'] = (new Order())->getUserOrder($user_id, 4);
+        $order['cancel'] = (new Order())->getUserOrder($user_id, 5);
+        // $order['rate'] = (new Order())->getUserOrder($user_id, 6);
+        // $order['notsend'] = (new Order())->getUserOrder($user_id, 7);
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }

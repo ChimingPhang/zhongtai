@@ -1,15 +1,16 @@
 {if [total] > [size]}
-<div class="text-center pt-3" >
+<div class="text-center pt-3">
   <nav aria-label="navigation pagination-box">
     <ul class="pagination justify-content-center">
-      <li class="page-item"><a class="page-link icon-link icon-prev " href="#"></a></li>
+      <li class="page-item btn-prev" data-page="prev"><a class="page-link icon-link icon-prev " href="javascript:void(0)"></a></li>
       {php}
-        $page = ceil([total] / [size]);
+      $page = ceil([total] / [size]);
       {/php}
       {for start="1" end="$page+1"}
-        <li class="page-item" data-page="{$i}"><a class="page-link {$i==1?'active':''}" href="#">{$i}</a></li>
+      <li class="page-item page-num {$i==1?'active':''}" data-page="{$i}"><a class="page-link" href="javascript:void(0)">{$i}</a></li>
       {/for}
-      <li class="page-item page-extra">
+      <li class="page-item btn-next" data-page="prev"><a class="page-link icon-link icon-next " href="javascript:void(0)"></a></li>
+      <!-- <li class="page-item page-extra">
         &nbsp;
         <select name="" id="">
           <option value="">10条/页</option>
@@ -17,8 +18,67 @@
         &nbsp;
         <span>跳至</span>
         <input value="5" class="form-control form-control-sm d-inline" /><span>&nbsp;页</span>
-      </li>
+      </li> -->
     </ul>
   </nav>
 </div>
+
+<script>
+  var current = 1
+  function setPage(page) {
+    current = page
+  }
+
+  function prevPage() {
+    current = current--
+    $('.pagination .page-num').eq(current-1).addClass('active').siblings('.page-num').removeClass('active')
+  }
+
+  function nextPage() {
+    current = current++
+    debugger
+    $('.pagination .page-num').eq(current-1).addClass('active').siblings('.page-num').removeClass('active')
+  }
+
+  $(function () {
+    $('.pagination .page-item').click(function () {
+      var clickPage = $(this).data('page');
+      
+      switch (clickPage) {
+        case 'prev':
+          if(current>1) {
+            prevPage();
+            getList(current);
+          }
+          break;
+        case 'next':
+          if(current<{$page}) {
+            nextPage();
+            getList(current);
+          }
+          break;
+        default:
+          clickPage = Number(clickPage);
+          $(this).addClass('active').siblings().removeClass('active')
+          if(clickPage!=current) {
+            getList(current);
+          }
+          setPage(clickPage);
+      }
+
+      if(current==1) {
+        $('.btn-prev').hide()    
+      } else {
+        $('.btn-prev').show()    
+      }
+      
+      if(current=={$page}){
+        $('.btn-next').hide() 
+      } else {
+        $('.btn-next').show() 
+      }
+      
+    })
+  })
+</script>
 {/if}

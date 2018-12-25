@@ -5,7 +5,7 @@
  * collection       我的收藏
  * collection_del   删除收藏
  */
-namespace app\api\controller;
+namespace app\homeapi\controller;
 use think\Model;
 use think\Request;
 
@@ -120,13 +120,12 @@ class Article extends Base{
      * Date: 2018/9/10 11:40
      */
     public function pointDesc(){
-        if (!Request::instance()->isPost()) $this->errorMsg('1006');
         $data = M('article')->where(['article_id'=>5,'is_open'=>1])->field('article_id as id,title,content')->find();
         if($data){
             $data['content'] = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data['content'] . '</div></body></html>');
-            $this->json('0000','ok',$data);
         }else{
-            $this->json('0000','暂无数据',[]);
+            $data = [];
         }
+        return $data;
     }
 }

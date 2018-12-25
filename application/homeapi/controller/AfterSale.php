@@ -3,7 +3,7 @@
 /**
  * 退款管理
  */
-namespace app\api\controller;
+namespace app\homeapi\controller;
 use think\Model;
 use app\api\model\Sale;
 use think\Hook;

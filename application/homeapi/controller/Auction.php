@@ -612,32 +612,28 @@ class Auction extends Base {
      * @Auther 蒋峰
      * @DateTime
      */
-    public function auctionPartake()
+    public function auctionPartake($user_id)
     {
-        if (!Request::instance()->isPost()) $this->errorMsg('1006');
-        empty(I('token', '')) && $this->errorMsg(2001, 'token');//必传
-
-        $user_id = $this->checkToken(I('token'));
-
         $auction = Db::name("Auction")->alias('g')
             ->join('auction_sign_up s','g.id=s.auction_id', 'left')
             ->where(array('g.is_end' => ['=' ,0],'s.user_id' => $user_id, 'g.start_time' => ['<', time()]))
-            ->field("g.id,g.goods_name,g.end_time,g.bail_price,g.price,g.spec_key_name,g.create_time,g.delay_time")
+            ->field("g.id,g.goods_name,g.end_time,g.bail_price,g.price,g.spec_key_name,g.delay_time")
             ->limit((self::$page - 1) * self::$pageNum, self::$pageNum)
             ->select();
 
-        if($auction)
+        if($auction) {
             foreach ($auction as &$value){
-                if($value['create_time'] && $value['create_time'] + ($value['delay_time'] * 60) > $value['end_time']){
-                    $value['end_time'] = $value['create_time'] + ($value['delay_time'] * 60);
-                }
+//                if($value['create_time'] && $value['create_time'] + ($value['delay_time'] * 60) > $value['end_time']){
+//                    $value['end_time'] = $value['create_time'] + ($value['delay_time'] * 60);
+//                }
                 unset($value['create_time']);
                 unset($value['delay_time']);
 
                 $value['goods_img'] = auction_thum_images($value['id'],200,150);
             }
-        if(!$auction) return $this->errorMsg(8910);
-        return $this->json("0000", "获取成功", $auction);
+        }
+
+        return $auction;
     }
 
     /**

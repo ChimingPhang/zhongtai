@@ -1,0 +1,13 @@
+<div class="swiper-container footer-ad">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      {foreach $footer_ads as $key=>$vo}
+      <div class="swiper-slide">
+        <a href="{$vo[ad_link]}">
+          <img src="{$vo[ad_code]}" title="{$vo[title]}" width="100%" style="" alt=""/>
+        </a>
+      </div>
+      {/foreach}
+    </div>
+  </div>

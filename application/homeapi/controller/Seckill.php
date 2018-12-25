@@ -33,6 +33,8 @@ class Seckill extends Base {
         //自动加载页数
         self::Initialization();
         !is_numeric(self::$page = I('page', 1)) && $this->errorMsg(2002, 'page');
+        $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
+        $this->assign('cartype_list', $this->cartype_list);
     }
 
     public static function Initialization()
@@ -70,9 +72,11 @@ class Seckill extends Base {
     public function one_dollar()
     {
         //获取首页顶部轮播
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
         $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
+        $this->assign('top_ads', $top_ads['result']);
+        $this->assign('footer_ads', $footer_ads['result']);
+
         //筛选条件
         $types = [
             ['id' => 1, 'name' => '汽车'],
@@ -169,9 +173,9 @@ class Seckill extends Base {
         $where['is_recommend'] = 1;
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $info['recommend'] = $Goods->GoodsList(1, 1, $where, [], 3, $field);
-
+        $info->goods_content = '';
         $this->assign('data', $info);
-        // $this->json(200, 'ok', $info);
+        $this->json(200, 'ok', $info);
 
         return $this->fetch('one_dollar/one_dollar_detail');
     }

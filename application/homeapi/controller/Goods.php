@@ -603,4 +603,45 @@ class Goods extends Base {
         if(!$data) $this->errorMsg(8910);
         $this->json("0000", "加载成功", $data);
     }
+
+    public function searchList() {
+        //验证参数
+        empty($title = I('title', ''));
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
+//        self::$redis->Zincrby('hot_words', 1, $title);
+        //排序顺序
+        $order = [];
+        if(!$sales_sum && !$price) $order['type'] = 'asc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($price) $order['deposit_price'] = $price;
+        //检索条件
+        $where = [];
+        $where['exchange_integral'] = ['lt',2];
+        if($title) $where['goods_name'] = ['like','%'.$title.'%'];
+
+        $Goods = new GoodsModel();
+        $field = "goods_id,goods_name,goods_remark,deposit_price,price,original_img,is_recommend,is_new,is_hot,type,exchange_integral";
+        $goodsList = $Goods->GoodsList($this->page, 0, $where, $order, self::$pageNum, $field);
+        // if(!$goodsList) $this->errorMsg(8910);
+
+        $banner = [];
+        if($this->page == 1){
+            $banner = $this->ad_position("9",'ad_name,ad_link,ad_code');
+            if($banner['status'] == 0000) $banner = $banner['result'];
+            else $banner = [];
+            $data = [
+                "banner" => $banner,
+                "list" => $goodsList
+            ];
+        }else{
+            $data = [
+                "list" => $goodsList
+            ];
+        }
+        $this->assign('total', sizeof($goodsList));
+        $this->assign('top_ads', $data['banner']);
+        $this->assign('goods', $goodsList);
+        return $this->fetch('common/search');
+    }
 }

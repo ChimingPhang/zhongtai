@@ -1,0 +1,63 @@
+{include file="public/header" title="特价拍卖" bundle="home" hasBanner="true" activeNav="integral" /}
+
+<main class="o-wrapper">
+  <!--顶部广告-->
+  {include file="public/top_ads" /}
+  <div class="container">
+    <section class="section-block pb-5">
+      <div class="section-title clearfix">
+        <h1>积分商城<span class="section-subtitle">免费兑换 | 送货上门</span></h1>
+      </div>
+
+      <div class="integral-top">
+        <div class="integral-top-img" style="height: 270px; overflow: hidden">
+          <img src="{$recommend_car.original_img}" width="100%" alt="">
+        </div>
+
+        <div class="integral-top-content">
+          <h3><label>{$recommend_car.goods_name}</label> <span>剩余时间: <em class="color-primary">3天23小时55分</em></span></h3>
+          <p>{$recommend_car.goods_remark}</p>
+          <div class="clearfix">
+            <h3 class="d-inline text-remain">剩余：<label>{$recommend_car.store_count}件</label></h3>
+
+            <a href="../integral/integral_mall_detail.html?goods_id={$recommend_car.goods_id}" class="btn btn-danger text-center float-right">
+              立即兑换<br />
+              <span>积分: {$recommend_car.integral}积分</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="product-card-list row">
+        {foreach $list as $gd}
+        <div class="col col-4">
+          <div class="product-card">
+            <div class="product-card-img">
+              <a href="#"><img src="{$gd.original_img}" width="100%" style="height: auto" alt=""></a>
+            </div>
+            <div class="product-card-content">
+              <h2 class="product-card-title">
+                {$gd.goods_name}
+                <span class="float-right">剩余时间:<strong class="color-primary">1天23时22分</strong></span>
+              </h2>
+              <div class="product-card-intro"><strong>特点：</strong>{$gd.goods_remark}</div>
+              <div class="product-card-btm clearfix">
+                <div class="float-left product-card-price">
+                  <img src="__STATIC__/assets/images/common/icon-integral.png" alt="">
+                  <span>积分：<strong>{$gd.integral}</strong>积分</span>
+                  <span>剩余：<em>{$gd.store_count}</em></span>
+                </div>
+                <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail.html?goods_id={$gd.goods_id}">立即兑换</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/foreach}
+      </div>
+      {include file="public/pagination" total="$total" size="6" /}
+    </section>
+
+  </div>
+
+</main>
+{include file="public/side_btns" /}
+{include file="public/footer" /}

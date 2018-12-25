@@ -1,0 +1,193 @@
+{include file="public/header" title="首页" bundle="home" hasBanner="false" activeNav="parts" /}
+<main class="o-wrapper">
+  <div class="container">
+    <section class="parts-buy">
+      <div class="product-photos__wrapper">
+        <div class="car-slider">
+          <div class="view">
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                {foreach $data.banner as $key=>$item}
+                <div class="swiper-slide text-center">
+                  <img src="{$item.ad_code}" width="100%" alt="" />
+                </div>
+                {/foreach}
+              </div>
+            </div>
+          </div>
+          <div class="preview">
+            <div class="preview-wrapper">
+              <a class="arrow-left" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-l.png" width="8" alt="">
+              </a>
+              <a class="arrow-right" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-r.png" width="8" alt="">
+              </a>
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  {foreach $data.banner as $key=>$item}
+                  <div class="swiper-slide text-center {$key==0?'active-nav':''}">
+                    <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
+                  </div>
+                  {/foreach}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="product-attr">
+        <div class="card-yellowing">
+          <div class="form-layout">
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+                <label>选择颜色：</label>
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <ul class="product-attr-brick" id="product-brick">
+                    {foreach $data['spec'] as $item}
+                    <li class="attr-color__item active">
+                      <div class="pic-wrapper">
+                        <img src="{$item.sku_img}" class="color-pic" alt="">
+                        <img src="" class="selected-icon" alt="">
+                      </div>
+                      <div class="color-name">{$item.sku_name}</div>
+                    </li>
+                    {/foreach}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+                <label>购买数量：</label>
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <div class="product-attr__formItem">
+                    <div class="select-wrapper">
+                      {php}
+                      $have = (float)$data['integral'];
+                      $need = (float)$data['moren_integral'];
+                      $max = floor($have/$need);
+                      {/php}
+                      <select class="selectpicker form-control form-control-sm" data-style="my-select">
+                        {for start="1" end="$max+1"}
+                        <option>1</option>
+                        {/for}
+                      </select>
+                    </div>
+                    <span class="formItem-des">个</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+                <label>积分抵扣：</label>
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <div class="product-attr__integral">可用积分 {$data.moren_integral} 积分</div>
+                  <div class="form-item form-item__inline">
+                    <div class="form-item-label">
+                      <label>使用</label>
+                    </div>
+                    <div class="form-item-control-wrapper">
+                      <div class="form-item-control">
+                        <div class="product-attr__formItem">
+                          <div class="input-wrapper">
+                            <input type="number" class="form-control form-control-sm">
+                          </div>
+                          <span class="formItem-des">积分</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="product-detail__wrapper">
+        <div class="product-detail">
+          <div class="product-detail__left" style="background-image:url('{$data.banner[0][ad_code]}')">
+            {if $data.video}
+            <video src="{$data.video}" ></video>
+            {/if}
+          </div>
+          <div class="product-detail__right">
+            <div class="product-txt">{$data.goods_remark}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-yellowing">
+        <div class="receiving-info">
+          <h2 class="title">收货信息</h2>
+          <form class="receiving-form">
+            <div class="form-layout form-layout__inline">
+              <div class="form-item">
+                <div class="form-item-label">
+                  <label>姓名：</label>
+                </div>
+                <div class="form-item-control-wrapper">
+                  <div class="form-item-control">
+                    <div class="input-wrapper">
+                      <input type="text" class="form-control form-control-sm">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <label>电话：</label>
+                </div>
+                <div class="form-item-control-wrapper">
+                  <div class="form-item-control">
+                    <div class="input-wrapper">
+                      <input type="text" class="form-control form-control-sm">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <label>地址：</label>
+                </div>
+                <div class="form-item-control-wrapper">
+                  <div class="form-item-control">
+                    <div class="input-wrapper">
+                      <input type="text" class="form-control form-control-sm">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <label>备注：</label>
+                </div>
+                <div class="form-item-control-wrapper">
+                  <div class="form-item-control">
+                    <div class="input-wrapper">
+                      <input type="text" class="form-control form-control-sm">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="actions">
+            <a class="c-btn c-btn__primary exchange-btn" href="#">立即兑换（{$data.moren_integral}积分）</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+{include file="public/footer" /}

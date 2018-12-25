@@ -1,0 +1,66 @@
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog sign" role="document">
+      <div class="modal-content">
+        <div class="modal-header sign-header">
+          <span>登录/注册</span>
+          <button type="button" class="close">
+          </button>
+          <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+            <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
+          </div>
+        </div>
+        <div class="modal-body sign-body">
+          <div class="tabs">
+            <ul class="tabs-list capsule">
+              <li class="tab-item active">
+                登录
+              </li>
+              <li class="tab-item">
+                注册
+              </li>
+            </ul>
+            <div class="tabs-content" id="loginForm">
+              <div class="tab-pane active">
+                <form class="login-form position-relative">
+                  <p class="text-center" v-show="loginMsg.visible"  style="font-size:12px;color:red;position:absolute;top:10px;width:100%;left:0;" v-html="loginMsg.text"></p>
+                  <div class="form-group">
+                    <input type="text" v-model="loginPhone" class="form-control" placeholder="手机号">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" v-model="loginPwd" class="form-control" placeholder="密码">
+                  </div>
+                  <div class="actions">
+                    <a class="c-btn c-btn__primary login-btn" @click="login" href="javasript:void(0)">登录</a>
+                  </div>
+                </form>
+              </div>
+              <div class="tab-pane">
+                <form class="register-form position-relative">
+                  <p class="text-center" v-show="registerMsg.visible"  style="font-size:12px;color:red;position:absolute;top:10px;width:100%;left:0;" v-html="registerMsg.text"></p>
+                  <div class="form-group">
+                    <input type="text" v-model="registerPhone" class="form-control" placeholder="手机号">
+                  </div>
+                  <div class="form-group input-group code-wrapper">
+                    <input type="text" v-model="registerCode" class="form-control" placeholder="验证码" aria-describedby="send-code">
+                    <div class="input-group-append" style="width:94px">
+                      <span class="input-group-text text-center send-btn d-block" style="width:100%;" @click="getCode" id="send-code" v-text="codeText"></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input type="password" v-model="registerPwd" id="registerPwd" class="form-control" placeholder="密码">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" v-model="registerRepwd" id="registerRepwd" class="form-control" placeholder="重复密码">
+                  </div>
+                  <div class="actions">
+                    <a class="c-btn c-btn__primary register-btn" @click="signup" href="#">注册</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

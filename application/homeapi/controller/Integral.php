@@ -186,8 +186,8 @@ class Integral extends Base {
     {
         $data = $this->get_goods_detail();
         $this->assign('data', $data);
-        $this->json(200, 'ok', $data);
-        return $this->fetch('dist/integral-mall-exchange');
+        // $this->json(200, 'ok', $data);
+        return $this->fetch('integral_mall/integral_mall_exchange');
     }
 
     private function get_goods_detail()

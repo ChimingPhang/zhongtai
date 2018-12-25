@@ -1,0 +1,58 @@
+{include file="public/header" title="首页" hasBanner="true" activeNav="home" /}
+
+
+<main class="o-wrapper">
+  <!--顶部广告-->
+  {include file="public/top_ads" /}
+
+  <div class="container">
+    <!--三大栏目-->
+    {include file="public/three_box" /}
+
+    <!--拍卖专区-->
+    {include file="index/top_auction" /}
+
+    <!--热卖车型-->
+    <section class="section-block">
+      <div class="section-title clearfix">
+        <h1>热卖车型<span class="section-subtitle">包购置税 | 送一年保险</span></h1>
+
+        <a href="#" class="float-right">查看详情》</a>
+      </div>
+      <div class="product-card-list row">
+        {foreach name="hot_car" item="data"}
+        <div class="col col-4">
+          <div class="product-card">
+            <div class="product-card-img">
+              <a href="#"><img src="{$data['original_img']}" alt=""></a>
+            </div>
+            <div class="product-card-content">
+              <h2 class="product-card-title">
+                车型: {$data['goods_name']}
+                <span class="float-right">已订购:<strong class="color-primary">{$data['sales_sum']}</strong>台</span>
+              </h2>
+              <div class="product-card-intro"><strong>特点：</strong>{$data['goods_remark']}</div>
+              <div class="product-card-btm clearfix">
+                <div class="float-left product-card-price">
+                  <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
+                  <span>价格：<strong>{$data['price'] / 10000}</strong>万元</span>
+                </div>
+                <a class="product-card-btn c-btn c-btn__primary float-right" href="../index/brand_models_detail.html?goods_id={$data['goods_id']}">立即购买</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/foreach}
+      </div>
+    </section>
+
+    {include file="public/footer_ad" /}
+
+    {include file="public/footer-feature" /}
+
+  </div>
+
+</main>
+
+{include file="public/side_btns" /}
+{include file="public/footer" /}

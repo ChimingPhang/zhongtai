@@ -96,6 +96,8 @@ class Auction extends Base {
 //        $this->json("0000", '加载成功', $auctionList);
         $this->assign('data', $auctionList);
 
+        $this->assign('total', sizeof($auctionList));
+
         return $this->fetch('auction/special_auction');
 
     }

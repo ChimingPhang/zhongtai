@@ -1,0 +1,246 @@
+{include file="public/header" title="首页" bundle="brand-models-buy" hasBanner="false" activeNav="integral" /}
+
+    <main class="o-wrapper">
+      <div class="container">
+        <section class="integral-mall-exchange">
+          <div class="product-photos">
+            <div class="car-slider">
+              <div class="view">
+                <div class="swiper-container">
+                  <div class="swiper-wrapper">
+                    {foreach $data.banner as $item}
+                    <div class="swiper-slide text-center">
+                      <img src="{$item.ad_code}" width="100%" alt="" />
+                    </div>
+                    {/foreach}
+                  </div>
+                </div>
+              </div>
+              <div class="preview">
+                <div class="preview-wrapper">
+                  <a class="arrow-left" href="#">
+                    <img src="__STATIC__/assets/images/common/icon-page-arrow-l.png" width="8" alt="">
+                  </a>
+                  <a class="arrow-right" href="#">
+                    <img src="__STATIC__/assets/images/common/icon-page-arrow-r.png" width="8" alt="">
+                  </a>
+                  <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                      {foreach $data.banner as $key=>$item}
+                      <div class="swiper-slide text-center {php} echo $key==0 ? 'active-nav' : '' {/php}">
+                        <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
+                      </div>
+                      {/foreach}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="product-attr">
+            <div class="card-yellowing">
+              <div class="form-layout">
+                <div class="form-item row">
+                  <div class="form-item-label col-1">
+                    <label>外观样式：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-11">
+                    <div class="form-item-control">
+                      <ul class="product-attr-color" id="product-color">
+                        {foreach $data['spec'] as $item}
+                        <li class="attr-color__item active">
+                          <div class="pic-wrapper">
+                            <img src="{$item.sku_img}" class="color-pic" alt="">
+                            <img src="" class="selected-icon" alt="">
+                          </div>
+                          <div class="color-name">{$item.sku_name}</div>
+                        </li>
+                        {/foreach}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item row">
+                  <div class="form-item-label col-1">
+                    <label>选择颜色：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-11">
+                    <div class="form-item-control">
+                      <ul class="product-attr-brick" id="product-brick">
+                        {foreach $data['appearance']['interior'] as $item}
+                        <li class="attr-color__item active">
+                          <div class="pic-wrapper">
+                            <img src="{$item.sku_img}" width="40" class="color-pic" alt="">
+                          </div>
+                          <div class="color-name">{$item.sku_name}</div>
+                        </li>
+                        {/foreach}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item row">
+                  <div class="form-item-label col-1">
+                    <label>专属型号：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-11">
+                    <div class="form-item-control">
+                      <ul class="product-attr-brick" id="product-brick">
+                        <li class="attr-brick__item active">自动豪华型</li>
+                        <li class="attr-brick__item selected">运动型</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item row">
+                  <div class="form-item-label col-1">
+                    <label>兑换数量：</label>
+                  </div>
+                  <div class="form-item-control-wrapper col-11">
+                    <div class="form-item-control">
+                      <div class="product-attr__exchange-num">
+                        <select class="selectpicker form-control form-control-sm" data-style="my-select">
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="receiving">
+                <div class="receiving-info">
+                  <h2 class="title">收货信息</h2>
+                  <form class="receiving-form">
+                    <div class="form-layout form-layout__inline">
+                      <div class="form-item">
+                        <div class="form-item-label">
+                          <label>姓名：</label>
+                        </div>
+                        <div class="form-item-control-wrapper">
+                          <div class="form-item-control">
+                            <div class="input-wrapper">
+                              <input type="text" class="form-control form-control-sm">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-item">
+                        <div class="form-item-label">
+                          <label>电话：</label>
+                        </div>
+                        <div class="form-item-control-wrapper">
+                          <div class="form-item-control">
+                            <div class="input-wrapper">
+                              <input type="text" class="form-control form-control-sm">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-item">
+                        <div class="form-item-label">
+                          <label>地址：</label>
+                        </div>
+                        <div class="form-item-control-wrapper">
+                          <div class="form-item-control">
+                            <div class="input-wrapper">
+                              <input type="text" class="form-control form-control-sm">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-item">
+                        <div class="form-item-label">
+                          <label>备注：</label>
+                        </div>
+                        <div class="form-item-control-wrapper">
+                          <div class="form-item-control">
+                            <div class="input-wrapper">
+                              <input type="text" class="form-control form-control-sm">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="actions">
+                    <a class="c-btn c-btn__primary exchange-btn" href="#">立即兑换（300积分）</a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+    <footer class="o-wrapper c-footer">
+      <div class="container">
+        <div class="row c-footer-links">
+          <div class="col">
+            <h5>品牌天地</h5>
+            <ul>
+              <li><a href="#">集团概述</a></li>
+              <li><a href="#">新闻资讯</a></li>
+              <li><a href="#">技术品牌</a></li>
+              <li><a href="#">企业文化</a></li>
+              <li><a href="#">吉利教育</a></li>
+              <li><a href="#">社会责任</a></li>
+            </ul>
+          </div>
+          <div class="col">
+            <h5>热门车型</h5>
+            <ul>
+              <li><a href="#">众泰T700</a></li>
+              <li><a href="#">众泰T600</a></li>
+              <li><a href="#">众泰Z300</a></li>
+              <li><a href="#">众泰Z700</a></li>
+              <li><a href="#">众泰T700</a></li>
+              <li><a href="#">众泰T700</a></li>
+            </ul>
+          </div>
+          <div class="col">
+            <h5>购车支持</h5>
+            <ul>
+              <li><a href="#">集团概述</a></li>
+              <li><a href="#">新闻资讯</a></li>
+              <li><a href="#">技术品牌</a></li>
+              <li><a href="#">企业文化</a></li>
+              <li><a href="#">吉利教育</a></li>
+              <li><a href="#">社会责任</a></li>
+            </ul>
+          </div>
+          <div class="col">
+            <h5>车主服务</h5>
+            <ul>
+              <li><a href="#">集团概述</a></li>
+              <li><a href="#">新闻资讯</a></li>
+              <li><a href="#">技术品牌</a></li>
+              <li><a href="#">企业文化</a></li>
+              <li><a href="#">吉利教育</a></li>
+              <li><a href="#">社会责任</a></li>
+            </ul>
+          </div>
+          <div class="col">
+            <h5>商务合作</h5>
+            <ul>
+              <li><a href="#">集团概述</a></li>
+              <li><a href="#">新闻资讯</a></li>
+              <li><a href="#">技术品牌</a></li>
+              <li><a href="#">企业文化</a></li>
+              <li><a href="#">吉利教育</a></li>
+              <li><a href="#">社会责任</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="copyright text-center">Copyright &copy; 2018 www.zhongtia.com All Rights Reserved</div>
+    </footer>
+
+  </body>
+</html>

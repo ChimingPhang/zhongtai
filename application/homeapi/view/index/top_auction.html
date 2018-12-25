@@ -1,0 +1,83 @@
+<section class="section-block">
+  <div class="section-title clearfix">
+    <h1>拍卖专区<span class="section-subtitle">限时出售 | 性价比高</span></h1>
+    <a href="../auction/special_auction.html?is_start=true" class="float-right">查看详情》</a>
+  </div>
+  <div class="top-auction product-card-list">
+    <div class="top-auction-row no-gutters">
+      {foreach $auc_car as $key=>$vo}
+      {switch $key}
+      {case 0}
+
+      <div class="top-auction-col col-big">
+        <div class="product-card">
+          <a href="../auction/special_auction_detail.html?auction_id={$vo.id}">
+            <div class="product-card-img">
+              <img src="{$vo.original_img}" alt="">
+            </div>
+            <div class="product-card-content">
+              <div class="product-card-title product-card-title__price">
+                {$vo.goods_name}
+                <span class="float-right"><strong>{$vo.start_price/ 10000}</strong>万元</span>
+              </div>
+              <div class="product-card-intro"><strong>特点：</strong>{$vo.goods_remark}
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="top-auction-col col-small">
+        {/case}
+
+        {case 5}
+      </div>
+      <div class="top-auction-col col-big">
+        <div class="product-card">
+          <a href="../auction/special_auction_detail.html?auction_id={$vo.id}">
+            <div class="product-card-img">
+              <img src="{$vo.original_img}" alt="">
+            </div>
+            <div class="product-card-content">
+              <div class="product-card-title product-card-title__price">
+                {$vo.goods_name}
+                <span class="float-right"><strong>{$vo.start_price}</strong>元</span>
+              </div>
+              <div class="product-card-intro"><strong>特点：</strong>{$vo.goods_remark}
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      {/case}
+      {default /}
+      {if $key==1|| $key==3 }
+      <div class="top-auction-row">
+        {/if}
+        <div class="top-auction-col">
+          <div class="product-card product-card__small">
+            <div class="product-card-img">
+              <a href="../auction/special_auction_detail.html?auction_id={$vo.id}"><img src="{$vo.original_img}" alt=""></a>
+            </div>
+            <div class="product-card-content">
+              <div class="row no-gutters">
+                <div class="col col-6">
+                  <div><a href="">{$vo.goods_name}</a></div>
+                  <em class="color-primary">{$vo.start_price / 10000}万元</em>
+                </div>
+                <div class="col col-6 text-right">
+                  <div>
+                    {$vo['spec_key_name']}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {if $key==2|| $key==4 }
+      </div>
+      {/if}
+      {/switch}
+      {/foreach}
+    </div>
+  </div>
+</section>

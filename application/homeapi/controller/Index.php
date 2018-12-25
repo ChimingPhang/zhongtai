@@ -49,6 +49,11 @@ class Index extends Base{
         $this->assign('is_login', $this->is_login);
         $this->assign('is_sign', $this->is_sign);
         
+        //获取广告图片
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $this->assign('top_ads', $top_ads['result']);
+        $this->assign('footer_ads', $footer_ads['result']);
     }
 
     /**
@@ -112,15 +117,6 @@ class Index extends Base{
      */
     public function home()
     {
-        //获取首页顶部轮播
-        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
-        //获取底部的广告图片
-        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
-        $data['footer_ads'] = $footer_ads['result'];
-        $this->assign('footer_ads', $data['footer_ads']);
-
         //拍卖车
         $Goods = new GoodsAuction();
         //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
@@ -174,9 +170,6 @@ class Index extends Base{
      * @return mixed
      */
     public function brand_models() {
-        //获取首页顶部轮播
-        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $this->assign('top_ads', $top_ads['result']);
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -306,15 +299,6 @@ class Index extends Base{
      */
     public function hot_car()
     {
-        //获取首页顶部轮播
-        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
-        //获取底部的广告图片
-        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
-        $data['footer_ads'] = $footer_ads['result'];
-        $this->assign('footer_ads', $data['footer_ads']);
-
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -360,15 +344,6 @@ class Index extends Base{
      */
     public function special_offer()
     {
-        //获取首页顶部轮播
-        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
-        //获取底部的广告图片
-        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
-        $data['footer_ads'] = $footer_ads['result'];
-        $this->assign('footer_ads', $data['footer_ads']);
-
         //检测必传参数
         $categoryModel = new GoodsCategory();
         $AccessoriesCategoryModel = new AccessoriesCategory();
@@ -476,7 +451,6 @@ class Index extends Base{
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
 
-
         $order = [];
         if(!$sales_sum && !$price) $order['on_time'] = 'desc';
         if ($sales_sum) $order['sales_sum'] = $sales_sum;
@@ -557,11 +531,6 @@ class Index extends Base{
      */
     public function special_auction()
     {
-	    //顶部广告
-	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $top_ads = $top_ads_result['result'];
-        $this->assign('top_ads', $top_ads);
-        
         //验证参数
 //        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
 //        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
@@ -723,5 +692,7 @@ class Index extends Base{
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }
+
+    
 
 }

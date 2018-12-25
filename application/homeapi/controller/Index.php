@@ -716,8 +716,7 @@ class Index extends Base{
         $SignLog = new UserSignLog();
         $service['sign_query'] = $SignLog->querySign($this->userInfo['user_id'], $today);//签到
         $service['integralLog'] = (new \app\homeapi\controller\Users())->integralLog($user_id, 1);//积分明细
-        //todo 预约订单
-
+        $service['appointment'] =  M('appointment_drive')->where(['user_id'=>$user_id])->select();//预约订单
 //        $model = new Sale();
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
 

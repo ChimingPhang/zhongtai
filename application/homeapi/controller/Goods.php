@@ -5,7 +5,6 @@ use app\api\model\AccessoriesCategory;
 use app\api\model\GoodsAuction;
 use app\api\model\GoodsCategory;
 use app\api\model\GoodsImages;
-use app\api\model\GoodsSeckill;
 use app\api\model\SonOrderComment;
 use app\api\model\Goods as GoodsModel;
 use app\api\logic\GoodsLogic;

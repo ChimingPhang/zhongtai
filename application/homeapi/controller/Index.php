@@ -14,11 +14,10 @@ use app\api\model\GoodsCategory;
 use app\api\model\GoodsImages;
 use app\api\model\Navigation;
 use app\api\model\Goods;
+use app\api\model\Sale;
 use app\api\model\Users;
 use app\api\model\SonOrderComment;
 use app\api\model\UserSignLog;
-use Prophecy\Argument\Token\IdenticalValueToken;
-use think\Controller;
 
 class Index extends Base{
 
@@ -27,9 +26,10 @@ class Index extends Base{
     //页数
     public $page = 1;
     public $token;
-    public $is_login = 0;
+    public $is_login = 0;       //是否登录
+    public $is_sign = 0;        //是否签到
     public $cartype_list = [];
-    public $is_sign = 0;
+
     public function __construct()
     {
         parent::__construct();
@@ -39,10 +39,13 @@ class Index extends Base{
         if (!empty($this->token)) {
             $user_id = $this->checkToken($this->token);
 
-            $SignLog = new UserSignLog();
-            $res = $SignLog->toSign($this->userInfo['user_id'],date('Y/m/d'), 0);
-            if(!$res) $this->is_sign = 1;
-            if ($user_id) $this->is_login = 1;
+//            $SignLog = new UserSignLog();
+//            $res = $SignLog->toSign($this->userInfo['user_id'],date('Y/m/d'), 0);
+
+            if ($user_id) {
+                $this->is_login = 1;
+                $this->is_sign = (new UserSignLog())->isSign($user_id);
+            }
         }
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
@@ -52,8 +55,16 @@ class Index extends Base{
         //获取广告图片
         $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
         $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $this->assign('top_ads', $top_ads['result']);
-        $this->assign('footer_ads', $footer_ads['result']);
+        if (isset($footer_ads['result'])) {
+            $this->assign('top_ads', $top_ads['result']);
+        } else {
+            $this->assign('top_ads', []);
+        }
+        if (isset($footer_ads['result'])) {
+            $this->assign('footer_ads', $footer_ads['result']);
+        } else {
+            $this->assign('footer_ads', []);
+        }
     }
 
     /**
@@ -688,13 +699,28 @@ class Index extends Base{
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
 
-        $order['all'] = (new Order())->getUserOrder($user_id, 1);
-        $order['notpay'] = (new Order())->getUserOrder($user_id, 2);
-        $order['sended'] = (new Order())->getUserOrder($user_id, 3);
-        $order['done'] = (new Order())->getUserOrder($user_id, 4);
-        $order['cancel'] = (new Order())->getUserOrder($user_id, 5);
+        $order_c = new Order();
+        $order['all'] = $order_c->getUserOrder($user_id, 1);
+        $order['notpay'] = $order_c->getUserOrder($user_id, 2);
+        $order['sended'] = $order_c->getUserOrder($user_id, 3);
+        $order['done'] = $order_c->getUserOrder($user_id, 4);
+        $order['cancel'] = $order_c->getUserOrder($user_id, 5);
+        $order['auction'] = (new Auction())->auctionPartake($user_id);//拍卖订单
+
         // $order['rate'] = (new Order())->getUserOrder($user_id, 6);
         // $order['notsend'] = (new Order())->getUserOrder($user_id, 7);
+        $service['pointDesc'] = (new Article())->pointDesc(); //赚去积分
+        $service['collection'] = (new Users())->get_collection($user_id, 1);//收藏
+
+        $today = I('today') ? I('today') : date('Y/m/d');
+        $SignLog = new UserSignLog();
+        $service['sign_query'] = $SignLog->querySign($this->userInfo['user_id'], $today);//签到
+        $service['integralLog'] = (new \app\homeapi\controller\Users())->integralLog($user_id, 1);//积分明细
+        //todo 预约订单
+
+//        $model = new Sale();
+//        $service['after_sales'] = $model->get_list($user_id,1);//售后
+
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }

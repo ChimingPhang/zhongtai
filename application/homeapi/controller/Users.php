@@ -5,10 +5,9 @@
  * collection       我的收藏
  * collection_del   删除收藏
  */
-namespace app\api\controller;
+namespace app\homeapi\controller;
 use app\api\model\Users as user;
 use app\api\model\UserSignLog;
-use think\Model;
 use think\Request;
 use app\common\model\Picture;
 use app\common\logic\PointLogic;
@@ -42,7 +41,6 @@ class Users extends Base{
         $token = I('token');
         $user_id = $this->checkToken($token);
         $model = new user();
-//        $data = $model->get_userinfo($user_id);
         $fields = [
             'reg_time',     //最近浏览次数
             'head_pic',     //头像
@@ -51,7 +49,7 @@ class Users extends Base{
             'email',
             'birthday',
         ];
-        $data = $model->get_user($user_id);
+        $data = $model->get_user($user_id, $fields);
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->json('0000','获取用户信息成功',$data);
     }
@@ -214,15 +212,13 @@ class Users extends Base{
      */
     public function sign_query()
     {
-        empty(I('token')) && $this->errorMsg(2001, 'token');//必传
         empty($today = I('today')) && $this->errorMsg(2001, 'today');//必传
         if(!strtotime($today)) $this->errorMsg(2002, 'token');//必传
-
-        $this->checkToken(I('token'));
 
         $SignLog = new UserSignLog();
         $res = $SignLog->querySign($this->userInfo['user_id'],$today);
         return $this->json("0000", "加载成功", $res);
+//        return $res;
     }
 
     /**
@@ -318,13 +314,8 @@ class Users extends Base{
      * @Autor: 胡宝强
      * Date: 2018/8/30 15:51
      */
-    public function integralLog(){
-        if (!Request::instance()->isPost()) $this->errorMsg('1006');
-        $token = I('token');
-        if(empty($token))  $this->errorMsg(2002, 'token');//必传
-        $user_id = $this->checkToken($token);       //用户id
-        $page = intval(I('page',1));
-        $page_num=10;//每页的数据
+    public function integralLog($user_id, $page, $page_num=10)
+    {
         $offset=$page_num*($page-1);
         $limit=$offset.",".$page_num;
         $data = M('integral_log')
@@ -333,7 +324,7 @@ class Users extends Base{
             ->limit($limit)
             ->field('status,integral,create_time,type_name')
             ->select();
-        $this->json('0000','获取列表成功',$data);
+        return $data;
     }
 
     /**

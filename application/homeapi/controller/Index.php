@@ -698,7 +698,4 @@ class Index extends Base{
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }
-
-    
-
 }

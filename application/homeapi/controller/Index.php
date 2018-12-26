@@ -531,7 +531,7 @@ class Index extends Base{
         $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $count = $Goods->GoodsCount(1, $where);
 
-        return $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+        return $this->json(200, 'ok', ['total'=> $count, 'list' => $data['car_list']]);
     }
 
     /**

@@ -6,6 +6,7 @@ use app\api\model\GoodsAuction;
 use app\api\logic\AuctionLogic;
 use app\api\model\GoodsImages;
 use app\api\model\Auction as AuctionModel;
+use app\api\model\UserSignLog;
 use think\Request;
 use think\Cache;
 use think\Db;

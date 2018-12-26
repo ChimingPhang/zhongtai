@@ -107,7 +107,8 @@ class Integral extends Base {
         $field = "goods_id,goods_name,goods_remark,store_count,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral";
         $data = $Goods->GoodsList($this->page, 0, $where, $order, self::$pageNum, $field);
         $this->assign('data', $data);
-        $this->assign('total',sizeof($data));
+        $count = $Goods->GoodsCount(0, $where);
+        $this->assign('total', $count);
         return $this->fetch('integral_mall/integral_mall_list');
     }
 
@@ -172,7 +173,7 @@ class Integral extends Base {
         $goods_where['exchange_integral'] = 2;      //纯积分商品
         $recommend_car = $Goods->GoodsList($this->page,'',$goods_where,['sort'=>'desc'],6,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type,store_count');
         $count = $Goods->GoodsCount(0, $goods_where);
-        $this->json(200, 'ok', ['total'=> ceil($count/6), 'list' => $recommend_car]);
+        $this->json(200, 'ok', ['total'=> $count, 'list' => $recommend_car]);
     }
 
 

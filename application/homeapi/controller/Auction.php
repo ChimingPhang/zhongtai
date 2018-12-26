@@ -119,7 +119,8 @@ class Auction extends Base {
 //        $this->json("0000", '加载成功', $auctionList);
         $this->assign('data', $auctionList);
 
-        $this->assign('total', sizeof($auctionList));
+        $count = M('Auction')->where($where)->count();
+        $this->assign('total', $count);
 
         return $this->fetch('auction/special_auction');
 
@@ -173,7 +174,7 @@ class Auction extends Base {
             $count = $Goods->GoodsCount(0, $where);
         }
 
-        $this->json(200, 'ok', ['total'=>ceil($count/6), 'list' => $auctionList]);
+        $this->json(200, 'ok', ['total' => $count, 'list' => $auctionList]);
     }
 
     /**

@@ -223,8 +223,8 @@ class Index extends Base{
     {
 
         $data = $this->get_car_detail();
+        $data->goods_content = '';
         $this->assign('data', $data);
-        //$this->json('200', 'ok', $data['appearance']['province']);
         return $this->fetch('brand_models/brand_models_detail');
     }
 

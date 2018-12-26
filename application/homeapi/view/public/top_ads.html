@@ -4,8 +4,8 @@
     <!-- Slides -->
     {foreach $top_ads as $key=>$vo}
     <div class="swiper-slide">
-      <a href="{$vo[ad_link]}">
-        <img src="{$vo[ad_code]}" title="{$vo[title]}" width="100%" style="" alt=""/>
+      <a href="{$vo[ad_link]}" style="background-image:url('{$vo[ad_code]}');display:block;width:100%;height:100%;background-size:cover;background-position:center">
+        <!-- <img src="{$vo[ad_code]}" title="{$vo[title]}" width="100%" style="" alt=""/> -->
       </a>
     </div>
     {/foreach}

@@ -21,9 +21,10 @@
               <label>选择车型:</label>
               <div class="d-inline">
                 <select class="selectpicker form-control form-control-sm" data-style="my-select" data-width="100px">
-                  <option>众泰</option>
-                  <option>大迈</option>
-                  <option>2016</option>
+                  <option value="0">全部</option>
+                  {foreach $cartype_list as $item}
+                    <option value="{$item.id}">{$item.name}</option>
+                  {/foreach}
                 </select>
               </div>
             </div>
@@ -31,11 +32,11 @@
             <div class="type-filter-row">
               <label> </label>
               <ul class="filter" id="type-filter">
-                <li>
+                <li {if !$Think.get.type}class="active"{/if}>
                   <a href="../seckill/one_dollar">全部</a>
                 </li>
                 {foreach $type as $item}
-                  <li>
+                  <li class="{if $item.id==$Think.get.type} active {/if}">
                     <a href="../seckill/one_dollar?type={$item.id}">{$item.name}</a>
                   </li>
                 {/foreach}

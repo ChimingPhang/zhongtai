@@ -11,7 +11,7 @@
           </div>
 
           <div class="type-filter car-type-filter">
-            <div class="type-filter-row">
+            <!-- <div class="type-filter-row">
               <label>选择车型:</label>
               <div class="d-inline">
                 <select class="selectpicker form-control form-control-sm" data-style="my-select" data-width="100px">
@@ -37,18 +37,28 @@
                   <a href="javascript:;">其它物品</a>
                 </li>
               </ul>
-            </div>
+            </div> -->
             <div class="type-filter-row">
               <label>分类默认:</label>
-              <ul class="filter" id="type-filter">
-                <li class="active">
-                  <a href="javascript:;">默认</a>
+              <ul class="filter">
+                <li {if !$Think.get.sales_sum && !$Think.get.price} class="active" {/if}><a href="__URL__/integral_mall_list.html" >默认</a></li>
+                <li {if $Think.get.sales_sum } class="active" {/if}>
+                  <div class="sort-wrapper">
+                    <span class="sort-txt"><a href="__URL__/integral_mall_list.html?sales_sum={$Think.get.sales_sum == 'asc' ? 'desc' : 'asc'}">销量</a></span>
+                    <div class="lamp">
+                      <div class="icon-arr icon-arr__up {$Think.get.sales_sum == 'asc' ? 'active' : ''}"></div>
+                      <div class="icon-arr icon-arr__down {$Think.get.sales_sum == 'desc' ? 'active' : ''}"" ></div>
+                    </div>
+                  </div>
                 </li>
-                <li>
-                  <a href="javascript:;">销量</a>
-                </li>
-                <li>
-                  <a href="javascript:;">价格</a>
+                <li {if $Think.get.price} class="active" {/if}>
+                  <div class="sort-wrapper">
+                    <span class="sort-txt"><a href="__URL__/integral_mall_list.html?price={$Think.get.price == 'asc' ? 'desc' : 'asc'}">价格</a></span>
+                    <div class="lamp">
+                      <div class="icon-arr icon-arr__up {$Think.get.price == 'asc' ? 'active' : ''}"></div>
+                      <div class="icon-arr icon-arr__down {$Think.get.price == 'desc' ? 'active' : ''}"" ></div>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>

@@ -383,11 +383,11 @@ class Order extends Base
             }
         }
 
-        //(new Payment($type))->getCode($order['order_sn']);
+        (new Payment($type))->getCode($order['order_sn']);
 
-        $result = update_pay_status($master_order_sn, '测试流程');
-        if($result === false) $this->json(1477,'支付失败');
-        return $this->json('0000','支付成功');
+//        $result = update_pay_status($master_order_sn, '测试流程');
+//        if($result === false) $this->json(1477,'支付失败');
+//        return $this->json('0000','支付成功');
 //
 //        $this->throwError('该接口暂时还没进行开发!');
 

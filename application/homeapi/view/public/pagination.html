@@ -36,12 +36,11 @@
 
   function nextPage() {
     current = current++
-    debugger
     $('.pagination .page-num').eq(current-1).addClass('active').siblings('.page-num').removeClass('active')
   }
 
   $(function () {
-    $('.pagination .page-item').click(function () {
+    $('.pagination').off('click','.page-item').on('click','.page-item',function(){
       var clickPage = $(this).data('page');
       
       switch (clickPage) {
@@ -61,7 +60,7 @@
           clickPage = Number(clickPage);
           $(this).addClass('active').siblings().removeClass('active')
           if(clickPage!=current) {
-            getList(current);
+            getList(clickPage);
           }
           setPage(clickPage);
       }

@@ -205,8 +205,8 @@
         </div>
       </div>
       <div class="modal-body sign-body">
-        <div class="text-center pt-5 pb-5">
-          <img src="" id="qrcode" alt="">
+        <div class="text-center pt-5 pb-5" id="qrcode">
+          
         </div>
       </div>
     </div>
@@ -227,10 +227,10 @@
       goods_num: 1,
       address_id: 108,
       item_id: 318,
-      pay_points: !exchange_integral ? 0 : pay_points,
+      pay_points: 0,
     }).then(function(result) {
       Apitool.order.payOrder(result.data, 4).then(function(res){
-        console.log(res)
+        $('#qrcode').html(res)
       })
     })
   }

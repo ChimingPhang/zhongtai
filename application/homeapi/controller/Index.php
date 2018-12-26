@@ -647,11 +647,6 @@ class Index extends Base{
      */
     public function integral_mall()
     {
-        //首页轮播
-	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-	    $top_ads = $top_ads_result['result'];
-
-
 	    //精品推荐
         $goods_model = new Goods();
 

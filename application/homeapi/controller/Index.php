@@ -130,7 +130,6 @@ class Index extends Base{
     {
         //拍卖车
         $Goods = new GoodsAuction();
-        //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
         $field = [
             "id",           //商品id
             "goods_sn",     //商品编号
@@ -156,7 +155,6 @@ class Index extends Base{
         $goods_where['is_on_sale'] = 1;
         $goods_where['state'] = 1;
         $goods_where['is_hot'] = 1;
-        //$goods_field = 'goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,original_img,label';
         $goods_field = [
             'goods_id',     //商品id
             'goods_name',   //商品名

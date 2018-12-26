@@ -1,0 +1,45 @@
+<div class="type-filter car-type-filter">
+    <div class="type-filter-row">
+      <label>车系:</label>
+      <div class="d-inline">
+        <ul class="filter">
+          <li class="{$Think.get.cat_id? '' : 'active'}"><a href="__URL__/parts.html">全部</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {foreach $category as $data}
+    <div class="type-filter-row">
+      <label>{$data['name']}:</label>
+      <ul class="filter" id="type-filter">
+        {foreach $data['list'] as $list}
+        <li class="{$Think.get.cat_id == $list['id'] ? 'active' : ''}"><a href="__URL__/parts.html?cat_id={$list['id']}">{$list['name']}</a></li>
+        {/foreach}
+      </ul>
+    </div>
+    {/foreach}
+    <div class="type-filter-row">
+      <label>分类默认:</label>
+      <ul class="filter">
+        <li {if !$Think.get.sales_num && !$Think.get.price} class="active" {/if}><a href="__URL__/parts.html" >默认</a></li>
+        <li {if $Think.get.sales_num } class="active" {/if}>
+          <div class="sort-wrapper">
+            <span class="sort-txt"><a href="__URL__/parts.html?sales_num={$Think.get.sales_num == 'asc' ? 'desc' : 'asc'}">销量</a></span>
+            <div class="lamp">
+              <div class="icon-arr icon-arr__up {$Think.get.sales_num == 'asc' ? 'active' : ''}"></div>
+              <div class="icon-arr icon-arr__down {$Think.get.sales_num == 'desc' ? 'active' : ''}"" ></div>
+            </div>
+          </div>
+        </li>
+        <li {if $Think.get.price} class="active" {/if}>
+          <div class="sort-wrapper">
+            <span class="sort-txt"><a href="__URL__/parts.html?price={$Think.get.price == 'asc' ? 'desc' : 'asc'}">价格</a></span>
+            <div class="lamp">
+              <div class="icon-arr icon-arr__up {$Think.get.price == 'asc' ? 'active' : ''}"></div>
+              <div class="icon-arr icon-arr__down {$Think.get.price == 'desc' ? 'active' : ''}"" ></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>

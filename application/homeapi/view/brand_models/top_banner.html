@@ -1,0 +1,35 @@
+<div class="product-photos__wrapper">
+  <div class="car-slider">
+    <div class="view">
+      <div class="swiper-container">
+
+        <div class="swiper-wrapper">
+          {foreach $data.banner as $item}
+          <div class="swiper-slide text-center">
+            <img src="{$item.ad_code}" width="100%" alt="" />
+          </div>
+          {/foreach}
+        </div>
+      </div>
+    </div>
+    <div class="preview">
+      <div class="preview-wrapper">
+        <a class="arrow-left" href="#">
+          <img src="__STATIC__/assets/images/common/icon-page-arrow-l.png" width="8" alt="">
+        </a>
+        <a class="arrow-right" href="#">
+          <img src="__STATIC__/assets/images/common/icon-page-arrow-r.png" width="8" alt="">
+        </a>
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+              {foreach $data.banner as $key=>$item}
+              <div class="swiper-slide text-center {php} echo $key==0 ? 'active-nav' : '' {/php}">
+                <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
+              </div>
+              {/foreach}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

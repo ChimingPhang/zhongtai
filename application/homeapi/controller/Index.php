@@ -696,6 +696,7 @@ class Index extends Base{
         ];
         
         $user = $model->get_user($user_id, $fields);
+//        $this->json(200, 'ok', $user);die;
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
 
@@ -719,7 +720,7 @@ class Index extends Base{
         $service['appointment'] =  M('appointment_drive')->where(['user_id'=>$user_id])->select();//预约订单
 //        $model = new Sale();
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
-
+//        $this->json(200,'ok', $service);
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }

@@ -16,6 +16,12 @@ use think\Db;
  * @DateTime 2018-07-11T15:09:13+0800
  */
 class Auction extends Base {
+
+    public $token;
+    public $is_login = 0;       //是否登录
+    public $is_sign = 0;        //是否签到
+    public $cartype_list = [];
+
     //每页显示数
     private static $pageNum = 10;
     //自动关闭订单时间
@@ -32,11 +38,22 @@ class Auction extends Base {
         //自动加载页数
         self::Initialization();
         !is_numeric(self::$page = I('page', 1)) && $this->errorMsg(2002, 'page');
+
+        $this->token = I('token')? I('token') : session('token');
+        if (!empty($this->token)) {
+            $user_id = $this->checkToken($this->token);
+            if ($user_id) {
+                $this->is_login = 1;
+                $this->is_sign = (new UserSignLog())->isSign($user_id);
+            }
+        }
+
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
+
         //获取广告图片
-        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
         $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
         if (isset($footer_ads['result'])) {
             $this->assign('top_ads', $top_ads['result']);
         } else {
@@ -102,7 +119,8 @@ class Auction extends Base {
 //        $this->json("0000", '加载成功', $auctionList);
         $this->assign('data', $auctionList);
 
-        $this->assign('total', sizeof($auctionList));
+        $count = M('Auction')->where($where)->count();
+        $this->assign('total', $count);
 
         return $this->fetch('auction/special_auction');
 
@@ -156,7 +174,7 @@ class Auction extends Base {
             $count = $Goods->GoodsCount(0, $where);
         }
 
-        $this->json(200, 'ok', ['total'=>ceil($count/6), 'list' => $auctionList]);
+        $this->json(200, 'ok', ['total' => $count, 'list' => $auctionList]);
     }
 
     /**

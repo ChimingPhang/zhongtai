@@ -38,10 +38,6 @@ class Index extends Base{
         $this->token = I('token')? I('token') : session('token');
         if (!empty($this->token)) {
             $user_id = $this->checkToken($this->token);
-
-//            $SignLog = new UserSignLog();
-//            $res = $SignLog->toSign($this->userInfo['user_id'],date('Y/m/d'), 0);
-
             if ($user_id) {
                 $this->is_login = 1;
                 $this->is_sign = (new UserSignLog())->isSign($user_id);
@@ -130,7 +126,6 @@ class Index extends Base{
     {
         //拍卖车
         $Goods = new GoodsAuction();
-        //$field = "id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,original_img";
         $field = [
             "id",           //商品id
             "goods_sn",     //商品编号
@@ -156,7 +151,6 @@ class Index extends Base{
         $goods_where['is_on_sale'] = 1;
         $goods_where['state'] = 1;
         $goods_where['is_hot'] = 1;
-        //$goods_field = 'goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,original_img,label';
         $goods_field = [
             'goods_id',     //商品id
             'goods_name',   //商品名
@@ -209,9 +203,9 @@ class Index extends Base{
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $this->assign('car_list', $data['car_list']);
-        
-        $this->assign('total', sizeof($data['car_list']));
 
+        $count = $Goods->GoodsCount(1, $where);
+        $this->assign('total', $count);
 //        $this->json('200','ok', $data);
         return $this->fetch('brand_models/brand_models');
     }
@@ -342,8 +336,7 @@ class Index extends Base{
         $this->assign('car_list', $data['car_list']);
 
         $count = $Goods->GoodsCount(1, $where);
-        $data['total'] = ceil($count/self::$pageNum);
-        $this->assign('total', $data['total']);
+        $this->assign('total', $count);
 
 //        $this->json('200', 'ok', $data);
         return $this->fetch('dist/special-offer');
@@ -388,11 +381,16 @@ class Index extends Base{
             $Goods = new Goods();
             $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
             $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
+
+            $count = $Goods->GoodsCount(1, $where);
+
         } else {
             $data['car_list'] = [];
+            $count = 0;
         }
 
         $this->assign('car_list', $data['car_list']);
+        $this->assign('total', $count);
 //        $this->json('200', 'ok', $data);
         return $this->fetch('dist/special-offer');
     }
@@ -420,7 +418,7 @@ class Index extends Base{
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $count = $Goods->GoodsCount(1, $where);
-        $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+        $this->json(200, 'ok', ['total'=>$count, 'list' => $data['car_list']]);
     }
 
     /**
@@ -449,7 +447,7 @@ class Index extends Base{
         $data['car_list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
 
         $count = $Goods->GoodsCount(1, $where);
-        $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+        $this->json(200, 'ok', ['total'=>$count, 'list' => $data['car_list']]);
     }
 
     /**
@@ -486,7 +484,7 @@ class Index extends Base{
         }
 
 
-        $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+        $this->json(200, 'ok', ['total'=> $count, 'list' => $data['car_list']]);
     }
 
     /**
@@ -525,7 +523,7 @@ class Index extends Base{
                 $data['car_list'] = [];
                 $count = 0;
             }
-            return $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data['car_list']]);
+            return $this->json(200, 'ok', ['total'=> $count, 'list' => $data['car_list']]);
         }
 
         $Goods = new Goods();
@@ -696,6 +694,7 @@ class Index extends Base{
         ];
         
         $user = $model->get_user($user_id, $fields);
+//        $this->json(200, 'ok', $user);die;
         $data['is_sign'] = (new UserSignLog())->isSign($user_id);
         $this->assign('user', $user);
 
@@ -720,6 +719,7 @@ class Index extends Base{
 //        $model = new Sale();
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
         $this->assign('service', $service);
+//        $this->json(200,'ok', $service);
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');
     }

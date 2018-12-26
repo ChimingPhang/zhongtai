@@ -111,7 +111,7 @@ class Goods extends Base {
         $data = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $count = $Goods->GoodsCount(1, $where);
 
-        return $this->json(200, 'ok', ['total'=>ceil($count/self::$pageNum), 'list' => $data]);
+        return $this->json(200, 'ok', ['total'=>$count, 'list' => $data]);
     }
 
     /**
@@ -403,7 +403,8 @@ class Goods extends Base {
         $data['parts_list'] = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
         $this->assign('parts_list', $data['parts_list']);
 
-        $this->assign('total', sizeof($data['parts_list']));
+        $data['total'] = $Goods->GoodsCount(2, $where);
+        $this->assign('total', $data['total']);
 //        $this->json("0000", "加载成功", ['category' => $category, 'class' => $class, 'total'=>$data['total'], 'parts_list' => $data['parts_list']]);
         return $this->fetch('parts/parts');
     }
@@ -486,7 +487,7 @@ class Goods extends Base {
         $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
         $count = $Goods->GoodsCount(2, $where);
-        $this->json(200, 'ok', ['total' => ceil($count/6), 'list' => $data]);
+        $this->json(200, 'ok', ['total' => $count, 'list' => $data]);
     }
 
     /**

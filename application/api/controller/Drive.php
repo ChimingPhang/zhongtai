@@ -34,6 +34,13 @@ class Drive extends Base{
     public function addAppoint(){
         if (!Request::instance()->isPost()) $this->errorMsg('1006');
         $data = I('post.');
+
+        $token = !empty($data['token'])? $data['token'] : session('token');
+        $user_id = $this->checkToken($token);
+        if (!$user_id)  $this->json('9999','预约失败,请先登录','');
+        $data['user_id'] = $user_id;
+        unset($data['token']);
+
         if(empty($data['name'])) return $this->errorMsg('2001','name');
         $this->moblie($data['mobile']);
         if(empty($data['category_id'])) return $this->errorMsg('2001','category_id');

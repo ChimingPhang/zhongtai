@@ -179,7 +179,7 @@
             </div>
           </form>
           <div class="actions">
-            <a class="c-btn c-btn__primary exchange-btn" href="#">立即兑换（{$data.moren_integral}积分）</a>
+            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)">立即兑换（{$data.moren_integral}积分）</a>
           </div>
         </div>
 

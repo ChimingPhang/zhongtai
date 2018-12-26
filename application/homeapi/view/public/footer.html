@@ -55,76 +55,32 @@
   </div>
   <div class="copyright text-center">Copyright &copy; 2018 www.zhongtia.com All Rights Reserved</div>
 </footer>
+
+<script src="__STATIC__/scripts/common.bundle.js"></script>
+{defined name="bundle"} 
+  <script src="__STATIC__/scripts/[bundle].bundle.js"></script>
+{/defined}
 <script>
-  function getProvince() {
-    $.post('/api/Drive/show_province', {}, function(res){
-      var result = JSON.parse(res);
-      var d=document.createDocumentFragment();
-      var list = document.getElementById('provinceList')
-      result.data.forEach(element => {
-        var e = document.createElement('option')
-        e.value = element.id
-        e.innerText = element.name
-        list.onchange = function(event) {
-          getCity(event.target.value, function() {
-            $(".selectpicker").selectpicker('refresh')
-          })
-        }
-        d.appendChild(e)
-      });
-      
-      $('#provinceList').html(d)
+  function getProvince(cb) {
+    Apitool.drive.getProvince().then(function(res){
+      console.log(res)
+      cb(res.data)
     })
   }
 
   function getCity(id, cb) {
-    $.post('/api/Drive/check_children', {id: id}, function(res){
-      var result = JSON.parse(res);
-      var d=document.createDocumentFragment();
-      var list = document.getElementById('cityList')
-      result.data.forEach(element => {
-        var e = document.createElement('option')
-        e.value = element.id
-        e.innerText = element.name
-        list.onchange = function() {
-          getSales(function() {
-            $(".selectpicker").selectpicker('refresh')
-          })
-        }
-        d.appendChild(e)
-      });
-      
-      $('#cityList').html(d)
-      cb&&cb()
+    Apitool.drive.getCity(id).then(function(res){
+      console.log(res)
+      cb(res.data)
     })
   }
 
-  function getSales(cb) {
-    var cate_id2 = $('#catList').val()
-    var province = $('#provinceList').val()
-    var city = $('#cityList').val()
-    console.log(cate_id2, province, city)
-    $.post('/api/Drive/sales', {
-      cate_id2: cate_id2,
-      province: province,
-      city: city
-    }, function(res){
-      var result = JSON.parse(res);
-      var d=document.createDocumentFragment();
-      var list = document.getElementById('salesList')
-      result.data.forEach(element => {
-        var e = document.createElement('option')
-        e.value = element.id
-        e.innerText = element.name
-        d.appendChild(e)
-      });
-      
-      $('#salesList').html(d)
-      cb&&cb()
+  function queryDealers(params, cb) {
+    Apitool.drive.queryDealers(params.cate, params.province, params.city).then(function(res) {
+      console.log(res)
+      cb(res.data)
     })
   }
-
-  
 </script>
 </body>
 </html>

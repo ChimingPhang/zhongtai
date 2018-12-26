@@ -30,16 +30,16 @@
                 <div class="form-item">
                   <span class="item-label">选择经销商：</span>
                   <div class="w80">
-                    <select class="selectpicker form-control form-control-sm" data-style="my-select" id="provinceList">
-                      <option value="1">请选择</option>
+                    <select class="selectpicker form-control form-control-sm" data-style="my-select" onchange="handleGetCity(this)" id="provinceList">
+                      <option>请选择</option>
                     </select>
                   </div>
                   <span class="item-des">省</span>
                 </div>
                 <div class="form-item">
                   <div class="w80">
-                    <select class="selectpicker form-control form-control-sm" data-style="my-select" id="cityList">
-                      <option value="2">请选择</option>
+                    <select class="selectpicker form-control form-control-sm" onchange="handleGetSales()" data-style="my-select" id="cityList">
+                      <option>请选择</option>
                     </select>
                   </div>
                   <span class="item-des">市</span>
@@ -142,11 +142,74 @@
 
 
 <script>
-  $(function(){
-    getProvince()
-    getCity(1)
-    getSales(function(){
+  function handleGetProvince() {
+    getProvince(function(result){
+      var d=document.createDocumentFragment();
+      var list = document.getElementById('provinceList')
+      result.forEach(element => {
+        var e = document.createElement('option')
+        e.value = element.id
+        e.innerText = element.name
+        d.appendChild(e)
+      });
+      
+      $('#provinceList').html(d)
+    })
+  }
+
+  function handleGetCity(event) {
+    console.log($(event).val());
+    getCity($(event).val() || 1, function(result) {
+      var d=document.createDocumentFragment();
+      var list = document.getElementById('cityList')
+      result.forEach(element => {
+        var e = document.createElement('option')
+        e.value = element.id
+        e.innerText = element.name
+        d.appendChild(e)
+      });
+      
+      $('#cityList').html(d)
+      handleGetSales()
       $(".selectpicker").selectpicker('refresh')
     })
+  }
+
+  function handleGetSales() {
+    var cate = $('#catList').val()
+    var province = $('#provinceList').val()
+    var city = $('#cityList').val()
+    queryDealers({
+      cate: cate,
+      province: province,
+      city: city
+    }, function(result) {
+      var d=document.createDocumentFragment();
+      var list = document.getElementById('salesList')
+      if(result instanceof Array) {
+        result.forEach(function(element){
+          var e = document.createElement('option')
+          e.value = element.id
+          e.innerText = element.name
+          d.appendChild(e)
+        });
+        
+      } else {
+        var e = document.createElement('option')
+        e.value = null
+        e.innerText = '无'
+        d.appendChild(e)
+      }
+
+      $('#salesList').html(d)
+
+      $(".selectpicker").selectpicker('refresh')
+    })
+  }
+
+  $(function(){
+    handleGetProvince()
+    handleGetCity()
+    handleGetSales()
   })
 </script>

@@ -162,7 +162,7 @@ class Index extends Base{
             'label'         //标签
         ];
         $goods_field = implode(',', $goods_field);
-        $hot_car = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 4, $goods_field);
+        $hot_car = $goods_model->GoodsList(1, 1, $goods_where, ['sort'=>'desc'], 6, $goods_field);
         $this->assign('hot_car', $hot_car);
         
 		
@@ -294,7 +294,7 @@ class Index extends Base{
         $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
         $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-
+        
         return $data;
     }
 
@@ -647,11 +647,6 @@ class Index extends Base{
      */
     public function integral_mall()
     {
-        //首页轮播
-	    $top_ads_result = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-	    $top_ads = $top_ads_result['result'];
-
-
 	    //精品推荐
         $goods_model = new Goods();
 
@@ -673,8 +668,6 @@ class Index extends Base{
         $data['list'] = $activity_car;
         $this->assign('list', $activity_car);
         $this->assign('total', sizeof($activity_car));
-	    $this->assign('top_ads', $top_ads);
-
         return $this->fetch('integral_mall/integral_mall');
     }
 
@@ -715,9 +708,10 @@ class Index extends Base{
         $SignLog = new UserSignLog();
         $service['sign_query'] = $SignLog->querySign($this->userInfo['user_id'], $today);//签到
         $service['integralLog'] = (new \app\homeapi\controller\Users())->integralLog($user_id, 1);//积分明细
-        $service['appointment'] =  M('appointment_drive')->where(['user_id'=>$user_id])->select();//预约订单
+        // $service['appointment'] =  M('appointment_drive')->where(['user_id'=>$user_id])->select();//预约订单
 //        $model = new Sale();
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
+        $this->assign('service', $service);
 //        $this->json(200,'ok', $service);
         $this->assign('order', $order);
         return $this->fetch('usercenter/user_center');

@@ -7,6 +7,15 @@
       <div class="container">
         <section class="section-block pb-5">
           {include file="public/parts-type-filter"  /}
+          <div class="loader text-center" style="display: none">
+            <div class="loader-inner line-scale-pulse-out">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
           <div class="product-card-list row">
             {foreach $parts_list as $key=>$vo}
               <div class="col col-4">
@@ -23,8 +32,8 @@
                     <div class="product-card-intro"><strong>特点：</strong>{$vo.goods_remark}</div>
                     <div class="product-card-btm clearfix">
                       <div class="float-left product-card-price">
-                        <img src="assets/images/common/icon-price.png" class="icon" alt="">
-                        <span>价格：<strong>{$vo.price}</strong>元<span class="color-read"> {$vo.exchange_integral==1 ?'（积分可用）': ''}</span></span>
+                        <img src="__STATIC__/assets/images/common/icon-price.png" class="icon" alt="">
+                        <span>价格：<strong>{$vo.shop_price}</strong>元<span class="color-read"> {$vo.exchange_integral==1 ?'（积分可用）': ''}</span></span>
                       </div>
                       <a class="product-card-btn c-btn c-btn__primary float-right" href="../goods/parts_detail.html?goods_id={$vo['goods_id']}">立即订购</a>
                     </div>

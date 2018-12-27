@@ -117,7 +117,7 @@
                 秒
               </div>
             </div>
-            <a class="c-btn c-btn__primary markup-btn" href="javascript:;" data-toggle="modal" data-target="#joinModal">
+            <a class="c-btn c-btn__primary markup-btn" href="javascript:;" data-toggle="modal" data-target="#{if $is_login}joinModal{else /}loginModal{/if}">
               竞拍加价
               <div class="tip">保证金：{$data.bail_price}元</div>
             </a>
@@ -128,8 +128,11 @@
         aria-hidden="true">
         <div class="modal-dialog join" role="document">
           <div class="modal-content">
-            <div class="modal-header join-header">
-              <span class="navbar-brand navbar-brand__white"></span><span>填写信息</span>
+            <div class="modal-header sign-header">
+              <span>填写信息</span>
+              <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+                <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
+              </div>
             </div>
             <div class="modal-body join-body">
               <div class="form-layout">
@@ -165,9 +168,9 @@
                     <div class="form-item-control">
                       <div class="select-wrapper">
                         <select class="selectpicker form-control form-control-sm" data-style="my-select">
-                          <option>2018</option>
-                          <option>2017</option>
-                          <option>2016</option>
+                          <option>身份证</option>
+                          <option>护照</option>
+                          <option>签证</option>
                         </select>
                       </div>
                     </div>
@@ -175,7 +178,7 @@
                 </div>
                 <div class="form-item row">
                   <div class="form-item-label col-5">
-                    <label>*身份证号码：</label>
+                    <label>*证件号码：</label>
                   </div>
                   <div class="form-item-control-wrapper col-7">
                     <div class="form-item-control">

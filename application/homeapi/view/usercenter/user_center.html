@@ -171,6 +171,7 @@
                       </ul>
                       <div class="tabs-content">
                         {foreach $order as $key=>$order_item}
+                          
                           <div class="tab-pane {$key=='all'?'active':''}">
                             <div class="order-list">
                               {notempty name="order_item"}
@@ -179,20 +180,20 @@
                                   <div class="order-header">
                                     <div class="order-info">
                                       <div class="order-info__left">订单号：</div>
-                                      <div class="order-info__right">{$item.id}</div>
+                                      <div class="order-info__right">{$item.master_order_sn}</div>
                                     </div>
                                     <div class="order-info">
                                       <div class="order-info__left">订单积分：</div>
-                                      <div class="order-info__right">500积分</div>
+                                      <div class="order-info__right">{$item.integral}积分</div>
                                     </div>
                                   </div>
                                   <div class="order-body">
                                     <div class="order-body__left">
-                                      <div class="car-pic" style="background-image: url('')"></div>
+                                      <div class="car-pic" style="background-image: url({$item.goods_img})"></div>
                                       <div class="car-info">
                                         <div class="order-info">
                                           <div class="order-info__left">车型：</div>
-                                          <div class="order-info__right">大众朗逸</div>
+                                          <div class="order-info__right">{$item.goods_name}</div>
                                         </div>
                                         <div class="car-attr">
                                           <div class="car-attr__top">
@@ -234,347 +235,7 @@
                               {/empty}
                             </div>
                           </div>
-                        {/foreach}  
-                        <div class="tab-pane">
-                          <div class="order-list">
-                            <div class="order-item">
-                              <div class="order-header">
-                                <div class="order-info">
-                                  <div class="order-info__left">订单号：</div>
-                                  <div class="order-info__right">12234354677243</div>
-                                </div>
-                                <div class="order-info">
-                                  <div class="order-info__left">订单积分：</div>
-                                  <div class="order-info__right">500积分</div>
-                                </div>
-                              </div>
-                              <div class="order-body">
-                                <div class="order-body__left">
-                                  <div class="car-pic" style="background-image: url('')"></div>
-                                  <div class="car-info">
-                                    <div class="order-info">
-                                      <div class="order-info__left">车型：</div>
-                                      <div class="order-info__right">大众朗逸</div>
-                                    </div>
-                                    <div class="car-attr">
-                                      <div class="car-attr__top">
-                                        <div class="attr-item attr-item__sm">白色</div>
-                                        <div class="attr-item attr-item__sm">1.5T</div>
-                                      </div>
-                                      <div class="attr-item attr-item__lg">自动豪华型</div>
-                                    </div>
-                                    <div class="car-pick">（自取）</div>
-                                  </div>
-                                </div>
-                                <div class="order-body__center">
-                                  <div class="other-info">
-                                    <div class="other-info-row">
-                                      <div class="row__left">当前报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">我的报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">押金金额：</div>
-                                      <div class="row__right">2000 元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">剩余时间：</div>
-                                      <div class="row__right">5 时 23 分 00 秒</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="order-body__right">
-                                  <a class="c-btn c-btn__primary" href="#">
-                                    进行中
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="order-item">
-                              <div class="order-header">
-                                <div class="order-info">
-                                  <div class="order-info__left">订单号：</div>
-                                  <div class="order-info__right">12234354677243</div>
-                                </div>
-                                <div class="order-info">
-                                  <div class="order-info__left">订单积分：</div>
-                                  <div class="order-info__right">500积分</div>
-                                </div>
-                              </div>
-                              <div class="order-body">
-                                <div class="order-body__left">
-                                  <div class="car-pic" style="background-image: url('')"></div>
-                                  <div class="car-info">
-                                    <div class="order-info">
-                                      <div class="order-info__left">车型：</div>
-                                      <div class="order-info__right">大众朗逸</div>
-                                    </div>
-                                    <div class="car-attr">
-                                      <div class="car-attr__top">
-                                        <div class="attr-item attr-item__sm">白色</div>
-                                        <div class="attr-item attr-item__sm">1.5T</div>
-                                      </div>
-                                      <div class="attr-item attr-item__lg">自动豪华型</div>
-                                    </div>
-                                    <div class="car-pick">（自取）</div>
-                                  </div>
-                                </div>
-                                <div class="order-body__center">
-                                  <div class="other-info">
-                                    <div class="other-info-row">
-                                      <div class="row__left">当前报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">我的报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">押金金额：</div>
-                                      <div class="row__right">2000 元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">剩余时间：</div>
-                                      <div class="row__right">5 时 23 分 00 秒</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="order-body__right">
-                                  <a class="c-btn c-btn__primary" href="#">
-                                    进行中
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="order-item">
-                              <div class="order-header">
-                                <div class="order-info">
-                                  <div class="order-info__left">订单号：</div>
-                                  <div class="order-info__right">12234354677243</div>
-                                </div>
-                                <div class="order-info">
-                                  <div class="order-info__left">订单积分：</div>
-                                  <div class="order-info__right">500积分</div>
-                                </div>
-                              </div>
-                              <div class="order-body">
-                                <div class="order-body__left">
-                                  <div class="car-pic" style="background-image: url('')"></div>
-                                  <div class="car-info">
-                                    <div class="order-info">
-                                      <div class="order-info__left">车型：</div>
-                                      <div class="order-info__right">大众朗逸</div>
-                                    </div>
-                                    <div class="car-attr">
-                                      <div class="car-attr__top">
-                                        <div class="attr-item attr-item__sm">白色</div>
-                                        <div class="attr-item attr-item__sm">1.5T</div>
-                                      </div>
-                                      <div class="attr-item attr-item__lg">自动豪华型</div>
-                                    </div>
-                                    <div class="car-pick">（自取）</div>
-                                  </div>
-                                </div>
-                                <div class="order-body__center">
-                                  <div class="other-info">
-                                    <div class="other-info-row">
-                                      <div class="row__left">当前报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">我的报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">押金金额：</div>
-                                      <div class="row__right">2000 元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">剩余时间：</div>
-                                      <div class="row__right">5 时 23 分 00 秒</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="order-body__right">
-                                  <a class="c-btn c-btn__primary" href="#">
-                                    进行中
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="order-item">
-                              <div class="order-header">
-                                <div class="order-info">
-                                  <div class="order-info__left">订单号：</div>
-                                  <div class="order-info__right">12234354677243</div>
-                                </div>
-                                <div class="order-info">
-                                  <div class="order-info__left">订单积分：</div>
-                                  <div class="order-info__right">500积分</div>
-                                </div>
-                              </div>
-                              <div class="order-body">
-                                <div class="order-body__left">
-                                  <div class="car-pic" style="background-image: url('')"></div>
-                                  <div class="car-info">
-                                    <div class="order-info">
-                                      <div class="order-info__left">车型：</div>
-                                      <div class="order-info__right">大众朗逸</div>
-                                    </div>
-                                    <div class="car-attr">
-                                      <div class="car-attr__top">
-                                        <div class="attr-item attr-item__sm">白色</div>
-                                        <div class="attr-item attr-item__sm">1.5T</div>
-                                      </div>
-                                      <div class="attr-item attr-item__lg">自动豪华型</div>
-                                    </div>
-                                    <div class="car-pick">（自取）</div>
-                                  </div>
-                                </div>
-                                <div class="order-body__center">
-                                  <div class="other-info">
-                                    <div class="other-info-row">
-                                      <div class="row__left">当前报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">我的报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">押金金额：</div>
-                                      <div class="row__right">2000 元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">剩余时间：</div>
-                                      <div class="row__right">5 时 23 分 00 秒</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="order-body__right">
-                                  <a class="c-btn c-btn__primary" href="#">
-                                    进行中
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="order-item">
-                              <div class="order-header">
-                                <div class="order-info">
-                                  <div class="order-info__left">订单号：</div>
-                                  <div class="order-info__right">12234354677243</div>
-                                </div>
-                                <div class="order-info">
-                                  <div class="order-info__left">订单积分：</div>
-                                  <div class="order-info__right">500积分</div>
-                                </div>
-                              </div>
-                              <div class="order-body">
-                                <div class="order-body__left">
-                                  <div class="car-pic" style="background-image: url('')"></div>
-                                  <div class="car-info">
-                                    <div class="order-info">
-                                      <div class="order-info__left">车型：</div>
-                                      <div class="order-info__right">大众朗逸</div>
-                                    </div>
-                                    <div class="car-attr">
-                                      <div class="car-attr__top">
-                                        <div class="attr-item attr-item__sm">白色</div>
-                                        <div class="attr-item attr-item__sm">1.5T</div>
-                                      </div>
-                                      <div class="attr-item attr-item__lg">自动豪华型</div>
-                                    </div>
-                                    <div class="car-pick">（自取）</div>
-                                  </div>
-                                </div>
-                                <div class="order-body__center">
-                                  <div class="other-info">
-                                    <div class="other-info-row">
-                                      <div class="row__left">当前报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">我的报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">押金金额：</div>
-                                      <div class="row__right">2000 元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">剩余时间：</div>
-                                      <div class="row__right">5 时 23 分 00 秒</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="order-body__right">
-                                  <a class="c-btn c-btn__primary" href="#">
-                                    进行中
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="order-item">
-                              <div class="order-header">
-                                <div class="order-info">
-                                  <div class="order-info__left">订单号：</div>
-                                  <div class="order-info__right">12234354677243</div>
-                                </div>
-                                <div class="order-info">
-                                  <div class="order-info__left">订单积分：</div>
-                                  <div class="order-info__right">500积分</div>
-                                </div>
-                              </div>
-                              <div class="order-body">
-                                <div class="order-body__left">
-                                  <div class="car-pic" style="background-image: url('')"></div>
-                                  <div class="car-info">
-                                    <div class="order-info">
-                                      <div class="order-info__left">车型：</div>
-                                      <div class="order-info__right">大众朗逸</div>
-                                    </div>
-                                    <div class="car-attr">
-                                      <div class="car-attr__top">
-                                        <div class="attr-item attr-item__sm">白色</div>
-                                        <div class="attr-item attr-item__sm">1.5T</div>
-                                      </div>
-                                      <div class="attr-item attr-item__lg">自动豪华型</div>
-                                    </div>
-                                    <div class="car-pick">（自取）</div>
-                                  </div>
-                                </div>
-                                <div class="order-body__center">
-                                  <div class="other-info">
-                                    <div class="other-info-row">
-                                      <div class="row__left">当前报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">我的报价：</div>
-                                      <div class="row__right">8.80 万元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">押金金额：</div>
-                                      <div class="row__right">2000 元</div>
-                                    </div>
-                                    <div class="other-info-row">
-                                      <div class="row__left">剩余时间：</div>
-                                      <div class="row__right">5 时 23 分 00 秒</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="order-body__right">
-                                  <a class="c-btn c-btn__primary" href="#">
-                                    进行中
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        {/foreach}
                       </div>
                     </div>
                   </div>
@@ -593,30 +254,21 @@
                         <li class="tab-item">
                           积分明细
                         </li>
-                        <li class="tab-item">
+                        <!-- <li class="tab-item">
                           预约信息
-                        </li>
+                        </li> -->
                       </ul>
                       <div class="tabs-content">
                         <div class="tab-pane active">
                           <div class="integral-des">
                             <article class="des-chapter">
                               <h6 class="des-title">积分说明：</h6>
-                              <p class="des-content">1·同样宣布将对高通展开反垄断调查。“高通公司利用其作为某些基带处理器供应商的主</p>
-                              <p class="des-content">2·果正是推动该项调查的幕后支持者。因为在之后，苹果就对外表示，高通扣留了10亿美元</p>
-                              <p class="des-content">3·高通开始对苹果反击，在美国对富士康等四家苹果的生产商提起诉讼，称这四家公司</p>
-                              <p class="des-content">4·推动该项调查的幕后支持者。因为在之后，苹果就对外表示，高通扣留了10亿美元</p>
-                              <p class="des-content">5·对高通展开反垄断调查。“高通公司利用其作为某些基带处理器供应商的主</p>
-                              <p class="des-content">6·因为在之后，果正是推动该项调查的幕后支持者，苹果就对外表示，高通扣留了10亿美元</p>
+                              
+                              <p class="des-content">{$service.pointDesc.title}</p>
                             </article>
                             <article class="des-chapter">
                               <h6 class="des-title">积分途径：</h6>
-                              <p class="des-content">1·同样宣布将对高通展开反垄断调查。“高通公司利用其作为某些基带处理器供应商的主</p>
-                              <p class="des-content">2·果正是推动该项调查的幕后支持者。因为在之后，苹果就对外表示，高通扣留了10亿美元</p>
-                              <p class="des-content">3·高通开始对苹果反击，在美国对富士康等四家苹果的生产商提起诉讼，称这四家公司</p>
-                              <p class="des-content">4·推动该项调查的幕后支持者。因为在之后，苹果就对外表示，高通扣留了10亿美元</p>
-                              <p class="des-content">5·对高通展开反垄断调查。“高通公司利用其作为某些基带处理器供应商的主</p>
-                              <p class="des-content">6·因为在之后，果正是推动该项调查的幕后支持者，苹果就对外表示，高通扣留了10亿美元</p>
+                              <p class="des-content">{$service.pointDesc.content}</p>
                             </article>
                           </div>
                         </div>
@@ -757,24 +409,17 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>10月23日 15:23</td>
-                                <td class="td-bling">+10</td>
-                                <td></td>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <td>10月23日 15:23</td>
-                                <td class="td-bling">+10</td>
-                                <td></td>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <td>10月23日 15:23</td>
-                                <td class="td-bling">+10</td>
-                                <td></td>
-                                <td></td>
-                              </tr>
+                              {foreach $service.integralLog as $row}
+                                {if $row.type_name=='签到赠送'}
+                                <tr>
+                                  <td>{$row.create_time}</td>
+                                  <td class="td-bling">+{$row.integral}</td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                                {/if}
+                              {/foreach}
+                              
                             </tbody>
                           </table>
                         </div>
@@ -785,32 +430,21 @@
                                 <th scope="col" class="w-190">签到时间</th>
                                 <th scope="col" class="w-190">积分记录</th>
                                 <th scope="col">途径</th>
-                                <th scope="col">剩余积分</th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>10月23日 15:23</td>
-                                <td class="td-bling">+10</td>
-                                <td>签到获取</td>
-                                <td>2000</td>
-                              </tr>
-                              <tr>
-                                <td>10月23日 15:23</td>
-                                <td class="td-bling">+10</td>
-                                <td>签到获取</td>
-                                <td>2000</td>
-                              </tr>
-                              <tr>
-                                <td>10月23日 15:23</td>
-                                <td class="td-bling">+10</td>
-                                <td>签到获取</td>
-                                <td>2000</td>
-                              </tr>
+                                {foreach $service.integralLog as $row}
+                                <tr>
+                                  <td>{$row.create_time}</td>
+                                  <td class="td-bling">+{$row.integral}</td>
+                                  <td>{$row.type_name}</td>
+                                </tr>
+                              {/foreach}
+  
                             </tbody>
                           </table>
                         </div>
-                        <div class="tab-pane">
+                        <!-- <div class="tab-pane">
                           <div class="appo">
                             <div class="appo-list">
                               <div class="appo-item">
@@ -877,7 +511,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>

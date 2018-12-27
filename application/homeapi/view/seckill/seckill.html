@@ -18,25 +18,11 @@
 
           <div class="type-filter car-type-filter">
             <div class="type-filter-row">
-              <label>选择车型:</label>
-              <div class="d-inline">
-                <select class="selectpicker form-control form-control-sm" data-style="my-select" data-width="100px">
-                  <option>众泰</option>
-                  <option>大迈</option>
-                  <option>2016</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="type-filter-row">
-              <label> </label>
+              <label>商品类型：</label>
               <ul class="filter" id="type-filter">
-                <li>
-                  <a href="../seckill/one_dollar">全部</a>
-                </li>
                 {foreach $type as $item}
-                  <li>
-                    <a href="../seckill/one_dollar?type={$item.id}">{$item.name}</a>
+                  <li class="{if $item.id==$Think.get.type} active {/if}">
+                    <a href="../seckill/seckill?type={$item.id}">{$item.name}</a>
                   </li>
                 {/foreach}
               </ul>
@@ -47,7 +33,7 @@
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="../seckill/one_dollar_detail.html?seckill_id={$data.id}"><img src={$data['original_img']} alt=""></a>
+                  <a href="../seckill/seckill_detail.html?seckill_id={$data.id}"><img src={$data['original_img']} alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -60,7 +46,7 @@
                       <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
                       <span>价格：<strong>{$data.price}</strong>元</span>
                     </div>
-                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../seckill/one_dollar_detail.html?seckill_id={$data.id}">立即购买</a>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../seckill/seckill_detail.html?seckill_id={$data.id}">立即购买</a>
                   </div>
                 </div>
               </div>

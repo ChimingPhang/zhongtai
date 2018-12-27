@@ -368,14 +368,19 @@ class Goods extends Base {
      */
     public function parts()
     {
-        //获取首页顶部轮播
-        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
-        //获取底部的广告图片
+        //获取广告图片
         $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
-        $data['footer_ads'] = $footer_ads['result'];
-        $this->assign('footer_ads', $data['footer_ads']);
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        if (isset($footer_ads['result'])) {
+            $this->assign('top_ads', $top_ads['result']);
+        } else {
+            $this->assign('top_ads', []);
+        }
+        if (isset($footer_ads['result'])) {
+            $this->assign('footer_ads', $footer_ads['result']);
+        } else {
+            $this->assign('footer_ads', []);
+        }
 
         //检测必传参数
         $categoryModel = new GoodsCategory();
@@ -398,7 +403,7 @@ class Goods extends Base {
         $order = ['goods_id' => 'desc'];
 
         $Goods = new GoodsModel();
-        $field = "goods_id,goods_name,price,original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
+        $field = "goods_id,goods_name,price,shop_price, original_img,goods_remark,sales_sum,is_recommend,is_new,is_hot,exchange_integral";
 
         $data['parts_list'] = $Goods->GoodsList($this->page, 2, $where, $order, 6, $field);
         $this->assign('parts_list', $data['parts_list']);
@@ -429,7 +434,7 @@ class Goods extends Base {
         $where['goods_id'] = $goods_id;
         $field = "goods_id,goods_name,goods_remark,price,label,store_count,sales_sum,goods_content,integral,moren_integral,equity_content,equity_desc,type,video";
         $data = $Goods->GoodsList($this->page, 2, $where, [], 1, $field);
-        $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        // $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
         //价格表
         $price_list = $GoodsLogic->priceList($goods_id);
 
@@ -470,7 +475,7 @@ class Goods extends Base {
 
         $this->assign('data', $data);
         // $this->json("0000", "加载成功", $data);
-
+        // $this->json('200','ok', $data);
         return $this->fetch('parts/parts_detail');
     }
 

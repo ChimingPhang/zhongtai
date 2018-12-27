@@ -32,7 +32,26 @@ class Parts extends Base
         $this->assign('categoryList',$categoryList);
         return $this->fetch();
     }
+    /**
+     * [配件规格列表]
+     * @Auther 蒋峰 Create
+     * @DateTime
+     */
+    public function partSpecList(){
+        $goods_id = I('goods_id',0);
 
+        $where = $this->VerifyRequest($goods_id);
+        $goods_info = (new GoodsModel)->findGoods($where);
+
+//        $GoodsSku = new GoodsSku();
+//        $cat_list = $GoodsSku->CarSpecSelect($goods_id);
+        $GoodsLogic = new GoodsLogic();
+        $cat_list = $GoodsLogic->goods_sku_list($goods_id);
+
+        $this->assign('cat_list',$cat_list);
+        $this->assign('goods_info',$goods_info);
+        return $this->fetch();
+    }
 
     public function ajaxPartsList()
     {

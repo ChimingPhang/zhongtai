@@ -72,7 +72,7 @@ class Seckill extends Base {
      * @Auther 蒋峰
      * @DateTime
      */
-    public function one_dollar()
+    public function seckill()
     {
         //获取首页顶部轮播
         $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
@@ -100,10 +100,10 @@ class Seckill extends Base {
         $list = self::$GoodsSecKill->GoodsList(self::$page, $type, [], $order, self::$pageNum, $field);
         $this->assign('car_list', $list);
         $this->assign('total', sizeof($list));
-        
+
         // $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
 
-        return $this->fetch('one_dollar/one_dollar');
+        return $this->fetch('seckill/seckill');
     }
 
     /**
@@ -131,7 +131,7 @@ class Seckill extends Base {
      * @Auther 蒋峰
      * @DateTime
      */
-    public function one_dollar_detail()
+    public function seckill_detail()
     {
         empty(I('seckill_id', '')) && $this->errorMsg(2001, 'seckill_id');//必传auction_id
         !is_numeric($seckill_id = I('seckill_id', 0)) && $this->errorMsg(2002, 'seckill_id');//必传
@@ -148,7 +148,7 @@ class Seckill extends Base {
         //banner图
         $info->banner_image =$this->bannerImage($info->banner_image);
         //详情
-        $info->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $info->goods_content . '</div></body></html>');
+        // $info->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $info->goods_content . '</div></body></html>');
 
         if($info->type == 1){
 //            $spec_key = substr(strrchr($info->spec_key,'_'), 1);
@@ -178,10 +178,10 @@ class Seckill extends Base {
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $info['recommend'] = $Goods->GoodsList(1, 1, $where, [], 3, $field);
         $info->goods_content = '';
-        $this->assign('data', $info);
+        $this->assign('info', $info);
         $this->json(200, 'ok', $info);
 
-        return $this->fetch('one_dollar/one_dollar_detail');
+        return $this->fetch('seckill/seckill_detail');
     }
 
     /**

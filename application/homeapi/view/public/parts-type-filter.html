@@ -1,0 +1,30 @@
+<div class="type-filter car-type-filter">
+    <div class="type-filter-row">
+      <label>车系:</label>
+      <div class="d-inline">
+        <ul class="filter">
+          <li class="{$Think.get.cat_id? '' : 'active'}"><a href="__URL__/parts.html">全部</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {foreach $category as $data}
+    <div class="type-filter-row">
+      <label>{$data['name']}:</label>
+      <ul class="filter" id="type-filter">
+        {foreach $data['list'] as $list}
+        <li class="{$Think.get.cat_id == $list['id'] ? 'active' : ''}"><a href="__URL__/parts.html?cat_id={$list['id']}">{$list['name']}</a></li>
+        {/foreach}
+      </ul>
+    </div>
+    {/foreach}
+    <div class="type-filter-row">
+      <label>配件分类:</label>
+      <ul class="filter">
+        <li {if !$Think.get.class_id} class="active" {/if}><a href="__URL__/parts.html{$Think.get.cat_id ? '?cat_id='.$Think.get.cat_id :''}" >默认</a></li>
+        {foreach $class as $item}
+          <li {if $Think.get.class_id && ($Think.get.class_id==$item.id) } class="active" {/if}><a href="__URL__/parts.html{$Think.get.cat_id ? '?cat_id='.$Think.get.cat_id.'&' : '?'}class_id={$item.id}" >{$item.name}</a></li>
+        {/foreach}
+      </ul>
+    </div>
+  </div>

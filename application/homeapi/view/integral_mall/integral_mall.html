@@ -8,7 +8,7 @@
       <div class="section-title clearfix">
         <h1>积分商城<span class="section-subtitle">免费兑换 | 送货上门</span></h1>
       </div>
-
+      {notempty name="recommend_car"}
       <div class="integral-top">
         <div class="integral-top-img" style="height: 270px; overflow: hidden">
           <img src="{$recommend_car.original_img}" width="100%" alt="">
@@ -27,8 +27,10 @@
           </div>
         </div>
       </div>
+      {/notempty}
       <div class="product-card-list row">
         {foreach $list as $gd}
+        {if $recommend_car.goods_id!=$gd.goods_id}
         <div class="col col-4">
           <div class="product-card">
             <div class="product-card-img">
@@ -51,6 +53,7 @@
             </div>
           </div>
         </div>
+        {/if}
         {/foreach}
       </div>
       {include file="public/pagination" total="$total" size="6" /}

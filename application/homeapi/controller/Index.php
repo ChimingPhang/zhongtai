@@ -668,8 +668,6 @@ class Index extends Base{
         $data['list'] = $activity_car;
         $this->assign('list', $activity_car);
         $this->assign('total', sizeof($activity_car));
-	    $this->assign('top_ads', $top_ads);
-
         return $this->fetch('integral_mall/integral_mall');
     }
 

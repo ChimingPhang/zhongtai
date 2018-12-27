@@ -19,6 +19,15 @@
         <li class="{$Think.get.is_start == 'false' ? 'active' : '' }"><a href="../auction/special_auction.html?is_start=false">待拍卖</a></li>
       </ul>
       <div class="pt-4">
+        <div class="loader text-center" style="display: none;position: absolute;left:0;z-index: 20;">
+          <div class="loader-inner line-scale-pulse-out">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
         <div class="product-card-list row">
           {foreach $data as $key=>$vo}
           <div class="col col-4">
@@ -34,7 +43,7 @@
                 <div class="product-card-btm clearfix">
                   <div class="float-left product-card-price">
                     <img src="__STATIC__/assets/images/common/icon-price.png" class="icon" alt="">
-                    <span>起拍价: <strong>{$vo.start_price / 10000}</strong>万元</span>
+                    <span>起拍价: <strong>{$vo.price}</strong>元</span>
                   </div>
                   <a class="product-card-btn c-btn c-btn__primary float-right" href="../auction/special_auction_detail.html?auction_id={$vo.id}">{$Think.get.is_start == 'false' ? '立即预约' : '立即拍' }</a>
                 </div>
@@ -44,8 +53,10 @@
           {/foreach}
         </div>
       </div>
-
-      {include file="public/pagination" total="$total" size="6" /}
+      <div class="pb-5">
+          {include file="public/pagination" total="$total" size="6" /}
+      </div>
+      
     </section>
 
     {include file="public/footer_ad" /}
@@ -58,4 +69,50 @@
 </main>
 
 {include file="public/side_btns" /}
+
+<script>
+    var api = '../auction/special_auction_list?is_start={$Think.get.is_start}'
+    function getList(page) {
+      var newUrl = api + '&page=' + page;
+      console.log(newUrl)
+      $('.loader').show()
+      $.ajax(newUrl, {
+        type: 'POST',
+        success: function(data) {
+          var res = JSON.parse(data)
+          var arr = res.data.list
+          var html = ''
+          arr.forEach(function(element) {
+            var text = !{$Think.get.is_start} ? (element.start_time + ' 开始') : ('预计 '+ element.end_time +' 结束')
+            html +=  '<div class="col col-4">\n' +
+              '            <div class="product-card">\n' +
+              '              <div class="product-card-img">\n' +
+              '                <a href="__URL__/brand_models_detail.html?goods_id='+element.goods_id+'"><img src="'+element['original_img']+'" alt=""></a>\n' +
+              '              </div>\n' +
+              '              <div class="product-card-content">\n' +
+              '                <h2 class="product-card-title">\n' +
+              '                    '+element['goods_name']+'\n' +
+              '                  <span class="float-right">'+text+'</span>\n' +
+              '                </h2>\n' +
+              '                <div class="product-card-intro"><strong>特点：</strong>'+element['goods_remark']+'</div>\n' +
+              '                <div class="product-card-btm clearfix">\n' +
+              '                  <div class="float-left product-card-price">\n' +
+              '                    <img src="__STATIC__/assets/images/common/icon-price.png" alt="">\n' +
+              '                    <span>起拍价：<strong>'+element['price']+'</strong>元</span>\n' +
+              '                  </div>\n' +
+              '                  <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail.html?goods_id='+element['goods_id']+'">立即购买</a>\n' +
+              '                </div>\n' +
+              '              </div>\n' +
+              '            </div>\n' +
+              '          </div>'
+          })
+  
+            $('.loader').hide();
+          $('.product-card-list').html(html);
+        }
+      })
+    }
+  </script>
+
+
 {include file="public/footer" /}

@@ -27,12 +27,15 @@ class Seckill extends Base {
     private static $GoodsSecKill;
     private static $SecKillLogic;
 
+    public $cartype_list = [];
+
     public function __construct()
     {
         parent::__construct();
         //自动加载页数
         self::Initialization();
         !is_numeric(self::$page = I('page', 1)) && $this->errorMsg(2002, 'page');
+
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
     }
@@ -79,6 +82,7 @@ class Seckill extends Base {
 
         //筛选条件
         $types = [
+            ['id' => 0, 'name' => '全部'],
             ['id' => 1, 'name' => '汽车'],
             ['id' => 2, 'name' => '配件'],
             ['id' => 3, 'name' => '第三方'],
@@ -87,7 +91,7 @@ class Seckill extends Base {
 
         !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
         $type = I('type', 0);
-        if(!in_array($type, [0,1,2,3,])) $type = 0;
+        if(!in_array($type, [0,1,2,3])) $type = 0;
 
         $order = [];
         if ($price) $order['deposit_price'] = $price;

@@ -84,7 +84,7 @@ class Auction extends Base {
      */
     public function special_auction()
     {
-        if (I('is_start')) {
+        if (I('is_start', 1)) {
             // token page
             $where = " 1 = 1 ";
             $user_id = (new \app\api\model\Users())->getUserOnToken(I('token'));
@@ -145,7 +145,7 @@ class Auction extends Base {
      */
     public function special_auction_list()
     {
-        if (I('is_start')) {
+        if (I('is_start',1)) {
             // token page
             $where = " 1 = 1 ";
             $user_id = (new \app\api\model\Users())->getUserOnToken(I('token'));

@@ -88,11 +88,21 @@ class Integral extends Base {
      * Date: 2018/8/8 15:56
      */
     public function integral_mall_list()
-    {   
-        
+    {
+        //筛选条件
+        $types = [
+            ['id' => 0, 'name' => '全部'],
+            ['id' => 1, 'name' => '汽车'],
+            ['id' => 2, 'name' => '配件'],
+            ['id' => 3, 'name' => '第三方'],
+        ];
+        $this->assign('type', $types);
+
         //验证参数
         !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
         !empty(I('integral', '')) && !in_array($integral = I('integral', ''),['asc','desc']) && $this->errorMsg(2002, 'integral');//选传
+        $type = I('type', 0);
+        if(!in_array($type, [0,1,2,3])) $type = 0;
 //        self::$redis->Zincrby('hot_words', 1, $title);
         //排序顺序
         $order = [];
@@ -105,11 +115,41 @@ class Integral extends Base {
 
         $Goods = new GoodsModel();
         $field = "goods_id,goods_name,goods_remark,store_count,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral";
-        $data = $Goods->GoodsList($this->page, 0, $where, $order, self::$pageNum, $field);
+        $data = $Goods->GoodsList($this->page, $type, $where, $order, self::$pageNum, $field);
         $this->assign('data', $data);
         $count = $Goods->GoodsCount(0, $where);
         $this->assign('total', $count);
         return $this->fetch('integral_mall/integral_mall_list');
+    }
+
+    /**
+     * 积分商城列表——API
+     * @Autor: 胡宝强
+     * Date: 2018/8/8 15:56
+     */
+    public function integral_mall_API()
+    {
+        //验证参数
+        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
+        !empty(I('integral', '')) && !in_array($integral = I('integral', ''),['asc','desc']) && $this->errorMsg(2002, 'integral');//选传
+        $type = I('type', 0);
+        if(!in_array($type, [0,1,2,3])) $type = 0;
+//        self::$redis->Zincrby('hot_words', 1, $title);
+        //排序顺序
+        $order = [];
+        if(!$sales_sum && !$integral) $order['sort'] = 'desc';
+        if ($sales_sum) $order['sales_sum'] = $sales_sum;
+        if ($integral) $order['integral'] = $integral;
+        //检索条件
+        $where = [];
+        $where['exchange_integral'] = 2;
+
+        $Goods = new GoodsModel();
+        $field = "goods_id,goods_name,goods_remark,store_count,original_img,is_recommend,is_new,is_hot,type,integral,moren_integral";
+        $data = $Goods->GoodsList($this->page, $type, $where, $order, self::$pageNum, $field);
+        $count = $Goods->GoodsCount(0, $where);
+
+        $this->json(200, 'ok', ['g_list' => $data, 'total' => $count]);
     }
 
     /**

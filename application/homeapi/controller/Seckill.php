@@ -100,7 +100,7 @@ class Seckill extends Base {
         $list = self::$GoodsSecKill->GoodsList(self::$page, $type, [], $order, self::$pageNum, $field);
         $this->assign('car_list', $list);
         $this->assign('total', sizeof($list));
-        
+
         // $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
 
         return $this->fetch('one_dollar/one_dollar');

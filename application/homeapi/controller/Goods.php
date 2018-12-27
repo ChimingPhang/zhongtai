@@ -19,8 +19,8 @@ class Goods extends Base {
     private static $pageNum = 9;
     //页数
     public $page = 1;
-    public $token;
-    public $is_login = 0;
+//    public $token;
+//    public $is_login = 0;
     public $cartype_list = [];
 
     public function __construct()
@@ -28,14 +28,14 @@ class Goods extends Base {
         parent::__construct();
         //自动加载页数
         !is_numeric($this->page = I('page', 1)) && $this->errorMsg(2002, 'page');
-            $this->token = I('token')? I('token') : session('token');
-        if (!empty($this->token)) {
-            $user_id = $this->checkToken($this->token);
-            if ($user_id) $this->is_login = 1;
-        }
+//        $this->token = I('token')? I('token') : session('token');
+//        if (!empty($this->token)) {
+//            $user_id = $this->checkToken($this->token);
+//            if ($user_id) $this->is_login = 1;
+//        }
+//        $this->assign('is_login', $this->is_login);
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
-        $this->assign('is_login', $this->is_login);
     }
 
     /**

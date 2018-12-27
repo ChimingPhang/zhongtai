@@ -1,5 +1,6 @@
 <?php
 namespace app\homeapi\controller;
+use app\api\model\UserSignLog;
 use think\Controller;
 use think\Cookie;
 use think\Hook;
@@ -10,6 +11,10 @@ class Base extends Controller {
 
     protected static $redis;
     protected $userInfo;
+
+    public $token;
+    public $is_login = 0;       //是否登录
+    public $is_sign = 0;        //是否签到
     /**
      * [返回报错信息]
      * @Auther 蒋峰
@@ -53,11 +58,28 @@ class Base extends Controller {
         exit( $this->json($code, $errorMsg[$code]) );
     }
 
-    public function __construct()
+    /**
+     * Base constructor.
+     * @param int $is_show 是否发送给view
+     */
+    public function __construct($is_show = 1)
     {
         parent::__construct();
         self::redisConnect();
         Hook::listen('app_begin_origin');
+
+        $this->token = I('token')? I('token') : session('token');
+        if (!empty($this->token)) {
+            $user_id = $this->checkToken($this->token);
+            if ($user_id) {
+                $this->is_login = 1;
+                $this->is_sign = (new UserSignLog())->isSign($user_id);
+            }
+        }
+        if ($is_show) {
+            $this->assign('is_login', $this->is_login);
+            $this->assign('is_sign', $this->is_sign);
+        }
     }
 
     /*

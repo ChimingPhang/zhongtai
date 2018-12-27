@@ -39,26 +39,26 @@
       <div class="product-attr">
         <div class="card-yellowing">
           <div class="form-layout">
+            {foreach $data['spec'] as $item}
             <div class="form-item row">
               <div class="form-item-label col-1">
-                <label>选择颜色：</label>
+                <label>{$item.name}：</label>
               </div>
+              
               <div class="form-item-control-wrapper col-11">
                 <div class="form-item-control">
-                  <ul class="product-attr-brick" id="product-brick">
-                    {foreach $data['spec'] as $item}
-                    <li class="attr-color__item active">
-                      <div class="pic-wrapper">
-                        <img src="{$item.sku_img}" class="color-pic" alt="">
-                        <img src="" class="selected-icon" alt="">
-                      </div>
-                      <div class="color-name">{$item.sku_name}</div>
+                  <ul class="product-attr-brick">
+                    
+                    {foreach $item['son'] as $vo}
+                    <li class="attr-brick__item">
+                      <label class="color-name">{$vo.name}</label>
                     </li>
                     {/foreach}
                   </ul>
                 </div>
               </div>
             </div>
+            {/foreach}
             <div class="form-item row">
               <div class="form-item-label col-1">
                 <label>购买数量：</label>
@@ -179,7 +179,7 @@
             </div>
           </form>
           <div class="actions">
-            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)">立即兑换（{$data.moren_integral}积分）</a>
+            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span>8800</span>元+<span>888</span>积分）</a>
           </div>
         </div>
 
@@ -189,5 +189,8 @@
   </div>
 
 </main>
+<script>
+  var spec_price = {$data.spec_price};
 
+</script>
 {include file="public/footer" /}

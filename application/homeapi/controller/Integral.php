@@ -246,13 +246,19 @@ class Integral extends Base {
         $where['goods_id'] = $goods_id;
         $field = "goods_id,goods_name,equity_content,label,equity_desc,goods_remark,price,
         deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,
-        integral_money as integrals_moneys,video";
+        integral_money as integrals_moneys,video,moren_integral";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
-        $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
-        $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
-        $data->equity_content = str_replace("", "<br/>", $data->equity_content);
+        if($data->equity_desc) {
+            $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
+            $data->equity_desc = str_replace(" ", "&nbsp;", $data->equity_desc);
+        }
+        if($data->equity_content) {
+            $data->equity_content = str_replace("", "<br/>", $data->equity_content);
         $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
         $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+        }
+        
+        
         //价格表
         $price_list = $GoodsLogic->priceList($goods_id);
         //$this->assign('price_list', $price_list);
@@ -281,7 +287,6 @@ class Integral extends Base {
 
         $data["banner"] = $banner;
         $data["price_list"] = $price_list;
-
         $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
         $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
         $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号

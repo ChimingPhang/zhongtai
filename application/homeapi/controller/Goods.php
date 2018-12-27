@@ -368,14 +368,19 @@ class Goods extends Base {
      */
     public function parts()
     {
-        //获取首页顶部轮播
-        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-        $data['top_ads'] = $top_ads['result'];
-        $this->assign('top_ads', $data['top_ads']);
-        //获取底部的广告图片
+        //获取广告图片
         $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
-        $data['footer_ads'] = $footer_ads['result'];
-        $this->assign('footer_ads', $data['footer_ads']);
+        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
+        if (isset($footer_ads['result'])) {
+            $this->assign('top_ads', $top_ads['result']);
+        } else {
+            $this->assign('top_ads', []);
+        }
+        if (isset($footer_ads['result'])) {
+            $this->assign('footer_ads', $footer_ads['result']);
+        } else {
+            $this->assign('footer_ads', []);
+        }
 
         //检测必传参数
         $categoryModel = new GoodsCategory();

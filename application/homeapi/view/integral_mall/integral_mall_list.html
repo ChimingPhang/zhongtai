@@ -13,7 +13,7 @@
           <div class="type-filter car-type-filter">
             <div class="type-filter-row">
               <label>商品类型：</label>
-              <ul class="filter" id="type-filter">
+              <ul class="filter" >
                 {foreach $type as $item}
                   <li class="{if $item.id==$Think.get.type} active {/if}">
                     <a href="__URL__/integral_mall_list?type={$item.id}">{$item.name}</a>
@@ -73,9 +73,6 @@
             </div>
             {/foreach}
           </div>
-          {php} 
-            $total = sizeof($data);
-          {/php}
           {include file="public/pagination" total="$total" size="9" /}
         </section>
 

@@ -72,7 +72,7 @@ class Seckill extends Base {
      * @Auther 蒋峰
      * @DateTime
      */
-    public function one_dollar()
+    public function seckill()
     {
         //获取首页顶部轮播
         $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
@@ -103,7 +103,7 @@ class Seckill extends Base {
 
         // $this->json("0000", 'ok', ['type'=>$types, 'car_list' => $list]);
 
-        return $this->fetch('one_dollar/one_dollar');
+        return $this->fetch('seckill/seckill');
     }
 
     /**
@@ -131,7 +131,7 @@ class Seckill extends Base {
      * @Auther 蒋峰
      * @DateTime
      */
-    public function one_dollar_detail()
+    public function seckill_detail()
     {
         empty(I('seckill_id', '')) && $this->errorMsg(2001, 'seckill_id');//必传auction_id
         !is_numeric($seckill_id = I('seckill_id', 0)) && $this->errorMsg(2002, 'seckill_id');//必传
@@ -181,7 +181,7 @@ class Seckill extends Base {
         $this->assign('data', $info);
         $this->json(200, 'ok', $info);
 
-        return $this->fetch('one_dollar/one_dollar_detail');
+        return $this->fetch('seckill/seckill_detail');
     }
 
     /**

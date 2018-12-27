@@ -26,7 +26,7 @@
               <div class="swiper-container">
                 <div class="swiper-wrapper">
                   {foreach $data.banner as $key=>$item}
-                  <div class="swiper-slide text-center {$key==0?'active-nav':''}">
+                  <div class="swiper-slide text-center  {php} echo $key==0 ? 'active-nav' : '' {/php}">
                     <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
                   </div>
                   {/foreach}

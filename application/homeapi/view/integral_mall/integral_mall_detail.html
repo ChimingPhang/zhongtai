@@ -67,7 +67,7 @@
         <div class="product-dec__body">
           <div class="product-actions">
             <div class="actions__left">
-              <div class="collection btn-collection">
+              <div class="collection btn-collection {if $is_login}logined{/if} {if $detail.is_collect} active {/if}" data-type="2" data-id="{$detail.goods_id}" {if !$is_login} data-toggle="modal" data-target="#loginModal" {/if}>
                 <span class="icon float-left"></span>
                 <label>收藏</label>
               </div>
@@ -81,7 +81,7 @@
             <div class="actions__right">
               <div class="product-worth">
                 <div class="worth__main">
-                  <img src="assets/images/common/icon-integral.png" class="icon" alt="">
+                  <img src="__STATIC__/assets/images/common/icon-integral.png" class="icon" alt="">
                   <span>所需积分:</span>
                   <span class="worth">{$detail.moren_integral} 积分</span>
                 </div>

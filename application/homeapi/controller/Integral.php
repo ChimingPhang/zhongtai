@@ -190,7 +190,7 @@ class Integral extends Base {
         $banner = (new GoodsImages())->getImage($goods_id);
         $data['banner'] = $banner;
         $data['is_collect'] = $this->userGoodsInfo(I('token'), $goods_id);//是否收藏
-
+        var_dump($data['is_collect']);
         $this->assign('detail', $data);
 
         $goods_where['is_recommend'] = 1;           //推荐商品

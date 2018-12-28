@@ -68,9 +68,11 @@
                   <div class="product-attr__formItem">
                     <div class="select-wrapper">
                       {php}
-                      $have = (float)$data['integral'];
-                      $need = (float)$data['moren_integral'];
-                      $max = floor($have/$need);
+                        if($data) {
+                          $have = (float)$data['integral'];
+                          $need = (float)$data['moren_integral'];
+                          $max = floor($have/$need);
+                        }
                       {/php}
                       <select class="selectpicker form-control form-control-sm" data-style="my-select">
                         {for start="1" end="$max+1"}

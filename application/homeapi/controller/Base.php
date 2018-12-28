@@ -93,7 +93,7 @@ class Base extends Controller {
     protected function userGoodsInfo($token,$goods_id)
     {
         if(empty($token) || !is_string($token)) return 0;
-        $user_id = M('users')->where(array('token' => input('token')))->getField('user_id');
+        $user_id = M('users')->where(array('token' => $token))->getField('user_id');
         $count = M('collection')->where(array('user_id' => $user_id, 'goods_id' => $goods_id,'deleted'=>0))->count();
         if($count) return 1;
         return 0;

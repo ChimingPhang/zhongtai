@@ -93,7 +93,7 @@
       <div class="actions-wrapper">
         <div class="product-actions">
           <div class="actions__left">
-            <div class="collection btn-collection" data-type="">
+            <div class="collection {if $is_login}logined{/if}" {if !$is_login} data-toggle="modal" data-target="#loginModal" {/if}>
               <span class="icon float-left"></span>
               <label>收藏</label>
             </div>

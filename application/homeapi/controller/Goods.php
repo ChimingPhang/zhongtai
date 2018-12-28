@@ -474,6 +474,7 @@ class Goods extends Base {
         $data['recommend_list'] = $Goods->GoodsList(1, 2, $recommend_where, ['goods_id' => 'desc'], 6, $field);
 
         $this->assign('data', $data);
+        $this->assign('spec_price_script', json_encode($data['spec_price']));
         // $this->json("0000", "加载成功", $data);
         // $this->json('200','ok', $data);
         return $this->fetch('parts/parts_detail');

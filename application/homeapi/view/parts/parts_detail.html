@@ -50,7 +50,7 @@
                   <ul class="product-attr-brick">
                     
                     {foreach $item['son'] as $vo}
-                    <li class="attr-brick__item">
+                    <li class="attr-brick__item" onclick="setPrice({$vo.id})">
                       <label class="color-name">{$vo.name}</label>
                     </li>
                     {/foreach}
@@ -179,7 +179,7 @@
             </div>
           </form>
           <div class="actions">
-            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span>8800</span>元+<span>888</span>积分）</a>
+            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span id="price">8800</span>元+<span  id="integral">888</span>积分）</a>
           </div>
         </div>
 
@@ -190,7 +190,16 @@
 
 </main>
 <script>
-  var spec_price = {$data.spec_price};
-
+  var spec_price = {$spec_price_script};
+  function setPrice(id) {
+    var obj = null
+    spec_price.forEach(function(item) {
+      if(item.key == id) {
+        obj = item
+      }
+    })
+    $('#price').text(obj.integral_price)
+    $('#integral').text(obj.integral)
+  }
 </script>
 {include file="public/footer" /}

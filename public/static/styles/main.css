@@ -11400,7 +11400,7 @@ label {
   width: auto;
 }
 
-.car-slider .view .swiper .swiper-slide {
+.car-slider .view .swiper-slide {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12302,24 +12302,8 @@ label {
   top: -2px;
 }
 
-.product-card-collect {
-  cursor: pointer;
-}
-
-.product-card-collect .icon-collect {
-  width: 22px;
-  height: 18px;
-  display: inline-block;
-  position: relative;
-  top: 3px;
-  background-image: url("../assets/images/common/icon-fav.png");
-  background-repeat: no-repeat;
-  background-size: 44px 18px;
-  background-position: 0 0;
-}
-
-.product-card-collect .icon-collect.collected {
-  background-position: -22px 0;
+.product-card .btn-collection {
+  margin-top: 5px;
 }
 
 .product-card-tip {
@@ -12504,26 +12488,6 @@ label {
   align-items: center;
 }
 
-.product-actions .actions__left .collection {
-  margin-right: 56px;
-  display: inline-block;
-  color: #999;
-  cursor: pointer;
-}
-
-.product-actions .actions__left .collection .icon {
-  margin-right: 8px;
-  width: 22px;
-  height: 20px;
-  display: inline-block;
-  position: relative;
-  top: 1px;
-  background-image: url("../assets/images/common/icon-fav.png");
-  background-repeat: no-repeat;
-  background-size: 46px 20px;
-  background-position: 0 0;
-}
-
 .product-actions .actions__right {
   display: flex;
   align-items: center;
@@ -12597,6 +12561,30 @@ label {
 
 .product-additional .additional-col__right {
   color: #999;
+}
+
+.btn-collection {
+  margin-right: 10px;
+  display: inline-block;
+  color: #999;
+  cursor: pointer;
+}
+
+.btn-collection .icon {
+  margin-right: 8px;
+  width: 22px;
+  height: 20px;
+  display: inline-block;
+  position: relative;
+  top: 1px;
+  background-image: url("../assets/images/common/icon-fav.png");
+  background-repeat: no-repeat;
+  background-size: 46px 20px;
+  background-position: 0 0;
+}
+
+.btn-collection.active .icon {
+  background-position: -24px 0;
 }
 
 .product-detail {

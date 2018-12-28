@@ -110,43 +110,13 @@ class Goods extends Base {
         $field = "goods_id,goods_name,goods_remark,sales_sum,deposit_price,price,label,original_img,is_recommend,is_new,is_hot,exchange_integral";
         $data = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
         $count = $Goods->GoodsCount(1, $where);
-
-        return $this->json(200, 'ok', ['total'=>$count, 'list' => $data]);
-    }
-
-    /**
-     * TODO 废弃
-     * [拍卖列表]
-     * @Auther tao.chen
-     * @DateTime
-     */
-    public function carauc()
-    {
-        //验证参数
-        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
-        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = ['is_on_sale' => 1, 'is_end' => 0];
-        if (I('is_start')) {
-            $where['start_time'] = ['elt', time()];
-        } else {
-            $where['start_time'] = ['gt', time()];
+        if ($count) {
+            foreach ($data as &$item) {
+                $item['is_collect'] = $this->userGoodsInfo(I('token'), $item['goods_id']);//是否收藏
+            }
         }
 
-
-        $order = [];
-        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
-        if ($sales_sum) $order['sales_sum'] = $sales_sum;
-        if ($price) $order['deposit_price'] = $price;
-
-        $Goods = new GoodsAuction();
-        $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend";
-        $data['list'] = $Goods->GoodsList($this->page, 1, $where, $order, self::$pageNum, $field);
-        //推荐
-        $where['is_recommend'] = 1;
-        $data['recommend'] = $Goods->GoodsList(1, 1, $where, $order, self::$pageNum, $field);
-
-        if(!$data) $this->errorMsg(8910);
-        $this->json("0000", "加载成功", $data);
+        return $this->json(200, 'ok', ['total'=>$count, 'list' => $data]);
     }
 
 
@@ -314,48 +284,6 @@ class Goods extends Base {
         $data['appearance'] = $appearance;
         $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
         $data['comment_count'] = $SonOrderComment->count;
-        $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-
-        $this->json("0000", "加载成功", $data);
-    }
-
-    /**
-     * TODO 废弃
-     * [拍卖物品详情]
-     * @Auther chen.tao
-     * @DateTime
-     */
-    public function aucInfo()
-    {
-        !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
-//        $Goods = new GoodsModel();
-        $Goods = new GoodsAuction();
-        //if($Goods->goodsType($goods_id) != 1) $this->errorMsg(9999);
-        $GoodsLogic = new GoodsLogic();
-        $SonOrderComment = new SonOrderComment();
-        //增加点击数
-        $Goods->addClickCount($goods_id);
-        //加载商品轮播
-        //$banner = (new GoodsImages())->getImage($goods_id);
-
-        //商品详情
-        $where['id'] = $goods_id;
-//        $field = "goods_id,goods_name,label,goods_remark,price,deposit_price,store_count,sales_sum,integral,exchange_integral,integral_money as integrals_moneys,video";
-        $data = $Goods->GoodsList($this->page, 1, $where, [], 1);
-        //价格表
-        $price_list = $GoodsLogic->priceList($goods_id);
-
-        //$data["banner"] = $banner;
-        $data["price_list"] = $price_list;
-
-        $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
-        $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
-        $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号
-        $appearance['interior'] = $GoodsLogic->get_sku($goods_id, $appearance['model'][0]['id'], 'interior');//内饰颜色
-        $appearance['distribu'] = $GoodsLogic->get_sku($goods_id, $appearance['city'][0]['id'], 'distribu', $appearance['interior'][0]['id']);//城市
-        $data['appearance'] = $appearance;
-//        $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
-//        $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
 
         $this->json("0000", "加载成功", $data);

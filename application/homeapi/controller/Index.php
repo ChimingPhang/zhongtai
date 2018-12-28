@@ -632,23 +632,6 @@ class Index extends Base{
     }
 
     /**
-     * [判断商品是否收藏过]
-     * @Auther 蒋峰
-     * @DateTime
-     * @param $token
-     * @param $goods_id
-     * @return int
-     */
-    private function userGoodsInfo($token,$goods_id)
-    {
-        if(empty($token) || !is_string($token)) return 0;
-        $user_id = M('users')->where(array('token' => input('token')))->getField('user_id');
-        $count = M('collection')->where(array('user_id' => $user_id, 'goods_id' => $goods_id,'deleted'=>0))->count();
-        if($count) return 1;
-        return 0;
-    }
-
-    /**
      * 积分商城
      */
     public function integral_mall()

@@ -189,6 +189,7 @@ class Integral extends Base {
         //加载商品轮播
         $banner = (new GoodsImages())->getImage($goods_id);
         $data['banner'] = $banner;
+        $data['is_collect'] = $this->userGoodsInfo(I('token'), $goods_id);//是否收藏
 
         $this->assign('detail', $data);
 
@@ -196,7 +197,8 @@ class Integral extends Base {
         $goods_where['exchange_integral'] = 2;      //纯积分商品
         $recommend_car = $Goods->GoodsList(1,'',$goods_where,['sort'=>'desc'],6,'goods_id,goods_name,goods_remark,sales_sum,original_img,label,integral,moren_integral,type,store_count');
         $data['recommend_car'] = $recommend_car;
-        $this->assign('recommend_car', ['total' => sizeof($recommend_car), 'list' => $recommend_car]);
+        $count = $Goods->GoodsCount(0, $where);
+        $this->assign('recommend_car', ['total' => $count, 'list' => $recommend_car]);
 
         // $this->json(200, 'ok', $data);
         return $this->fetch('integral_mall/integral_mall_detail');

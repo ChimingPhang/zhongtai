@@ -205,6 +205,12 @@ class Index extends Base{
         $this->assign('car_list', $data['car_list']);
 
         $count = $Goods->GoodsCount(1, $where);
+        if ($count) {
+            foreach ($data['car_list'] as &$item) {
+                $item['is_collect'] = $this->userGoodsInfo(I('token'), $item['goods_id']);//是否收藏
+            }
+        }
+
         $this->assign('total', $count);
 //        $this->json('200','ok', $data);
         return $this->fetch('brand_models/brand_models');

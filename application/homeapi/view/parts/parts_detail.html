@@ -68,7 +68,7 @@
                   <div class="product-attr__formItem">
                     <div class="select-wrapper">
                       {php}
-                        if($data) {
+                        if($data['integral']) {
                           $have = (float)$data['integral'];
                           $need = (float)$data['moren_integral'];
                           $max = floor($have/$need);

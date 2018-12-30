@@ -1,5 +1,4 @@
 {include file="public/header" title="首页" bundle="brand-models-buy" hasBanner="false" activeNav="integral" /}
-
     <main class="o-wrapper">
       <div class="container">
         <section class="integral-mall-exchange">
@@ -42,52 +41,16 @@
               <div class="form-layout">
                 <div class="form-item row">
                   <div class="form-item-label col-1">
-                    <label>外观样式：</label>
+                    <label>配件模型：</label>
                   </div>
                   <div class="form-item-control-wrapper col-11">
                     <div class="form-item-control">
-                      <ul class="product-attr-color" id="product-color">
-                        {foreach $data['spec'] as $item}
-                        <li class="attr-color__item">
-                          <div class="pic-wrapper">
-                            <img src="{$item.sku_img}" class="color-pic" alt="">
-                            <img src="" class="selected-icon" alt="">
-                          </div>
-                          <div class="color-name">{$item.sku_name}</div>
+                      <ul class="product-attr-brick" id="product-color">
+                        {foreach $data['price_list'] as $item}
+                        <li class="attr-brick__item">
+                          <div class="color-name">{$item.key_name}</div>
                         </li>
                         {/foreach}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-item row">
-                  <div class="form-item-label col-1">
-                    <label>选择颜色：</label>
-                  </div>
-                  <div class="form-item-control-wrapper col-11">
-                    <div class="form-item-control">
-                      <ul class="product-attr-brick" id="product-brick">
-                        {foreach $data['appearance']['interior'] as $item}
-                        <li class="attr-color__item active">
-                          <div class="pic-wrapper">
-                            <img src="{$item.sku_img}" width="40" class="color-pic" alt="">
-                          </div>
-                          <div class="color-name">{$item.sku_name}</div>
-                        </li>
-                        {/foreach}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-item row">
-                  <div class="form-item-label col-1">
-                    <label>专属型号：</label>
-                  </div>
-                  <div class="form-item-control-wrapper col-11">
-                    <div class="form-item-control">
-                      <ul class="product-attr-brick" id="product-brick">
-                        <li class="attr-brick__item active">自动豪华型</li>
-                        <li class="attr-brick__item selected">运动型</li>
                       </ul>
                     </div>
                   </div>

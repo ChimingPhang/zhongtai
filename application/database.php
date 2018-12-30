@@ -14,16 +14,16 @@ return [
     'type'           => 'mysql',
     // 服务器地址
 //    'hostname'       => '39.106.37.92',
-    'hostname'       => '45.250.40.228',
+    'hostname'       => '127.0.0.1',
     // 数据库名
 //    'database'       => 'zhongtaidb',
     'database'       => 'ztshop',
     // 用户名
 //    'username'       => 'zhongtai',
-    'username'       => 'zhongtai',
+    'username'       => 'root',
     // 密码
 //    'password'       => '123456',
-    'password'       => 'zhongtai',
+    'password'       => '',
     // 端口
     'hostport'       => '3306',
     // 连接dsn

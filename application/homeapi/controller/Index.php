@@ -202,7 +202,7 @@ class Index extends Base{
         }
 
         $this->assign('total', $count);
-        $this->json('200','ok', $data);
+        // $this->json('200','ok', $data);
         return $this->fetch('brand_models/brand_models');
     }
 
@@ -237,7 +237,7 @@ class Index extends Base{
         $where['goods_id'] = $goods_id;
         $field = "goods_id,goods_name,equity_content,label,equity_desc,goods_remark,price,
         deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,
-        integral_money as integrals_moneys,video";
+        integral_money as integrals_moneys,video, shop_price";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
         if (!empty($data->equity_desc)) {
             $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
@@ -278,7 +278,6 @@ class Index extends Base{
 
         $data["banner"] = $banner;
         $data["price_list"] = $price_list;
-
         $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
         $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
         $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号
@@ -290,7 +289,6 @@ class Index extends Base{
         $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
         $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-        
         return $data;
     }
 

@@ -3,11 +3,10 @@
   <div class="container">
     <section class="brand-models-buy">
       {include file="brand_models/top_banner"/}
-      
-      <div clsas="product-attr" id="app">
+      <div clsas="product-attr">
         <div class="card-yellowing">
           <div class="form-layout">
-            <div class="form-item row">
+            <div class="form-item row sku-row">
               <div class="form-item-label col-1">
                 <label>车型外观：</label>
               </div>
@@ -15,11 +14,10 @@
                 <div class="form-item-control">
                   <ul class="product-attr-color">
                     {foreach $data['spec'] as $item}
-                    <li class="attr-color__item">
+                    <li class="attr-color__item" onclick="getCarInfo(this)" data-type="displacement" data-skulevel="1" data-id="{$item.id}" data-skuname="{$item.sku_name}">
                       <div class="pic-wrapper" style="background:url({$item.sku_img})">
                         <label>
                           <img src="{$item.sku_img}" class="color-pic" alt="">
-                          <input type="radio" name="spec" style="display:none" value="{$item.id}">
                         </label>
                       </div>
                       <div class="color-name">{$item.sku_name}</div>
@@ -29,47 +27,46 @@
                 </div>
               </div>
             </div>
-            <div class="form-item row">
+            <div class="form-item row sku-row">
               <div class="form-item-label col-1">
                 <label>特定排量：</label>
               </div>
               <div class="form-item-control-wrapper col-11">
                 <div class="form-item-control">
-                  <ul class="product-attr-brick">
+                  <ul class="product-attr-brick" id="sku-displacement" data-next="model">
                     {foreach $data['appearance']['displacement'] as $item}
-                    <li class="attr-brick__item"><label>{$item.sku_name}<input type="radio" v-model="displacement" name="displacement" style="display:none" value="{$item.id}"></label></li>
+                    <li class="attr-brick__item" onclick="getCarInfo(this)" data-type="model"  data-id="{$item.id}" data-skulevel="2" data-skuname="{$item.sku_name}">{$item.sku_name}</li>
                     {/foreach}
                   </ul>
                 </div>
               </div>
             </div>
-            <div class="form-item row">
+            <div class="form-item row sku-row">
               <div class="form-item-label col-1">
                 <label>专属型号：</label>
               </div>
               <div class="form-item-control-wrapper col-11">
                 <div class="form-item-control">
-                  <ul class="product-attr-brick">
+                  <ul class="product-attr-brick" id="sku-model" data-next="interior">
                     {foreach $data['appearance']['model'] as $item}
-                    <li class="attr-brick__item"><label>{$item.sku_name}<input type="radio" name="model" style="display:none" value="{$item.id}"></label></li>
+                    <li class="attr-brick__item" onclick="getCarInfo(this)" data-type="interior" data-id="{$item.id}" data-skulevel="3" data-skuname="{$item.sku_name}">{$item.sku_name}</li>
                     {/foreach}
                   </ul>
                 </div>
               </div>
             </div>
-            <div class="form-item row">
+            <div class="form-item row sku-row">
               <div class="form-item-label col-1">
                 <label>室内颜色：</label>
               </div>
               <div class="form-item-control-wrapper col-11">
                 <div class="form-item-control">
-                  <ul class="product-attr-color">
+                  <ul class="product-attr-color" id="sku-interior" data-next="province">
                     {foreach $data['appearance']['interior'] as $item}
-                    <li class="attr-color__item">
-                      <div class="pic-wrapper" style="background:url({$item.sku_img})">
+                    <li class="attr-color__item" onclick="getCarInfo(this)" data-type="province" data-id="{$item.id}" data-skulevel="4" data-skuname="{$item.sku_name}">
+                      <div class="pic-wrapper">
                         <label>
                           <img src="{$item.sku_img}" class="color-pic" alt="">
-                          <input type="radio" name="spec" style="display:none" value="{$item.id}">
                         </label>
                       </div>
                       <div class="color-name">{$item.sku_name}</div>
@@ -95,7 +92,8 @@
                       <div class="product-attr__formItem">
                         <div class="select-wrapper">
 
-                          <select class="form-control selectpicker form-control-sm" data-style="my-select" id="provinceList" onchange="handleGetCity(this)">
+                          <select class="form-control selectpicker form-control-sm" data-style="my-select" id="provinceList"
+                            onchange="handleGetCity(this)">
                             {foreach $data['appearance']['province'] as $item}
                             <option value="{$item.id}">{$item.name}</option>
                             {/foreach}
@@ -106,7 +104,8 @@
                       </div>
                       <div class="product-attr__formItem">
                         <div class="select-wrapper">
-                          <select class="selectpicker form-control form-control-sm" data-style="my-select" id="cityList" onchange="handleGetSales()">
+                          <select class="selectpicker form-control form-control-sm" data-style="my-select" id="cityList"
+                            onchange="handleGetSales()">
                             {foreach $data['appearance']['city'] as $item}
                             <option value="{$item.id}">{$item.name}</option>
                             {/foreach}
@@ -133,7 +132,7 @@
                     <div class="form-item-control">
                       <ul class="product-attr-brick" id="salesList">
                         {foreach $data['appearance']['distribu'] as $item}
-                        <li class="attr-brick__item"><label>{$item.name}<input type="radio" name='salesChoosed' value="{$item.id}" style="display:none"/></label></li>
+                        <li class="attr-brick__item">{$item.name}</li>
                         {/foreach}
                       </ul>
                     </div>
@@ -180,10 +179,11 @@
           <div class="product-detail__right">
             <div class="product-txt">{$data.equity_content}</div>
             <div class="actions">
-              
-              <a class="c-btn c-btn__primary buy-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)">
+
+              <a class="c-btn c-btn__primary buy-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal"
+                data-target="#loginModal" {/if} href="javascript:void(0)">
                 立即购买
-                <div class="tip">定金：{$data.deposit_price}元</div>
+                <div class="tip">定金：<span id="depositPrice">{$data.shop_price}</span>元</div>
               </a>
             </div>
           </div>
@@ -201,22 +201,25 @@
         <button type="button" class="close">
         </button>
         <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
-          <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
+          <img src="__STATIC__/assets/images/common/icon-close.png" width="" alt="">
+
         </div>
       </div>
       <div class="modal-body sign-body">
         <div class="text-center pt-5 pb-5" id="qrcode">
-          
+          加载中...
         </div>
       </div>
     </div>
   </div>
 </div>
-  
+
 {include file="public/footer" /}
 <script>
   function commitOrder() {
-    $('#qrcodeModal').modal({show: true});
+    $('#qrcodeModal').modal({
+      show: true
+    });
     var pay_points = $('input[name=pay_points]').val();
     var exchange_integral = {$data.exchange_integral};
     var id = {$data.goods_id};
@@ -226,78 +229,116 @@
       goods_id: id,
       goods_num: 1,
       address_id: 108,
-      item_id: 318,
+      item_id: window.localStorage.getItem('item_id'),
       pay_points: 0,
-    }).then(function(result) {
-      Apitool.order.payOrder(result.data, 4).then(function(res){
+    }).then(function (result) {
+      Apitool.order.payOrder(result.data, 4).then(function (res) {
         $('#qrcode').html(res)
+        $('#qrcode').append('<p>扫一扫,微信支付</p>')
       })
     })
+  }
+
+  function getCarInfo(e) {
+    var data = {}
+    var type = data['type'] = $(e).data('type');
+    var next = $('#sku-'+type).data('next');
+    data['id'] = $(e).data('id');
+    data['goods_id'] = {$data.goods_id};
+    var sku_level = $(e).data('skulevel');
+    Apitool.drive.getCarSpec(data).then(function (result) {
+      if(result.data instanceof Array) {
+        var dom = renderList(result.data, next, sku_level+1)
+        $('#sku-'+type).html(dom);
+      } else {
+        $('#sku-'+type).html('<li class="attr-brick__item" >无数据</li>');
+      }
+    })
+  }
+
+  function renderList(list, type, level) {
+    var html = ''
+    list.forEach(function (item) {
+      if (item.hasOwnProperty('sku_img') && item['sku_img']!='') {
+        html += '<li class="attr-color__item" onclick="getCarInfo(this)" data-type="'+type+'"  data-skulevel="'+level+'" data-id="'+item.id+'">' +
+          '         <div class="pic-wrapper">' +
+          '          <label>' +
+          '            <img src="'+item.sku_img+'" class="color-pic" alt="">' +
+          '          </label>' +
+          '        </div>' +
+          '       <div class="color-name">'+item.sku_name+'</div>' +
+          '      </li>'
+      } else {
+        html += '<li class="attr-brick__item" onclick="getCarInfo(this)" data-type="'+type+'"  data-skulevel="'+level+'"  data-id="'+item.id+'">'+item.sku_name+'</li>'
+      }
+    })
+    return html;
   }
 </script>
 
 <script>
-    function handleGetProvince() {
-      getProvince(function(result){
-        var d=document.createDocumentFragment();
-        var list = document.getElementById('provinceList')
-        result.forEach(element => {
-          var e = document.createElement('option')
-          e.value = element.id
-          e.innerText = element.name
-          d.appendChild(e)
-        });
-        
-        $('#provinceList').html(d)
-      })
-    }
-  
-    function handleGetCity(event) {
-      getCity($(event).val() || 1, function(result) {
-        var d=document.createDocumentFragment();
-        var list = document.getElementById('cityList')
-        result.forEach(element => {
-          var e = document.createElement('option')
-          e.value = element.id
-          e.innerText = element.name
-          d.appendChild(e)
-        });
-        
-        $('#cityList').html(d)
-        handleGetSales()
-        $(".selectpicker").selectpicker('refresh')
-      })
-    }
-  
-    function handleGetSales() {
-      var cate = {$data['goods_id']};
-      var province = $('#provinceList').val()
-      var city = $('#cityList').val()
-      queryDealers({
-        cate: cate,
-        province: province,
-        city: city
-      }, function(result) {
-        var html = ''
-        var list = document.getElementById('salesList')
-        if(result instanceof Array) {
-          result.forEach(function(element){
-            html += '<li class="attr-brick__item"><label>'+ element.name +'<input type="radio" style="display:none" name="salesChoosed" value="'+ element.id +'" /></label></li>'
-          });
+  function handleGetProvince() {
+    getProvince(function (result) {
+      var d = document.createDocumentFragment();
+      var list = document.getElementById('provinceList')
+      result.forEach(element => {
+        var e = document.createElement('option')
+        e.value = element.id
+        e.innerText = element.name
+        d.appendChild(e)
+      });
 
-          
-        } else {
-          html += '<li class="attr-brick__item">无</li>'
-        }
-  
-        $('#salesList').html(html)
-      })
-    }
-
-    $("body").delegate(".product-attr-brick li","click",function(){
-      $(this)
-        .addClass('active')
-        .siblings().removeClass('active')
+      $('#provinceList').html(d)
     })
-  
-  </script>
+  }
+
+  function handleGetCity(event) {
+    getCity($(event).val() || 1, function (result) {
+      var d = document.createDocumentFragment();
+      var list = document.getElementById('cityList')
+      result.forEach(element => {
+        var e = document.createElement('option')
+        e.value = element.id
+        e.innerText = element.name
+        d.appendChild(e)
+      });
+
+      $('#cityList').html(d)
+      handleGetSales()
+      $(".selectpicker").selectpicker('refresh')
+    })
+  }
+
+  function handleGetSales() {
+    var cate = {$data['goods_id']};
+    var province = $('#provinceList').val()
+    var city = $('#cityList').val()
+    queryDealers({
+      cate: cate,
+      province: province,
+      city: city
+    }, function (result) {
+      var html = ''
+      var list = document.getElementById('salesList')
+      if (result instanceof Array) {
+        result.forEach(function (element) {
+          html += '<li class="attr-brick__item"><label>' + element.name +
+            '<input type="radio" style="display:none" name="salesChoosed" value="' + element.id +
+            '" /></label></li>'
+        });
+
+
+      } else {
+        html += '<li class="attr-brick__item">无</li>'
+      }
+
+      $('#salesList').html(html)
+    })
+  }
+
+  $("body").delegate(".product-attr-brick li", "click", function () {
+    $(this)
+      .addClass('active')
+      .siblings().removeClass('active')
+  })
+</script>

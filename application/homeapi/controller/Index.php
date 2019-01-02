@@ -156,7 +156,7 @@ class Index extends Base{
         $this->assign('hot_car', $hot_car);
         
 		
-//        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
+//        $this->json('0000','ok', ['auc_car' =>$data, 'hot_car' => $hot_car]);
         return $this->fetch('index/index');
     }
 
@@ -202,7 +202,7 @@ class Index extends Base{
         }
 
         $this->assign('total', $count);
-        $this->json('200','ok', $data);
+//        $this->json('200','ok', $data);
         return $this->fetch('brand_models/brand_models');
     }
 

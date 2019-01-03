@@ -672,11 +672,8 @@ class Order extends Base
         $this->json('0000','获取成功',$arr);
     }
 
-    public function getUserOrder($user_id, $type){
-        if(empty($type)){
-            $order_type = I("order_type/d", 1); // 商品id
-        }
-        $page = I("page/d",'1');// 商品数量
+    public function getUserOrder($user_id, $order_type, $page = 1){
+
         $order = new \app\common\model\Order();
         $select_year = select_year(); // 查询 三个月,今年内,2016年等....订单
         $where = ' user_id=:user_id';
@@ -699,7 +696,7 @@ class Order extends Base
                     ->group('o.order_id')->field('o.order_id')
                     ->select();
 
-                if(!$order_ids) $this->json('0000','获取成功',[]);
+                if(!$order_ids) return [];
                 //if(!$order_ids) return $this->errorMsg(8910);
                 $where .= " and order_id in(" . implode(',',array_column($order_ids, 'order_id'))  . ")";
                 $whereSon = [
@@ -715,7 +712,7 @@ class Order extends Base
                     ->where('o.user_id',$user_id)->where('og.is_shouhuo', 1)
                     ->group('o.order_id')->field('o.order_id')
                     ->select();
-                if(!$order_ids) $this->json('0000','获取成功',[]);
+                if(!$order_ids) return [];
                 //if(!$order_ids) return $this->errorMsg(8910);
                 $where .= " and order_id in(" . implode(',',array_column($order_ids, 'order_id'))  . ")";
                 $whereSon = [
@@ -735,7 +732,7 @@ class Order extends Base
                     ->where('o.user_id',$user_id)->where('og.is_shouhuo', 1)->where('og.is_comment',0)->where(['og.is_send'=>['lt',3]])
                     ->group('o.order_id')->field('o.order_id')
                     ->select();
-                if(!$order_ids) $this->json('0000','获取成功',[]);
+                if(!$order_ids) return [];
                 //if(!$order_ids) return $this->errorMsg(8910);
                 $where .= " and order_id in(" . implode(',',array_column($order_ids, 'order_id'))  . ")";
                 $whereSon = [

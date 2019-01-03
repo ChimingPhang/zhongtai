@@ -532,97 +532,6 @@ class Index extends Base{
     }
 
     /**
-     * TODO 废弃
-     * 特价车型拍卖会
-     */
-    public function special_auction()
-    {
-        //验证参数
-//        !empty(I('sales_sum', '')) && !in_array($sales_sum = I('sales_sum', ''),['asc','desc']) && $this->errorMsg(2002, 'sales_sum');//选传
-//        !empty(I('price', '')) && !in_array($price = I('price', ''),['asc','desc']) && $this->errorMsg(2002, 'price');//选传
-        $where = ['is_on_sale' => 1, 'is_end' => 0];
-        if (I('is_start')) {
-            $where['start_time'] = ['elt', time()];
-        } else {
-            $where['start_time'] = ['gt', time()];
-        }
-
-//        $order = [];
-//        if(!$sales_sum && !$price) $order['on_time'] = 'desc';
-//        if ($sales_sum) $order['sales_sum'] = $sales_sum;
-//        if ($price) $order['deposit_price'] = $price;
-        $order['on_time'] = 'desc';
-
-        $Goods = new GoodsAuction();
-        $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
-        video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-        $data = $Goods->GoodsList($this->page, 1, $where, $order, 9, $field);
-
-        $this->assign('data', $data);
-	   
-        return $this->fetch('auction/special_auction');
-    }
-
-    /**
-     * TODO 废弃
-     * 特价拍卖详情
-     */
-    public function special_auction_detail()
-    {
-        !empty(I('goods_id', '')) && !is_numeric($goods_id = I('goods_id', 0)) && $this->errorMsg(2002, 'goods_id');//必传
-        $Goods = new GoodsAuction();
-        $GoodsLogic = new GoodsLogic();
-        $SonOrderComment = new SonOrderComment();
-        //增加点击数
-        $Goods->addClickCount($goods_id);
-        //加载商品轮播
-        $banner = (new GoodsImages())->getImage($goods_id);
-        $data['banner'] = $banner;
-        var_dump($data['banner']);
-        //商品详情
-        $where['id'] = $goods_id;
-        $field = "goods_id,goods_name,start_price,bail_price,markup_price,brokerage_price,reserve_price,start_time,end_time,delay_time,goods_remark,goods_content,type,label,banner_image,original_img,spec_key_name";
-        $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
-
-        if (count($data)) {
-            $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
-            $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
-            $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号
-            $appearance['interior'] = $GoodsLogic->get_sku($goods_id, $appearance['model'][0]['id'], 'interior');//内饰颜色
-            $appearance['distribu'] = $GoodsLogic->get_sku($goods_id, $appearance['city'][0]['id'], 'distribu', $appearance['interior'][0]['id']);//城市
-            $data['appearance'] = $appearance;
-            $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
-            $data['comment_count'] = $SonOrderComment->count;
-            $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-            
-        }
-        $this->assign('data', $data);
-        return $this->fetch('auction/special_auction_detail');
-    }
-
-    /**
-     * TODO 废弃
-     * 特价车型拍卖会列表API
-     */
-    public function special_auction_list()
-    {
-        //验证参数
-        $where = ['is_on_sale' => 1, 'is_end' => 0];
-        if (I('is_start')) {
-            $where['start_time'] = ['elt', time()];
-        } else {
-            $where['start_time'] = ['gt', time()];
-        }
-        $order['on_time'] = 'desc';
-
-        $Goods = new GoodsAuction();
-        $field = "goods_id,goods_sn,goods_name,goods_remark,start_price,start_time,end_time,
-        video,spec_key,spec_key_name,is_on_sale,is_end,is_recommend,original_img";
-        $data = $Goods->GoodsList($this->page, 1, $where, $order, 6, $field);
-        $this->json('200', 'ok', $data);
-    }
-
-    /**
      * 积分商城
      */
     public function integral_mall()
@@ -693,7 +602,7 @@ class Index extends Base{
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
         $this->assign('service', $service);
         $this->assign('order', $order);
-
+//        $this->json(200, 'ok', $order);
         return $this->fetch('usercenter/user_center');
     }
 

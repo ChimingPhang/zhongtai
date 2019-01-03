@@ -4,6 +4,7 @@
  * **/
 namespace app\api\model;
 
+use think\Db;
 use think\Model;
 use think\Request;
 use think\Response;
@@ -124,5 +125,45 @@ class UserAddress extends Model
     }
 
 
+    /**
+     *  获取用户收货地址 用于购物车确认订单页面
+     */
+    public function ajaxAddress($user_id, $type=1)
+    {
+        //$type == 1是没有address_id
+        //$type == 2 是有address_id
+        if($type == 1){
+            $arr['address_list'] = Db::name('UserAddress')->where(["user_id"=>$user_id,'status'=>1])->order('is_default desc')->select();
+        }else{
+            $arr['address_list'] = Db::name('UserAddress')->where(["address_id"=>$user_id,'status'=>1])->select();
+        }
+
+        if ($arr['address_list']) {
+            $area_id = array();
+            foreach ($arr['address_list'] as $val) {
+                $area_id[] = $val['province'];
+                $area_id[] = $val['city'];
+                $area_id[] = $val['district'];
+                $area_id[] = $val['twon'];
+            }
+            $area_id = array_filter($area_id);
+            $area_id = implode(',', $area_id);
+            $arr['regionList'] = Db::name('region')->where("id", "in", $area_id)->getField('id,name');
+        }
+        if($type == 1){
+            $c = Db::name('UserAddress')->where(['user_id' => $user_id, 'is_default' => 1])->count(); // 看看有没默认收货地址
+            if ((count($arr['address_list']) > 0) && ($c == 0)) // 如果没有设置默认收货地址, 则第一条设置为默认收货地址
+                $arr['address_list'][0]['is_default'] = 1;
+        }
+
+        $res = [];
+        $address = $arr['regionList'][$arr['address_list'][0]['province']].'-'.$arr['regionList'][$arr['address_list'][0]['city']].'-'.$arr['regionList'][$arr['address_list'][0]['district']].'-'. $arr['address_list'][0]['address'];
+        $res['id'] =  $arr['address_list'][0]['address_id'];
+        $res['name'] =  $arr['address_list'][0]['consignee'];
+        $res['mobile'] =  $arr['address_list'][0]['mobile'];
+        $res['address'] =  $address;
+
+        return $res;
+    }
 
 }

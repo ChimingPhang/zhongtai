@@ -15,6 +15,7 @@ use app\api\model\GoodsImages;
 use app\api\model\Navigation;
 use app\api\model\Goods;
 use app\api\model\Sale;
+use app\api\model\UserAddress;
 use app\api\model\Users;
 use app\api\model\SonOrderComment;
 use app\api\model\UserSignLog;
@@ -213,8 +214,11 @@ class Index extends Base{
     {
 
         $data = $this->get_car_detail();
-        $data->goods_content = '';
         $this->assign('data', $data);
+
+        $address = (new UserAddress())->ajaxAddress($this->userInfo['user_id']);
+        $this->assign('address', $address);
+//        $this->json(200, 'ok', $data);
         return $this->fetch('brand_models/brand_models_detail');
     }
 

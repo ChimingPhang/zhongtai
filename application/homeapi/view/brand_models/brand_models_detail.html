@@ -49,7 +49,7 @@
                 <div class="form-item-control">
                   <ul class="product-attr-brick" id="sku-model" data-next="interior">
                     {foreach $data['appearance']['model'] as $item}
-                    <li class="attr-brick__item" onclick="getCarInfo(this)" data-type="interior" data-id="{$item.id}" data-skulevel="3" data-skuname="{$item.sku_name}">{$item.sku_name}</li>
+                    <li class="attr-brick__item" onclick="getCarInfo(this, 'sku_name3')" data-type="interior" data-id="{$item.id}" data-skulevel="3" data-skuname="{$item.sku_name}">{$item.sku_name}</li>
                     {/foreach}
                   </ul>
                 </div>
@@ -190,7 +190,7 @@
         </div>
       </div>
     </section>
-    {$data.goods_content}
+    <!-- {$data.goods_content} -->
   </div>
 </main>
 <div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -225,7 +225,7 @@
     $('#qrcodeModal').modal({
       show: true
     });
-    $('#qrcode').append('加载中...')
+    $('#qrcode').html('加载中...')
     var pay_points = $('input[name=pay_points]').val();
     var exchange_integral = {$data.exchange_integral};
     var id = {$data.goods_id};
@@ -251,13 +251,12 @@
     var next = $('#sku-'+type).data('next');
     data['id'] = $(e).data('id');
     data['goods_id'] = {$data.goods_id};
-    if($(e).data('itemid')){
-      item_id = $(e).data('itemid')
+    if(type=='province'){
+      item_id = $(e).data('id')
     }
-    var sku_level = $(e).data('skulevel');
     Apitool.drive.getCarSpec(data).then(function (result) {
       if(result.data instanceof Array) {
-        var dom = renderList(result.data, next, sku_level+1)
+        var dom = renderList(result.data, next)
         $('#sku-'+type).html(dom);
       } else {
         $('#sku-'+type).html('<li class="attr-brick__item" >无数据</li>');
@@ -265,12 +264,11 @@
     })
   }
 
-  function renderList(list, type, level) {
+  function renderList(list, type) {
     var html = ''
     list.forEach(function (item) {
-      console.log(item);
       if (item.hasOwnProperty('sku_img') && item['sku_img']!='') { 
-        html += '<li class="attr-color__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id') ? "data-itemid="+item['item_id']:'') +' data-skulevel="'+level+'" data-id="'+item.id+'">' +
+        html += '<li class="attr-color__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id') ? "data-itemid="+item['item_id']:'') +' data-id="'+item.id+'">' +
           '         <div class="pic-wrapper">' +
           '          <label>' +
           '            <img src="'+item.sku_img+'" class="color-pic" alt="">' +
@@ -279,7 +277,7 @@
           '       <div class="color-name">'+item.sku_name+'</div>' +
           '      </li>'
       } else {
-        html += '<li class="attr-brick__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id')? "data-itemid="+item['item_id']:'') +'  data-skulevel="'+level+'"  data-id="'+item.id+'">'+item.sku_name+'</li>'
+        html += '<li class="attr-brick__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id')? "data-itemid="+item['item_id']:'') +' data-id="'+item.id+'">'+item.sku_name+'</li>'
       }
     })
     return html;

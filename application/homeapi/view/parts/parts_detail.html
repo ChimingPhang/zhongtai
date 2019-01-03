@@ -181,7 +181,7 @@
             </div>
           </form>
           <div class="actions">
-            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span id="price">8800</span>元+<span  id="integral">888</span>积分）</a>
+            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span id="price">-</span>元+<span  id="integral">-</span>积分）</a>
           </div>
         </div>
 
@@ -191,6 +191,9 @@
   </div>
 
 </main>
+
+{include file="public/footer" /}
+{include file="public/choose-address"}
 <script>
   var spec_price = {$spec_price_script};
   function setPrice(id) {
@@ -203,5 +206,63 @@
     $('#price').text(obj.integral_price)
     $('#integral').text(obj.integral)
   }
+  
 </script>
-{include file="public/footer" /}
+
+<script>
+    function commitOrder() {
+      var pay_points = $('#pay_points').text();
+      var id = {$Think.get.goods_id};
+      var num = $('#goods_num').val()
+      var address_id = null
+      addNewAddress(function(res) {
+        if(res) {
+          address_id = res.data
+        } else {
+          address_id = $("#addressDefault input").val()
+        }
+
+        Apitool.order.commitOrder({
+          action: 'buy_now',
+          exchange_integral: 1,
+          goods_id: id,
+          goods_num: num,
+          address_id: address_id,
+          item_id: item_id,
+          pay_points: pay_points,
+        }).then(function (result) {
+          alert(result.message)
+          window.location.reload()
+        })
+      })
+      
+    }
+    function addNewAddress(cb) {
+      var name = $('#form-consignee').val()
+      var mobile = $('#form-mobile').val()
+      var address = $('#form-address').val()
+      if(name!='' || mobile!='' || address!=''){
+        if(name==''){
+          alert('请输入收件人')
+        }else if(mobile=='') {
+          alert('请输入收件人手机号')
+        } else if(address==''){
+          alert('请输入收件人地址')
+        } else {
+          Apitool.usercenter.addAddress({
+            consignee: name,
+            mobile: mobile,
+            address: address,
+            district: ''
+          }).then((res) => {
+            cb(res.data)
+          }).catch(function(){
+            cb()
+          })
+        }
+      } else {
+        cb()
+      }
+      
+    }
+</script>

@@ -190,7 +190,6 @@ class Integral extends Base {
         $banner = (new GoodsImages())->getImage($goods_id);
         $data['banner'] = $banner;
         $data['is_collect'] = $this->userGoodsInfo(I('token'), $goods_id);//是否收藏
-        var_dump($data['is_collect']);
         $this->assign('detail', $data);
 
         $goods_where['is_recommend'] = 1;           //推荐商品
@@ -256,8 +255,8 @@ class Integral extends Base {
         }
         if($data->equity_content) {
             $data->equity_content = str_replace("", "<br/>", $data->equity_content);
-        $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
-        $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
+            $data->equity_content = str_replace(" ", "&nbsp;", $data->equity_content);
+            $data->goods_content = htmlspecialchars_decode('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body><style>#goods_info_content_div p{margin:0px; padding:0px} #goods_info_content_div p img{width:100%} </style><div id="goods_info_content_div">' . $data->goods_content . '</div></body></html>');
         }
         
         
@@ -290,6 +289,7 @@ class Integral extends Base {
         $data["banner"] = $banner;
         $data["price_list"] = $price_list;
         $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
+        $data['spec_price'] = $GoodsLogic->get_spec_goods_price($goods_id);//外观颜色
         $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
         $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号
         $appearance['interior'] = $GoodsLogic->get_sku($goods_id, $appearance['model'][0]['id'], 'interior');//内饰颜色

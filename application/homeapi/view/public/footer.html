@@ -57,9 +57,9 @@
 </footer>
 
 <script src="__STATIC__/scripts/common.bundle.js?v=20181226"></script>
-{defined name="bundle"} 
-  <script src="__STATIC__/scripts/[bundle].bundle.js?v=20181226"></script>
-{/defined}
+{notempty name="bundle"} 
+  <script src="__STATIC__/scripts/{$bundle}.bundle.js?v=20181226"></script>
+{/notempty}
 <script>
   function getProvince(cb) {
     Apitool.drive.getProvince().then(function(res){

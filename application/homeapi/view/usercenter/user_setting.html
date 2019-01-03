@@ -1,0 +1,175 @@
+{include file="public/header" title="首页" bundle="user-center" hasBanner="false" activeNav="usercenter" /}
+    <main class="o-wrapper">
+      <div class="container">
+        <section class="user-center">
+          <div class="row">
+            <div class="col-3">
+              <div class="user-info">
+                <div class="user-info__header">
+                  <div class="avatar">
+                    <img src="{$user.head_pic}" alt="">
+                  </div>
+                  <div class="phone">{$user.mobile}</div>
+                  <div class="drawer row">
+                    <div class="drawer-item col-6">
+                      <div class="drawer-item__top">最近浏览</div>
+                      <div class="drawer-item__bottom">123</div>
+                    </div>
+                    <div class="drawer-item col-6">
+                      <div class="drawer-item__top">我的积分</div>
+                      <div class="drawer-item__bottom">{$user.pay_point}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-info__body">
+                  <div class="row base-col">
+                    <div class="col-5 base-col__left">出生日期:</div>
+                    <div class="col-7 base-col__right">{$user.birthday}</div>
+                  </div>
+                  <div class="row base-col">
+                    <div class="col-5 base-col__left">所在地:</div>
+                    <div class="col-7 base-col__right">{$user.address}</div>
+                  </div>
+                  <div class="row base-col">
+                    <div class="col-5 base-col__left">邮箱:</div>
+                    <div class="col-7 base-col__right">{$user.email}</div>
+                  </div>
+                </div>
+                <div class="user-info__footer">
+                  <div class="row">
+                    <div class="col-6 btn-col">
+                      <a class="c-btn c-btn__primary c-btn--small" href="javascript:void(0)" data-toggle="modal" data-target="#testDriveForm">
+                        <img src="__STATIC__/assets/images/common/icon-test-drive.png" class="icon" width="20" height="20" alt="">
+                        立即预约
+                      </a>
+                    </div>
+                    <div class="col-6 btn-col">
+                      <a class="c-btn c-btn__success c-btn--small"  href="javascript:void(0)" {if $is_sign} id="checkin" {/if} >
+                        <img src="__STATIC__/assets/images/common/sign.png" class="icon" width="20" height="20" alt="">
+                        {if $is_sign} 
+                          已签到
+                        {else /}
+                          签到
+                        {/if} 
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <img src="__STATIC__/assets/images/common/setting.png" class="user-info__setting" alt="" id="setting">
+              </div>
+            </div>
+            <div class="col-9">
+                <div class="user-info-edit" id="user-info" style="display:block">
+                    <div class="user-info-edit__header">
+                      <div class="cancel-editing" id="cancel-edit">
+                        <a href="__URL__/user_center.html"><img src="__STATIC__/assets/images/common/back.png" class="icon" alt="">
+                        取消编辑</a>
+                      </div>
+                    </div>
+                    <div class="user-info-edit__body">
+                      <form>
+                        <div class="form-group row">
+                          <label
+                            for="staticEmail"
+                            class="col-2 col-form-label col-form-label-sm u-text-right"
+                          >
+                            账号昵称:
+                          </label>
+                          <div class="col-6">
+                            <input type="text" class="form-control form-control-sm" id="staticEmail">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            class="col-2 col-form-label col-form-label-sm u-text-right"
+                          >
+                            出生年月:
+                          </label>
+                          <div class="col-6">
+                            <div class="row">
+                              <div class="col-4">
+                                <div class="select-box">
+                                 <select 
+                                  class="selectpicker form-control form-control-sm select-major" 
+                                  data-style="my-select"
+                                  id="year"
+                                >
+                                 </select>
+                                 <span class="select-des">年</span>
+                                </div>
+                              </div>
+                              <div class="col-4">
+                                <div class="select-box">
+                                 <select 
+                                  class="selectpicker form-control form-control-sm select-major" 
+                                  data-style="my-select"
+                                  id="month"
+                                >
+                                 </select>
+                                 <span class="select-des">月</span>
+                                </div>
+                              </div>
+                              <div class="col-4">
+                                <div class="select-box">
+                                 <select 
+                                  class="selectpicker form-control form-control-sm select-major" 
+                                  data-style="my-select"
+                                  id="day"
+                                >
+                                 </select>
+                                 <span class="select-des">日</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="address"
+                            class="col-2 col-form-label col-form-label-sm u-text-right"
+                          >
+                            所在地:
+                          </label>
+                          <div class="col-6">
+                            <input type="password" class="form-control form-control-sm" id="address">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="email"
+                            class="col-2 col-form-label col-form-label-sm u-text-right"
+                          >
+                            邮箱:</label>
+                          <div class="col-6">
+                            <input type="password" class="form-control form-control-sm" id="email">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="email"
+                            class="col-2 col-form-label col-form-label-sm u-text-right"
+                          ></label>
+                          <div class="col-6">
+                            <div class="user-info-edit__footer">
+                              <a class="c-btn c-btn__primary c-btn--small" href="javascript:;">
+                                确认编辑
+                              </a>
+                              <a class="c-btn c-btn__success c-btn--small" href="javascript:;">
+                                绑定编辑
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+    {include file="public/test-drive" /}
+    {include file="public/footer" /}

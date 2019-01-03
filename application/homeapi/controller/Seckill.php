@@ -2,16 +2,13 @@
 namespace app\homeapi\controller;
 
 use app\api\controller\Order;
+use app\api\controller\Payment;
 use app\api\logic\CartLogic;
-use app\api\logic\GoodsLogic;
-use app\api\model\AccessoriesCategory;
 use app\api\model\Goods;
-use app\api\model\GoodsCategory;
 use app\api\model\GoodsSeckill;
 use app\api\logic\SecKillLogic;
 use app\common\logic\PlaceOrder;
 use think\Request;
-use think\Cache;
 use think\Db;
 
 /**

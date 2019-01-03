@@ -1,4 +1,12 @@
 {include file="public/header" title="首页" bundle="brand-models-buy" hasBanner="false" activeNav="integral" /}
+    <style>
+      #addressDefault {
+        display: none;
+        border: 1px solid #dedede;
+        margin-bottom: 20px;
+        padding:10px;
+      }
+    </style>
     <main class="o-wrapper">
       <div class="container">
         <section class="integral-mall-exchange">
@@ -46,9 +54,9 @@
                   <div class="form-item-control-wrapper col-11">
                     <div class="form-item-control">
                       <ul class="product-attr-brick" id="product-color">
-                        {foreach $data['price_list'] as $item}
+                        {foreach $data['spec_price'] as $item}
                         <li class="attr-brick__item">
-                          <div class="color-name">{$item.key_name}</div>
+                          <div class="color-name" onclick="setIntergral({$item.item_id},{$item.integral})">{$item.key_name}</div>
                         </li>
                         {/foreach}
                       </ul>
@@ -62,7 +70,7 @@
                   <div class="form-item-control-wrapper col-11">
                     <div class="form-item-control">
                       <div class="product-attr__exchange-num">
-                        <select class="selectpicker form-control form-control-sm" data-style="my-select">
+                        <select class="selectpicker form-control form-control-sm" id="goods_num" data-style="my-select">
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -73,12 +81,18 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-item row">
+                  
               </div>
               <div class="receiving">
                 <div class="receiving-info">
                   <h2 class="title">收货信息</h2>
                   <form class="receiving-form">
+                    <div id="addressDefault">
+                      
+                    </div>
                     <div class="form-layout form-layout__inline">
+                      
                       <div class="form-item">
                         <div class="form-item-label">
                           <label>姓名：</label>
@@ -86,7 +100,7 @@
                         <div class="form-item-control-wrapper">
                           <div class="form-item-control">
                             <div class="input-wrapper">
-                              <input type="text" class="form-control form-control-sm">
+                              <input type="text" id="form-consignee" class="form-control form-control-sm">
                             </div>
                           </div>
                         </div>
@@ -98,7 +112,7 @@
                         <div class="form-item-control-wrapper">
                           <div class="form-item-control">
                             <div class="input-wrapper">
-                              <input type="text" class="form-control form-control-sm">
+                              <input type="text" id="form-mobile" class="form-control form-control-sm">
                             </div>
                           </div>
                         </div>
@@ -110,7 +124,7 @@
                         <div class="form-item-control-wrapper">
                           <div class="form-item-control">
                             <div class="input-wrapper">
-                              <input type="text" class="form-control form-control-sm">
+                              <input type="text" id="form-address" class="form-control form-control-sm">
                             </div>
                           </div>
                         </div>
@@ -122,7 +136,7 @@
                         <div class="form-item-control-wrapper">
                           <div class="form-item-control">
                             <div class="input-wrapper">
-                              <input type="text" class="form-control form-control-sm">
+                              <input type="text" id="form-remark" class="form-control form-control-sm">
                             </div>
                           </div>
                         </div>
@@ -130,7 +144,7 @@
                     </div>
                   </form>
                   <div class="actions">
-                    <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)">立即兑换（300积分）</a>
+                    <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)">立即兑换（<span id="pay_points">{$data.moren_integral}</span>积分）</a>
                   </div>
                 </div>
 
@@ -138,8 +152,70 @@
             </div>
           </div>
         </section>
-
       </div>
-
     </main>
+    
     {include file="public/footer" /}
+    {if $is_login}
+    {include file="public/choose-address"}
+    {/if}
+    <script>
+        var item_id = null
+        function setIntergral(id, integral) {
+          $('#pay_points').text(integral)
+          item_id = id
+        }
+        function commitOrder() {
+          var pay_points = $('#pay_points').text();
+          var id = {$Think.get.goods_id};
+          var num = $('#goods_num').val()
+          
+          addNewAddress(function(res) {
+            if(res) {
+              address_id = res.data
+            } else {
+              address_id = $("#addressDefault input").val()
+            }
+
+            Apitool.order.commitOrder({
+              action: 'buy_now',
+              exchange_integral:2,
+              goods_id: id,
+              goods_num: num,
+              address_id: address_id,
+              item_id: item_id,
+              pay_points: pay_points,
+            }).then(function (result) {
+              alert(result.message)
+              window.location.reload()
+            })
+         })
+       }
+        function addNewAddress(cb) {
+          var name = $('#form-consignee').val()
+          var mobile = $('#form-mobile').val()
+          var address = $('#form-address').val()
+          if(name!='' || mobile!='' || address!=''){
+            if(name==''){
+              alert('请输入收件人')
+            }else if(mobile=='') {
+              alert('请输入收件人手机号')
+            } else if(address==''){
+              alert('请输入收件人地址')
+            } else {
+              Apitool.usercenter.addAddress({
+                consignee: name,
+                mobile: mobile,
+                address: address
+              }).then(function(res) {
+                cb(res.data)
+              }).catch(function() {
+                cb()
+              })
+            }
+          } else {
+            cb()
+          }
+          
+        }
+    </script>

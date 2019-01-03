@@ -34,9 +34,9 @@
                   <span>价格：<strong>{$data.deposit_price}</strong>元</span>
                 </div>
                 <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail.html?goods_id={$data.goods_id}">立即购买</a>
-                <div class="collection btn-collection float-right {if $is_login}logined{/if}" {if !$is_login} data-toggle="modal" data-target="#loginModal" {/if} data-type="{$data.exchange_integral}" data-id="{$data.goods_id}">
+                <div class="collection btn-collection float-right {if $is_login}logined{/if}  {if $data.is_collect} active {/if}" {if !$is_login} data-toggle="modal" data-target="#loginModal" {/if} data-type="{$data.exchange_integral}" data-id="{$data.goods_id}">
                   <span class="icon float-left"></span>
-                  <label>收藏</label>
+                  <label>{if $data.is_collect}已{/if}收藏</label>
                 </div>
               </div>
             </div>

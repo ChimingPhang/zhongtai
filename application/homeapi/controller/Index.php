@@ -689,9 +689,30 @@ class Index extends Base{
 //        $model = new Sale();
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
         $this->assign('service', $service);
-//        $this->json(200,'ok', $service);
         $this->assign('order', $order);
+
         return $this->fetch('usercenter/user_center');
+    }
+
+    public function user_setting()
+    {
+        $token = I('token')? I('token') : session('token');
+        $user_id = $this->checkToken($token);
+        $model = new Users();
+        $fields = [
+            'reg_time',     //最近浏览次数
+            'head_pic',     //头像
+            'mobile',       //手机号
+            'pay_points',   //我的积分
+            'email',
+            'birthday',
+        ];
+        
+        $user = $model->get_user($user_id, $fields);
+//        $this->json(200, 'ok', $user);die;
+        $data['is_sign'] = (new UserSignLog())->isSign($user_id);
+        $this->assign('user', $user);
+        return $this->fetch('usercenter/user_setting');
     }
 
     

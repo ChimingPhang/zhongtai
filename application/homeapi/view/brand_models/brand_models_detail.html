@@ -183,14 +183,14 @@
               <a class="c-btn c-btn__primary buy-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal"
                 data-target="#loginModal" {/if} href="javascript:void(0)">
                 立即购买
-                <div class="tip">定金：<span id="depositPrice">{$data.shop_price}</span>元</div>
+                <div class="tip">定金：<span id="depositPrice">{$data.deposit_price}</span>元</div>
               </a>
             </div>
           </div>
         </div>
       </div>
     </section>
-
+    {$data.goods_content}
   </div>
 </main>
 <div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -216,10 +216,16 @@
 
 {include file="public/footer" /}
 <script>
+  var item_id = null
   function commitOrder() {
+    if(!item_id) {
+      alert('请选择规格')
+      return
+    }
     $('#qrcodeModal').modal({
       show: true
     });
+    $('#qrcode').append('加载中...')
     var pay_points = $('input[name=pay_points]').val();
     var exchange_integral = {$data.exchange_integral};
     var id = {$data.goods_id};
@@ -229,7 +235,7 @@
       goods_id: id,
       goods_num: 1,
       address_id: 108,
-      item_id: window.localStorage.getItem('item_id'),
+      item_id: item_id,
       pay_points: 0,
     }).then(function (result) {
       Apitool.order.payOrder(result.data, 4).then(function (res) {
@@ -245,6 +251,9 @@
     var next = $('#sku-'+type).data('next');
     data['id'] = $(e).data('id');
     data['goods_id'] = {$data.goods_id};
+    if($(e).data('itemid')){
+      item_id = $(e).data('itemid')
+    }
     var sku_level = $(e).data('skulevel');
     Apitool.drive.getCarSpec(data).then(function (result) {
       if(result.data instanceof Array) {
@@ -259,8 +268,9 @@
   function renderList(list, type, level) {
     var html = ''
     list.forEach(function (item) {
-      if (item.hasOwnProperty('sku_img') && item['sku_img']!='') {
-        html += '<li class="attr-color__item" onclick="getCarInfo(this)" data-type="'+type+'"  data-skulevel="'+level+'" data-id="'+item.id+'">' +
+      console.log(item);
+      if (item.hasOwnProperty('sku_img') && item['sku_img']!='') { 
+        html += '<li class="attr-color__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id') ? "data-itemid="+item['item_id']:'') +' data-skulevel="'+level+'" data-id="'+item.id+'">' +
           '         <div class="pic-wrapper">' +
           '          <label>' +
           '            <img src="'+item.sku_img+'" class="color-pic" alt="">' +
@@ -269,7 +279,7 @@
           '       <div class="color-name">'+item.sku_name+'</div>' +
           '      </li>'
       } else {
-        html += '<li class="attr-brick__item" onclick="getCarInfo(this)" data-type="'+type+'"  data-skulevel="'+level+'"  data-id="'+item.id+'">'+item.sku_name+'</li>'
+        html += '<li class="attr-brick__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id')? "data-itemid="+item['item_id']:'') +'  data-skulevel="'+level+'"  data-id="'+item.id+'">'+item.sku_name+'</li>'
       }
     })
     return html;

@@ -556,7 +556,8 @@ class Goods extends Base {
                 "list" => $goodsList
             ];
         }
-        $this->assign('total', sizeof($goodsList));
+        $count = $Goods->GoodsCount(0, $where);
+        $this->assign('total', $count);
         $this->assign('top_ads', $data['banner']);
         $this->assign('goods', $goodsList);
         return $this->fetch('common/search');

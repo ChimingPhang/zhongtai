@@ -304,7 +304,11 @@
                               {foreach $service.integralLog as $row}
                                 {if $row.type_name=='签到赠送'}
                                 <tr>
-                                  <td>{$row.create_time}</td>
+                                  <td>
+                                  {php}
+                                    echo date('Y-m-d H:i', (int) $row['create_time']);
+                                  {/php}
+                                  </td>
                                   <td class="td-bling">+{$row.integral}</td>
                                   <td></td>
                                   <td></td>
@@ -327,7 +331,11 @@
                             <tbody>
                                 {foreach $service.integralLog as $row}
                                 <tr>
-                                  <td>{$row.create_time}</td>
+                                  <td>
+                                    {php}
+                                      echo date('Y-m-d H:i', (int) $row['create_time']);
+                                    {/php}
+                                    </td>
                                   <td class="td-bling">+{$row.integral}</td>
                                   <td>{$row.type_name}</td>
                                 </tr>

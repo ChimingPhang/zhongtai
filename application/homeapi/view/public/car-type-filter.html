@@ -24,7 +24,7 @@
         <li {if !$Think.get.sales_sum && !$Think.get.price} class="active" {/if}><a href="__URL__/brand_models.html" >默认</a></li>
         <li {if $Think.get.sales_sum } class="active" {/if}>
           <div class="sort-wrapper">
-            <span class="sort-txt"><a href="__URL__/brand_models.html?sales_sum={$Think.get.sales_sum == 'asc' ? 'desc' : 'asc'}">销量</a></span>
+            <span class="sort-txt"><a href="__URL__/brand_models.html?sales_sum={$Think.get.sales_sum == 'desc' ? 'asc' : 'desc'}">销量</a></span>
             <div class="lamp">
               <div class="icon-arr icon-arr__up {$Think.get.sales_sum == 'asc' ? 'active' : ''}"></div>
               <div class="icon-arr icon-arr__down {$Think.get.sales_sum == 'desc' ? 'active' : ''}"" ></div>

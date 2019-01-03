@@ -4,13 +4,13 @@ namespace app\api\controller;
 
 use app\api\logic\CartLogic;
 use think\Request;
-use think\Cache;
 use think\Db;
-use think\Loader;
 use app\common\logic\Pay;
 use app\common\logic\PlaceOrder;
 use app\common\util\TpshopException;
 use app\api\model\Users;
+use think\Session;
+
 /**
  * 订单
  * @Author   XD
@@ -148,6 +148,26 @@ class Order extends Base
         }
         $this->json('0000','获取成功',$arr);
     }
+
+    /**
+     * 获取收货地址，或用户默认收货地址
+     */
+    public function getUserAddress()
+    {
+        $token     = I("token") ?? Session::get('token');
+        $address_id     = I("address_id");
+        $user_id = $this->checkToken($token);
+        $user_model = new \app\api\model\UserAddress();
+        if ($address_id) {
+            $address = $user_model->ajaxAddress($address_id, 2);
+        } else {
+
+            $address = $user_model->ajaxAddress($user_id);
+        }
+
+        $this->json(200, 'ok', $address);
+    }
+
     /**
      * 生成车型订单
      * [carOrder description]
@@ -596,7 +616,13 @@ class Order extends Base
         // $show = $Page->show();
         $order_str = "order_id DESC";
         //获取订单
-        $order_list_obj = M('order')->order($order_str)->where($where)->bind($bind)->field('total_amount,master_order_sn,order_id,refund_status,order_status,pay_status,shipping_status,add_time,order_amount,type,dj,integral,prom_type,is_winning')->limit($limit,10)->select();
+        $order_list_obj = M('order')->order($order_str)->where($where)->bind($bind)
+            ->field('total_amount,master_order_sn,order_id,refund_status,order_status,
+            pay_status,shipping_status,add_time,order_amount,type,dj,integral,prom_type,is_winning,
+            consignee,country,province,city,district,twon,address
+            ')
+            ->limit($limit,10)
+            ->select();
 //         echo M('order')->getLastSql();die;
         $arr = [];
         if($order_list_obj){
@@ -612,6 +638,15 @@ class Order extends Base
                 $arr[$k]['integral'] = $v['integral'];
                 $arr[$k]['type'] = $v['type'];
                 $arr[$k]['order_id'] = $v['order_id'];
+
+                $arr[$k]['consignee'] = $v['consignee'];
+                $arr[$k]['country'] = $v['country'];
+                $arr[$k]['province'] = $v['province'];
+                $arr[$k]['city'] = $v['city'];
+                $arr[$k]['district'] = $v['district'];
+                $arr[$k]['twon'] = $v['twon'];
+                $arr[$k]['address'] = $v['address'];
+
                 if($v['pay_status'] == 0 || $v['pay_status'] == 2){
                     $arr[$k]['master_order_sn'] = substr($v['master_order_sn'],0,8)."****";
                 }else{
@@ -625,7 +660,8 @@ class Order extends Base
                     $arr[$k]['cancle_order'] = 0;
                 }
                 // $v['order_button'] = $order->getOrderButtonAttr(null,$v);
-                $arr[$k]['list'] = M('order_goods'.$select_year)->cache(true,3)->where($whereSon)->where('order_id = '.$v['order_id'])->field('goods_name,is_shouhuo,spec_key_name as spec,goods_num,final_price,rec_id,is_send,is_comment,goods_id,pay_integral,goods_price,all_point')->select();
+                $arr[$k]['list'] = M('order_goods'.$select_year)->cache(true,3)->where($whereSon)->where('order_id = '.$v['order_id'])
+                    ->field('goods_name,is_shouhuo,spec_key_name as spec,goods_num,final_price,rec_id,is_send,is_comment,goods_id,pay_integral,goods_price,all_point')->select();
                 foreach ($arr[$k]['list'] as $key => $value) {
                     $arr[$k]['list'][$key]['goods_img'] = goods_thum_images($value['goods_id'],200,150);
                 }
@@ -719,7 +755,11 @@ class Order extends Base
         $limit = ($page - 1) * 10;
         $order_str = "order_id DESC";
         //获取订单
-        $order_list_obj = M('order')->order($order_str)->where($where)->bind($bind)->field('total_amount,master_order_sn,order_id,refund_status,order_status,pay_status,shipping_status,add_time,order_amount,type,dj,integral,prom_type,is_winning')->limit($limit,10)->select();
+        $order_list_obj = M('order')->order($order_str)->where($where)->bind($bind)
+            ->field('total_amount,master_order_sn,order_id,refund_status,order_status,pay_status,
+            shipping_status,add_time,order_amount,type,dj,integral,prom_type,is_winning,
+            consignee,country,province,city,district,twon,address')
+            ->limit($limit,10)->select();
         $arr = [];
         if($order_list_obj){
             foreach($order_list_obj as $k => $v)
@@ -729,6 +769,15 @@ class Order extends Base
                 $arr[$k]['integral'] = $v['integral'];
                 $arr[$k]['type'] = $v['type'];
                 $arr[$k]['order_id'] = $v['order_id'];
+
+                $arr[$k]['consignee'] = $v['consignee'];
+                $arr[$k]['country'] = $v['country'];
+                $arr[$k]['province'] = $v['province'];
+                $arr[$k]['city'] = $v['city'];
+                $arr[$k]['district'] = $v['district'];
+                $arr[$k]['twon'] = $v['twon'];
+                $arr[$k]['address'] = $v['address'];
+
                 if($v['pay_status'] == 0 || $v['pay_status'] == 2){
                     $arr[$k]['master_order_sn'] = substr($v['master_order_sn'],0,8)."****";
                 }else{

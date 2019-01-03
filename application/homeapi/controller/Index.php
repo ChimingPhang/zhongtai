@@ -15,6 +15,7 @@ use app\api\model\GoodsImages;
 use app\api\model\Navigation;
 use app\api\model\Goods;
 use app\api\model\Sale;
+use app\api\model\UserAddress;
 use app\api\model\Users;
 use app\api\model\SonOrderComment;
 use app\api\model\UserSignLog;
@@ -156,7 +157,7 @@ class Index extends Base{
         $this->assign('hot_car', $hot_car);
         
 		
-//        $this->json('0000','ok', ['auc_car' =>$auc_car, 'hot_car' => $hot_car]);
+//        $this->json('0000','ok', ['auc_car' =>$data, 'hot_car' => $hot_car]);
         return $this->fetch('index/index');
     }
 
@@ -202,7 +203,6 @@ class Index extends Base{
         }
 
         $this->assign('total', $count);
-        // $this->json('200','ok', $data);
         return $this->fetch('brand_models/brand_models');
     }
 
@@ -213,8 +213,11 @@ class Index extends Base{
     {
 
         $data = $this->get_car_detail();
-        $data->goods_content = '';
         $this->assign('data', $data);
+
+        $address = (new UserAddress())->ajaxAddress($this->userInfo['user_id']);
+        $this->assign('address', $address);
+//        $this->json(200, 'ok', $data);
         return $this->fetch('brand_models/brand_models_detail');
     }
 

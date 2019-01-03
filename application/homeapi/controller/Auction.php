@@ -18,9 +18,6 @@ use think\Db;
  */
 class Auction extends Base {
 
-//    public $token;
-//    public $is_login = 0;       //是否登录
-//    public $is_sign = 0;        //是否签到
     public $cartype_list = [];
 
     //每页显示数
@@ -39,15 +36,6 @@ class Auction extends Base {
         //自动加载页数
         self::Initialization();
         !is_numeric(self::$page = I('page', 1)) && $this->errorMsg(2002, 'page');
-
-//        $this->token = I('token')? I('token') : session('token');
-//        if (!empty($this->token)) {
-//            $user_id = $this->checkToken($this->token);
-//            if ($user_id) {
-//                $this->is_login = 1;
-//                $this->is_sign = (new UserSignLog())->isSign($user_id);
-//            }
-//        }
 
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
@@ -280,11 +268,13 @@ class Auction extends Base {
         //出价列表
         $delayTime = self::$AuctionLogic->offerList($auction_id, 1, $user_id, 3);
         $auctionInfo->offer_list = $delayTime;
-        // $token = I('token')? I('token') : session('token');
-        // $auctionInfo['is_collect'] = $this->userGoodsInfo($token, $auction_id);//是否收藏
+
+        $token = I('token')? I('token') : session('token');
+        $auctionInfo['is_collect'] = $this->userGoodsInfo($token, $auction_id);//是否收藏
         //加载商品轮播
         $this->assign('banner', $auctionInfo->banner_image);
         $this->assign('data',  $auctionInfo);
+
         return $this->fetch('auction/special_auction_detail');
     }
 

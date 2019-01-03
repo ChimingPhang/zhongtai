@@ -50,7 +50,7 @@
                   <ul class="product-attr-brick">
                     
                     {foreach $item['son'] as $vo}
-                    <li class="attr-brick__item">
+                    <li class="attr-brick__item" onclick="setPrice({$vo.id})">
                       <label class="color-name">{$vo.name}</label>
                     </li>
                     {/foreach}
@@ -68,9 +68,11 @@
                   <div class="product-attr__formItem">
                     <div class="select-wrapper">
                       {php}
-                      $have = (float)$data['integral'];
-                      $need = (float)$data['moren_integral'];
-                      $max = floor($have/$need);
+                        if($data['integral']) {
+                          $have = (float)$data['integral'];
+                          $need = (float)$data['moren_integral'];
+                          $max = floor($have/$need);
+                        }
                       {/php}
                       <select class="selectpicker form-control form-control-sm" data-style="my-select">
                         {for start="1" end="$max+1"}
@@ -179,7 +181,7 @@
             </div>
           </form>
           <div class="actions">
-            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span>8800</span>元+<span>888</span>积分）</a>
+            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span id="price">-</span>元+<span  id="integral">-</span>积分）</a>
           </div>
         </div>
 
@@ -189,8 +191,78 @@
   </div>
 
 </main>
-<script>
-  var spec_price = {$data.spec_price};
 
-</script>
 {include file="public/footer" /}
+{include file="public/choose-address"}
+<script>
+  var spec_price = {$spec_price_script};
+  function setPrice(id) {
+    var obj = null
+    spec_price.forEach(function(item) {
+      if(item.key == id) {
+        obj = item
+      }
+    })
+    $('#price').text(obj.integral_price)
+    $('#integral').text(obj.integral)
+  }
+  
+</script>
+
+<script>
+    function commitOrder() {
+      var pay_points = $('#pay_points').text();
+      var id = {$Think.get.goods_id};
+      var num = $('#goods_num').val()
+      var address_id = null
+      addNewAddress(function(res) {
+        if(res) {
+          address_id = res.data
+        } else {
+          address_id = $("#addressDefault input").val()
+        }
+
+        Apitool.order.commitOrder({
+          action: 'buy_now',
+          exchange_integral: 1,
+          goods_id: id,
+          goods_num: num,
+          address_id: address_id,
+          item_id: item_id,
+          pay_points: pay_points,
+        }).then(function (result) {
+          alert(result.message)
+          window.location.reload()
+        })
+      })
+      
+    }
+    function addNewAddress(cb) {
+      var name = $('#form-consignee').val()
+      var mobile = $('#form-mobile').val()
+      var address = $('#form-address').val()
+      if(name!='' || mobile!='' || address!=''){
+        if(name==''){
+          alert('请输入收件人')
+        }else if(mobile=='') {
+          alert('请输入收件人手机号')
+        } else if(address==''){
+          alert('请输入收件人地址')
+        } else {
+          Apitool.usercenter.addAddress({
+            consignee: name,
+            mobile: mobile,
+            address: address,
+            district: ''
+          }).then((res) => {
+            cb(res.data)
+          }).catch(function(){
+            cb()
+          })
+        }
+      } else {
+        cb()
+      }
+      
+    }
+</script>

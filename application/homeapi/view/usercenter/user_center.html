@@ -1,4 +1,4 @@
-{include file="public/header" title="首页" bundle="user-center" hasBanner="false" activeNav="usercenter" /}
+{include file="public/header" title="首页" hasBanner="false" activeNav="usercenter" /}
     <main class="o-wrapper">
       <div class="container">
         <section class="user-center">
@@ -44,18 +44,19 @@
                       </a>
                     </div>
                     <div class="col-6 btn-col">
-                      <a class="c-btn c-btn__success c-btn--small"  href="javascript:void(0)" {if $is_sign} id="checkin" {/if} >
+                      <a class="c-btn c-btn__success c-btn--small"  href="javascript:void(0)" {if !$is_sign} id="checkin" {/if} >
                         <img src="__STATIC__/assets/images/common/sign.png" class="icon" width="20" height="20" alt="">
-                        {if $is_sign} 
-                          已签到
-                        {else /}
-                          签到
-                        {/if} 
+                        <span>{if $is_sign} 
+                            已签到
+                          {else /}
+                            签到
+                          {/if} </span>
+                        
                       </a>
                     </div>
                   </div>
                 </div>
-                <img src="__STATIC__/assets/images/common/setting.png" class="user-info__setting" alt="" id="setting">
+                <a href="__URL__/user_setting.html"><img src="__STATIC__/assets/images/common/setting.png" class="user-info__setting" alt="" id="setting"></a>
               </div>
             </div>
             <div class="col-9">
@@ -171,63 +172,52 @@
                       </ul>
                       <div class="tabs-content">
                         {foreach $order as $key=>$order_item}
-                          
                           <div class="tab-pane {$key=='all'?'active':''}">
                             <div class="order-list">
                               {notempty name="order_item"}
-                                {foreach $order_item as $item}
-                                <div class="order-item">
-                                  <div class="order-header">
-                                    <div class="order-info">
-                                      <div class="order-info__left">订单号：</div>
-                                      <div class="order-info__right">{$item.master_order_sn}</div>
-                                    </div>
-                                    <div class="order-info">
-                                      <div class="order-info__left">订单积分：</div>
-                                      <div class="order-info__right">{$item.integral}积分</div>
-                                    </div>
-                                  </div>
-                                  <div class="order-body">
-                                    <div class="order-body__left">
-                                      <div class="car-pic" style="background-image: url({$item.goods_img})"></div>
-                                      <div class="car-info">
+                                {foreach $order_item as $key=>$item}
+                                 
+                                  <div class="order-item">
+                                      <div class="order-header">
                                         <div class="order-info">
-                                          <div class="order-info__left">车型：</div>
-                                          <div class="order-info__right">{$item.goods_name}</div>
+                                          <div class="order-info__left">订单号：</div>
+                                          <div class="order-info__right">{$item.master_order_sn}</div>
                                         </div>
-                                        <div class="car-attr">
-                                          <div class="car-attr__top">
-                                            <div class="attr-item attr-item__sm">白色</div>
-                                            <div class="attr-item attr-item__sm">1.5T</div>
+                                        <div class="order-info">
+                                          <div class="order-info__left">订单积分：</div>
+                                          <div class="order-info__right">{$item.integral}积分</div>
+                                        </div>
+                                      </div>
+                                      {foreach $item.list as $vo}
+                                      <div class="order-body">
+                                        <div class="order-body__left">
+                                          <div class="car-pic" style="background-image: url({$vo.goods_img});background-position: center;background-size:contain"></div>
+                                          <div class="car-info" style="vertical-align: top;margin-top: 30px"> 
+                                            <div class="order-info">
+                                              <div class="order-info__left">{$vo.goods_name}</div>
+                                            </div>
+                                            {if $vo.spec}
+                                            <div class="car-attr">
+                                              <div class="car-attr__top">
+                                                <div class="attr-item attr-item__sm">{$vo.spec}</div>
+                                              </div>
+                                            </div>
+                                            {/if}
                                           </div>
-                                          <div class="attr-item attr-item__lg">自动豪华型</div>
                                         </div>
-                                        <div class="car-pick">（自取）</div>
-                                      </div>
-                                    </div>
-                                    <div class="order-body__center">
-                                      <div class="other-info">
-                                        <div class="other-info-row">
-                                          <div class="row__left">提成城市：</div>
-                                          <div class="row__right">北京市</div>
+                                        <div class="order-body__center">
+                                          <div class="other-info">
+                                            {$vo.address}
+                                          </div>
                                         </div>
-                                        <div class="other-info-row">
-                                          <div class="row__left">提车人：</div>
-                                          <div class="row__right">王子豪 145*****6137</div>
-                                        </div>
-                                        <div class="other-info-row">
-                                          <div class="row__left">经销商：</div>
-                                          <div class="row__right">北京澳宝世达汽车销售有限公司</div>
+                                        <div class="order-body__right">
+                                          <a class="c-btn c-btn__primary" href="#">
+                                            进行中
+                                          </a>
                                         </div>
                                       </div>
+                                      {/foreach}
                                     </div>
-                                    <div class="order-body__right">
-                                      <a class="c-btn c-btn__primary" href="#">
-                                        进行中
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
                                 {/foreach}
                               {/notempty}
                               {empty name="order_item"}
@@ -275,126 +265,28 @@
                         <div class="tab-pane">
                           <div class="collection">
                             <div class="product-card-list row">
-                              <div class="col col-4">
-                                <div class="product-card collect">
-                                  <div class="product-card-img">
-                                    <a href="#"><img src="__STATIC__/assets/images/temp/parts-img.jpg" alt=""></a>
-                                  </div>
-                                  <div class="product-card-content">
-                                    <h2 class="product-card-title">
-                                      车型：T500
-                                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                                    </h2>
-                                    <div class="product-card-btm clearfix">
-                                      <div class="float-left product-card-price">
-                                        <span class="icon-collect collected"></span>
-                                        <span>已收藏</span>
+                              {foreach $service.collection as $vo}
+                                <div class="col col-4">
+                                    <div class="product-card collect">
+                                      <div class="product-card-img">
+                                        <a href="#"><img src="{$vo.original_img}" alt=""></a>
                                       </div>
-                                      <span class="product-card-tip float-right">首付4.9万元</span>
+                                      <div class="product-card-content">
+                                        <h2 class="product-card-title">
+                                          {$vo.goods_name}
+                                          <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
+                                        </h2>
+                                        <div class="product-card-btm clearfix">
+                                          <div class="collection btn-collection float-left active logined" data-type="{$vo.exchange_integral}" data-id="{$vo.goods_id}">
+                                            <span class="icon float-left"></span>
+                                            <label>已收藏</label>
+                                          </div>
+                                          <span class="product-card-tip float-right">{$vo.price}元 </span>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
-                              <div class="col col-4">
-                                <div class="product-card collect">
-                                  <div class="product-card-img">
-                                    <a href="#"><img src="__STATIC__/assets/images/temp/parts-img.jpg" alt=""></a>
-                                  </div>
-                                  <div class="product-card-content">
-                                    <h2 class="product-card-title">
-                                      车型：T500
-                                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                                    </h2>
-                                    <div class="product-card-btm clearfix">
-                                      <div class="float-left product-card-price">
-                                        <span class="icon-collect collected"></span>
-                                        <span>已收藏</span>
-                                      </div>
-                                      <span class="product-card-tip float-right">首付4.9万元</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col col-4">
-                                <div class="product-card collect">
-                                  <div class="product-card-img">
-                                    <a href="#"><img src="__STATIC__/assets/images/temp/parts-img.jpg" alt=""></a>
-                                  </div>
-                                  <div class="product-card-content">
-                                    <h2 class="product-card-title">
-                                      车型：T500
-                                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                                    </h2>
-                                    <div class="product-card-btm clearfix">
-                                      <div class="float-left product-card-price">
-                                        <span class="icon-collect collected"></span>
-                                        <span>已收藏</span>
-                                      </div>
-                                      <span class="product-card-tip float-right">首付4.9万元</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col col-4">
-                                <div class="product-card collect">
-                                  <div class="product-card-img">
-                                    <a href="#"><img src="__STATIC__/assets/images/temp/parts-img.jpg" alt=""></a>
-                                  </div>
-                                  <div class="product-card-content">
-                                    <h2 class="product-card-title">
-                                      车型：T500
-                                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                                    </h2>
-                                    <div class="product-card-btm clearfix">
-                                      <div class="float-left product-card-price">
-                                        <span class="icon-collect collected"></span>
-                                        <span>已收藏</span>
-                                      </div>
-                                      <span class="product-card-tip float-right">首付4.9万元</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col col-4">
-                                <div class="product-card collect">
-                                  <div class="product-card-img">
-                                    <a href="#"><img src="__STATIC__/assets/images/temp/parts-img.jpg" alt=""></a>
-                                  </div>
-                                  <div class="product-card-content">
-                                    <h2 class="product-card-title">
-                                      车型：T500
-                                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                                    </h2>
-                                    <div class="product-card-btm clearfix">
-                                      <div class="float-left product-card-price">
-                                        <span class="icon-collect collected"></span>
-                                        <span>已收藏</span>
-                                      </div>
-                                      <span class="product-card-tip float-right">首付4.9万元</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col col-4">
-                                <div class="product-card collect">
-                                  <div class="product-card-img">
-                                    <a href="#"><img src="__STATIC__/assets/images/temp/parts-img.jpg" alt=""></a>
-                                  </div>
-                                  <div class="product-card-content">
-                                    <h2 class="product-card-title">
-                                      车型：T500
-                                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                                    </h2>
-                                    <div class="product-card-btm clearfix">
-                                      <div class="float-left product-card-price">
-                                        <span class="icon-collect collected"></span>
-                                        <span>已收藏</span>
-                                      </div>
-                                      <span class="product-card-tip float-right">首付4.9万元</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                              {/foreach}
                             </div>
                           </div>
                         </div>
@@ -524,5 +416,22 @@
       </div>
 
     </main>
+    {php} $bundle='user-center' {/php}
     {include file="public/test-drive" /}
     {include file="public/footer" /}
+    <script>
+      function checkin() {
+        return Apitool.usercenter.checkin()
+      }
+
+      $(() => {
+        $('#checkin').click(function() {
+
+          Apitool.usercenter.checkin().then(function(){
+            $('#checkin span').text('已签到')
+          })
+        
+        })
+      })
+
+    </script>

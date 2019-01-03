@@ -68,18 +68,18 @@
               <div class="form-group row">
                 <label class="col-sm-3 text-right col-form-label">姓名：</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control form-control-sm">
+                  <input type="text" id="form-name" class="form-control form-control-sm">
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-sm-3 text-right col-form-label">性别：</label>
                 <div class="col-sm-9">
                   <div class="form-check form-check-inline">
-                    <label for=""><input class="form-check-input" type="radio" name="exampleRadios" value="option1"
+                    <label for=""><input class="form-check-input" type="radio" name="formSex" value="1"
                                          checked>男</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <label for=""><input class="form-check-input" type="radio" name="exampleRadios" value="option2">女</label>
+                    <label for=""><input class="form-check-input" type="radio" name="formSex" value="2">女</label>
                   </div>
 
                 </div>
@@ -87,7 +87,13 @@
               <div class="form-group row">
                 <label class="col-sm-3 text-right col-form-label">手机号：</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control form-control-sm">
+                  <input type="text" id="form-mobile" class="form-control form-control-sm">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-3 text-right col-form-label">邮箱：</label>
+                <div class="col-sm-9">
+                  <input type="text" id="form-email" class="form-control form-control-sm">
                 </div>
               </div>
               <div class="form-group row">
@@ -96,16 +102,42 @@
                   <div class="form-mini">
                     <div class="form-item" style="margin-right: 73px">
                       <div class="w80">
-                        <select class="selectpicker form-control form-control-sm" data-style="my-select">
-                          <option>2018</option>
+                        <select class="selectpicker form-control form-control-sm" id="form-month" data-style="my-select">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
                         </select>
                       </div>
                       <span class="item-des">月</span>
                     </div>
                     <div class="form-item">
                       <div class="w80">
-                        <select class="selectpicker form-control form-control-sm" data-style="my-select">
-                          <option>2018</option>
+                        <select class="selectpicker form-control form-control-sm" id="form-day" data-style="my-select">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
                         </select>
                       </div>
                       <span class="item-des">日</span>
@@ -119,8 +151,13 @@
                   <div class="form-mini">
                     <div class="form-item">
                       <div class="w80">
-                        <select class="selectpicker form-control form-control-sm" data-style="my-select">
-                          <option>2018</option>
+                        <select class="selectpicker form-control form-control-sm" id="form-time" data-style="my-select">
+                          <option value="9">9:00</option>
+                          <option value="10">10:00</option>
+                          <option value="11">11:00</option>
+                          <option value="14">14:00</option>
+                          <option value="15">15:00</option>
+                          <option value="16">16:00</option>
                         </select>
                       </div>
                       <span class="item-des">时</span>
@@ -130,7 +167,7 @@
               </div>
 
               <div class="text-center pt-3 pb-3">
-                <a href="#" class="btn btn-danger btn-lg btn-block">立即预约</a>
+                <a href="javascript:void(0)" onclick="bookDrive()"  class="btn btn-danger btn-lg btn-block" >立即预约</a>
               </div>
             </div>
           </div>
@@ -142,6 +179,47 @@
 
 
 <script>
+  function bookDrive() {
+    var name = $('#form-name').val()
+    var category_id = $('#catList').val()
+    var province = $('#provinceList').val()
+    var city = $('#cityList').val()
+    var dealers_id = $('#salesList').val()
+    var sex = $('input[name="formSex"]').val()
+    var month = $('#form-month').val()
+    var email = $('#form-email').val()
+    var day = $('#form-day').val()
+    var mobile = $('#form-mobile').val()
+    if(!name||!category_id||!province||!city||!dealers_id||!sex||!month||!day||!email||!mobile) {
+      alert('请填充表单内容')
+      return
+    }
+    Apitool.drive.addAppoint({
+      name:name,
+      category_id: category_id,
+      province: province,
+      city: city,
+      dealers_id: dealers_id,
+      sex: sex,
+      month: month,
+      day: day,
+      mobile: mobile,
+      email: email
+    }).then(function(res) {
+      switch(res.code) {
+        case '0000':
+          alert('预约成功')
+          $('#testDriveForm').modal('hide')
+          location.reload()
+          break;
+        case '2002':
+          alert('未选择经销商')
+          break;
+        default:
+          alert(res.message)
+      }
+    })
+  }
   function handleGetProvince() {
     getProvince(function(result){
       var d=document.createDocumentFragment();

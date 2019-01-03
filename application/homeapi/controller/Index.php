@@ -203,7 +203,6 @@ class Index extends Base{
         }
 
         $this->assign('total', $count);
-//        $this->json('200','ok', $data);
         return $this->fetch('brand_models/brand_models');
     }
 
@@ -241,7 +240,7 @@ class Index extends Base{
         $where['goods_id'] = $goods_id;
         $field = "goods_id,goods_name,equity_content,label,equity_desc,goods_remark,price,
         deposit_price,store_count,sales_sum,goods_content,integral,exchange_integral,
-        integral_money as integrals_moneys,video";
+        integral_money as integrals_moneys,video, shop_price";
         $data = $Goods->GoodsList($this->page, 1, $where, [], 1, $field);
         if (!empty($data->equity_desc)) {
             $data->equity_desc = str_replace("", "<br/>", $data->equity_desc);
@@ -282,7 +281,6 @@ class Index extends Base{
 
         $data["banner"] = $banner;
         $data["price_list"] = $price_list;
-
         $data['spec'] = $GoodsLogic->get_sku($goods_id);//外观颜色
         $appearance['displacement'] = $GoodsLogic->get_sku($goods_id, $data['spec'][0]['id'], 'displacement');//排量
         $appearance['model'] = $GoodsLogic->get_sku($goods_id, $appearance['displacement'][0]['id'], 'model');//型号
@@ -294,7 +292,6 @@ class Index extends Base{
         $data['comment'] = $SonOrderComment->commentList($this->page,$goods_id,2);
         $data['comment_count'] = $SonOrderComment->count;
         $data['is_collect'] = $this->userGoodsInfo(I('token'),$goods_id);//是否收藏
-        
         return $data;
     }
 
@@ -695,9 +692,30 @@ class Index extends Base{
 //        $model = new Sale();
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
         $this->assign('service', $service);
-//        $this->json(200,'ok', $service);
         $this->assign('order', $order);
+
         return $this->fetch('usercenter/user_center');
+    }
+
+    public function user_setting()
+    {
+        $token = I('token')? I('token') : session('token');
+        $user_id = $this->checkToken($token);
+        $model = new Users();
+        $fields = [
+            'reg_time',     //最近浏览次数
+            'head_pic',     //头像
+            'mobile',       //手机号
+            'pay_points',   //我的积分
+            'email',
+            'birthday',
+        ];
+        
+        $user = $model->get_user($user_id, $fields);
+//        $this->json(200, 'ok', $user);die;
+        $data['is_sign'] = (new UserSignLog())->isSign($user_id);
+        $this->assign('user', $user);
+        return $this->fetch('usercenter/user_setting');
     }
 
     

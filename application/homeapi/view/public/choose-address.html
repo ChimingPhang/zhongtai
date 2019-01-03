@@ -1,0 +1,62 @@
+<style>
+  #addressList {
+    padding: 20px;
+  }
+  #addressList li {
+    border-bottom: 1px solid #dedede;
+    padding: 8px 0;
+  }
+</style>
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+  <div class="modal-dialog sign" role="document">
+    <div class="modal-content">
+      <div class="modal-header sign-header">
+        <span>选择默认地址</span>
+        <button type="button" class="close">
+        </button>
+        <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+          <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
+        </div>
+      </div>
+      <div class="modal-body sign-body">
+        <ul id="addressList">
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function getAddressList() {
+    Apitool.usercenter.getAddressList().then(function (res) {
+      var data = res.data
+      var html = ''
+      var default_id = null
+      data.forEach(elem => {
+        if(elem.is_default) {
+          default_id = elem.address_id
+          $('#addressDefault').show().html('<div class="clearfix">' +
+          '<label for="">' +
+          '<div><strong> '+ elem.consignee +'  '+ elem.mobile +'</strong></div>'+
+          '<input type="hidden"  name="defaultAddress" value="'+elem.address_id+'">' + elem.address +
+          '</label>' +
+          '<a href="javascript:void(0)"  data-toggle="modal" data-target="#addressModal" class="btn btn-primary btn-sm float-right">选择其他地址</a>'+
+          '</div>')
+        }
+        html += '<li>' +
+          '<label for="">' +
+          '<div> '+ elem.consignee +'  '+ elem.mobile +'</div>'+
+          '<input type="radio" onclick="setDefaultAddress(this)" name="choosedAddress" '+ (elem.address_id == default_id ? "checked" : "")  +' value="'+elem.address_id+'">' + elem.address +
+          '</label>' +
+          '</li>'
+      });
+      $('#addressList').html(html)
+    })
+  }
+
+  function setDefaultAddress(e) {
+    console.log(e)
+  }
+
+  getAddressList()
+</script>

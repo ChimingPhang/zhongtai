@@ -280,7 +280,8 @@ class Auction extends Base {
         //出价列表
         $delayTime = self::$AuctionLogic->offerList($auction_id, 1, $user_id, 3);
         $auctionInfo->offer_list = $delayTime;
-
+        // $token = I('token')? I('token') : session('token');
+        // $auctionInfo['is_collect'] = $this->userGoodsInfo($token, $auction_id);//是否收藏
         //加载商品轮播
         $this->assign('banner', $auctionInfo->banner_image);
         $this->assign('data',  $auctionInfo);

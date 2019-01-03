@@ -51,7 +51,7 @@ class GoodsLogic extends Model
      * @return mixed
      */
     public function get_spec_goods_price($goods_id){
-        return M("SpecGoodsPrice")->where(array('goods_id' => $goods_id))->field('item_id,key,price,store_count,integral_price,integral')->select();
+        return M("SpecGoodsPrice")->where(array('goods_id' => $goods_id))->field('item_id,key,price,store_count,integral_price,integral,key_name')->select();
     }
 
     /**

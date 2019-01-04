@@ -12,6 +12,7 @@ use app\api\model\AccessoriesCategory;
 use app\api\model\GoodsAuction;
 use app\api\model\GoodsCategory;
 use app\api\model\GoodsImages;
+use app\api\model\IntegralLog;
 use app\api\model\Navigation;
 use app\api\model\Goods;
 use app\api\model\Sale;
@@ -26,9 +27,6 @@ class Index extends Base{
     private static $pageNum = 9;
     //页数
     public $page = 1;
-//    public $token;
-//    public $is_login = 0;       //是否登录
-//    public $is_sign = 0;        //是否签到
     public $cartype_list = [];
 
     public function __construct()
@@ -596,13 +594,14 @@ class Index extends Base{
         $today = I('today') ? I('today') : date('Y/m/d');
         $SignLog = new UserSignLog();
         $service['sign_query'] = $SignLog->querySign($this->userInfo['user_id'], $today);//签到
-        $service['integralLog'] = (new \app\homeapi\controller\Users())->integralLog($user_id, 1);//积分明细
+        $service['integralLog'] = (new IntegralLog())->integralLog($user_id, 1);//积分明细
         // $service['appointment'] =  M('appointment_drive')->where(['user_id'=>$user_id])->select();//预约订单
 //        $model = new Sale();
 //        $service['after_sales'] = $model->get_list($user_id,1);//售后
         $this->assign('service', $service);
         $this->assign('order', $order);
 //        $this->json(200, 'ok', $order);
+//        $this->json(200, 'ok', $service['integralLog']);
         return $this->fetch('usercenter/user_center');
     }
 

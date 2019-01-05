@@ -166,4 +166,37 @@ class UserAddress extends Model
         return $res;
     }
 
+    /**
+     *  匹配地址名称
+     *
+     * @param $address_list ['province', 'city', 'district', 'twon', 'address_id', 'consignee', 'mobile']
+     * @return array
+     */
+    public function formatAddress($address_list)
+    {
+//        dump($address_list);die;
+        if ($address_list) {
+            $area_id = array();
+                $area_id[] = $address_list['province'];
+                $area_id[] = $address_list['city'];
+                $area_id[] = $address_list['district'];
+                $area_id[] = $address_list['twon'];
+            $area_id = array_filter($area_id);
+            $area_id = implode(',', $area_id);
+
+            $regionList = Db::name('region')->where("id", "in", $area_id)->getField('id,name');
+        }
+
+        $res = [];
+        $res['province'] = $regionList[$address_list['province']];
+        $res['city'] = $regionList[$address_list['city']];
+        $res['district'] = $regionList[$address_list['district']];
+        $res['twon'] = empty($regionList[$address_list['twon']]) ? '' : $regionList[$address_list['twon']];
+//        $res['id'] =  $address_list['address_id'];
+        $res['name'] =  $address_list['consignee'];
+//        $res['mobile'] =  $address_list['mobile'];
+//        $res['address'] =  $address_list['address'];
+        return $res;
+    }
+
 }

@@ -46,7 +46,7 @@ class Base extends Controller {
             3005 => "订单未支付",
             3006 => "订单不是纯积分订单",
             3007 => "商品活动已结束",
-            3008 => " "
+            3008 => 0
         ];
         if(!$errorMsg[$code]) $errorMsg[$code] = $field;
 

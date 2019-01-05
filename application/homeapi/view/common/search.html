@@ -31,6 +31,15 @@
             </ul>
           </div>
         </div>
+      <div class="loader text-center" style="display: none">
+          <div class="loader-inner line-scale-pulse-out">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       <div class="product-card-list row">
         {if $total}
           {foreach name="goods" item="data"}
@@ -72,7 +81,7 @@
 {include file="public/footer" /}
 
 <script>
-  var api = '../goods/car'
+  var api = '../goods/search_list'
   function getList(page) {
     var newUrl = api + (location.search ? location.search + '&':'?') + 'page=' + page;
     $('.loader').show()
@@ -91,13 +100,12 @@
             '              <div class="product-card-content">\n' +
             '                <h2 class="product-card-title">\n' +
             '                    '+element['goods_name']+'\n' +
-            '                  <span class="float-right">已订购:<strong class="color-primary">'+element['sales_sum']+'</strong>台</span>\n' +
             '                </h2>\n' +
             '                <div class="product-card-intro"><strong>特点：</strong>'+element['goods_remark']+'</div>\n' +
             '                <div class="product-card-btm clearfix">\n' +
             '                  <div class="float-left product-card-price">\n' +
             '                    <img src="__STATIC__/assets/images/common/icon-price.png" alt="">\n' +
-            '                    <span>价格：<strong>'+element['deposit_price']+'</strong>元</span>\n' +
+            '                    <span>价格：<strong>'+element['price']+'</strong>元</span>\n' +
             '                  </div>\n' +
             '                  <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail.html?goods_id='+element['goods_id']+'">立即购买</a>\n' +
             '                </div>\n' +

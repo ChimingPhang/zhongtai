@@ -1,7 +1,6 @@
-
 <div class="side-btns">
   <div class="side-btns-item">
-    <div class="side-btns-item__inner">
+    <div class="side-btns-item__inner" data-toggle="modal" data-target="#telForm">
       <img src="__STATIC__/assets/images/common/icon-kefu.png" alt="">
       <p>客服咨询</p>
     </div>
@@ -15,7 +14,7 @@
     </div>
   </div>
 
-  <div class="side-btns-item">
+  <div class="side-btns-item" data-toggle="modal" data-target="#locationModal">
     <div class="side-btns-item__inner">
       <img src="__STATIC__/assets/images/common/icon-map.png" alt="">
       <p>销售网点</p>
@@ -30,5 +29,71 @@
   </div>
 </div>
 
+<div class="modal fade" id="telForm" tabindex="-1" role="dialog" aria-labelledby="telForm" aria-hidden="true">
+  <div class="modal-dialog sign" role="document">
+    <div class="modal-content">
+      <div class="modal-header sign-header">
+        <span>客服咨询</span>
+        <button type="button" class="close">
+        </button>
+        <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+          <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
+        </div>
+      </div>
+      <div class="modal-body sign-body">
+        <div class="hua text-center" style="">
+          <div>
+            <dl class="phoneWrap_f"><dt><img src="data:image/png;base64,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"></dt>
+              <h5 style="margin:0" class="mt-3">4009009900</h5>
+            </dl>
+            <a href="javascript:void(0)" data-dismiss="modal" aria-label="Close">关闭</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="locationModal"  data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="telForm" aria-hidden="true">
+  <div class="modal-dialog" style="max-width:680px" role="document">
+    <div class="modal-content">
+      <div class="modal-header sign-header">
+        <span>销售网点</span>
+        <button type="button" class="close">
+        </button>
+        <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+          <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
+        </div>
+      </div>
+      <div class="modal-body sign-body p-3">
+        <form action="">
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <select class="form-control selectpicker">
+                <option selected>选择车型</option>
+                <option>Z360</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <select class="form-control selectpicker">
+                <option selected>请选择</option>
+                <option>北京市</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <select class="form-control selectpicker">
+                <option selected>请选择</option>
+                <option>直辖市</option>
+              </select>
+            </div>
+          </div>
+          <div class="text-center">
+              <a href="javascript:void(0)" class="btn btn-danger btn-sm" >确定</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {include file="public/test-drive" /}

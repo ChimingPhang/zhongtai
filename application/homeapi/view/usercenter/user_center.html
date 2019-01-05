@@ -175,7 +175,7 @@
                           <div class="tab-pane {$key=='all'?'active':''}">
                             <div class="order-list">
                               {notempty name="order_item"}
-                                {foreach $order_item as $key=>$item}
+                                {foreach $order_item as $item}
                                  
                                   <div class="order-item">
                                       <div class="order-header">
@@ -211,9 +211,22 @@
                                           </div>
                                         </div>
                                         <div class="order-body__right">
-                                          <a class="c-btn c-btn__primary" href="#">
-                                            进行中
-                                          </a>
+
+                                          {if !$vo.is_send&&!$vo.is_shouhuo}
+                                            <a class="c-btn c-btn__primary" href="#">
+                                              立即支付
+                                            </a>
+                                          {elseif $vo.is_send /}
+                                            <a class="c-btn c-btn__primary" href="#">
+                                              确认收货
+                                            </a>
+                                          {elseif $vo.is_shouhuo /}
+                                            <a class="c-btn c-btn__primary" href="#">
+                                              已完成
+                                            </a>
+                                          {/if}
+
+                                          
                                         </div>
                                       </div>
                                       {/foreach}
@@ -323,7 +336,7 @@
                           <table class="table table-hover text-center user-record-table">
                             <thead>
                               <tr>
-                                <th scope="col" class="w-190">签到时间</th>
+                                <th scope="col" class="w-190">时间</th>
                                 <th scope="col" class="w-190">积分记录</th>
                                 <th scope="col">途径</th>
                               </tr>
@@ -344,74 +357,6 @@
                             </tbody>
                           </table>
                         </div>
-                        <!-- <div class="tab-pane">
-                          <div class="appo">
-                            <div class="appo-list">
-                              <div class="appo-item">
-                                <div class="appo-index">1</div>
-                                <div class="appo-content appo-content__fixed">
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约时间：</span>
-                                    <span class="appo-content__right">2018年10月23日 上午 10：00</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约地址：</span>
-                                    <span class="appo-content__right">北京市海淀区北京奥宝世汽车销售有限公司</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约车型：</span>
-                                    <span class="appo-content__right">众泰T600</span>
-                                  </div>
-                                </div>
-                                <div class="appo-content">
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约人：</span>
-                                    <span class="appo-content__right">张火金</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">联系电话：</span>
-                                    <span class="appo-content__right">185123124332</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约情况：</span>
-                                    <span class="appo-content__right">待预约啊啊啊啊啊啊啊啊啊啊啊啊啊啊</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="appo-item">
-                                <div class="appo-index">1</div>
-                                <div class="appo-content appo-content__fixed">
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约时间：</span>
-                                    <span class="appo-content__right">2018年10月23日 上午 10：00</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约地址：</span>
-                                    <span class="appo-content__right">北京市海淀区北京奥宝世汽车销售有限公司</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约车型：</span>
-                                    <span class="appo-content__right">众泰T600</span>
-                                  </div>
-                                </div>
-                                <div class="appo-content">
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约人：</span>
-                                    <span class="appo-content__right">张火金</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">联系电话：</span>
-                                    <span class="appo-content__right">185123124332</span>
-                                  </div>
-                                  <div class="appo-content-row">
-                                    <span class="appo-content__left">预约情况：</span>
-                                    <span class="appo-content__right">待预约啊啊啊啊啊啊啊啊啊啊啊啊啊啊</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div> -->
                       </div>
                     </div>
                   </div>

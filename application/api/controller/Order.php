@@ -774,12 +774,12 @@ class Order extends Base
                 $arr[$k]['district'] = $v['district'];
                 $arr[$k]['twon'] = $v['twon'];
                 $arr[$k]['address'] = $v['address'];
-
-                if($v['pay_status'] == 0 || $v['pay_status'] == 2){
-                    $arr[$k]['master_order_sn'] = substr($v['master_order_sn'],0,8)."****";
-                }else{
+                //todo 后加
+//                if($v['pay_status'] == 0 || $v['pay_status'] == 2){
+//                    $arr[$k]['master_order_sn'] = substr($v['master_order_sn'],0,8)."****";
+//                }else{
                     $arr[$k]['master_order_sn'] = $v['master_order_sn'];
-                }
+//                }
                 $arr[$k]['prom_type'] = $v['prom_type'];         //0 普通订单 7拍卖订单 8秒杀订单
                 $arr[$k]['is_winning'] = $v['is_winning'];      //1中奖的订单
                 if($v['order_status'] == 3){

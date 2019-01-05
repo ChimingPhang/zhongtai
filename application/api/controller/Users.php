@@ -12,6 +12,7 @@ use think\Model;
 use think\Request;
 use app\common\model\Picture;
 use app\common\logic\PointLogic;
+use think\Session;
 
 class Users extends Base{
 
@@ -85,6 +86,36 @@ class Users extends Base{
         $res = M('users')->where(['user_id'=>$user_id])->save(['head_pic'=>$img]);
         if($res) $this->json('0000','修改成功');
         else $this->json('0000','修改失败');
+    }
+
+    public function update_info()
+    {
+        $where = [];
+        $year = I('year');
+        $month = I('month');
+        $day = I('day');
+        $birthday= $year.$month.$day;
+        if(strlen($birthday) == 8) {
+            $where['birthday'] = $birthday;
+        } else {
+            $this->errorMsg('1', '生日格式不正确');
+        }
+
+        if(I('nickname')) {
+            $where['nickname'] = I('nickname');
+        } else {
+            $this->errorMsg('1', '昵称不能为空');
+        }
+        if(I('email')) {
+            $where['email'] = I('email');
+        } else {
+            $this->errorMsg('1', '邮箱不能为空');
+        }
+
+        $token = I('token') ?? Session::get('token');
+        $user_id = $this->checkToken($token);
+        (new \app\api\model\Users())->update_info($user_id, $where);
+        $this->json(200, 'ok', true);
     }
 
      /**

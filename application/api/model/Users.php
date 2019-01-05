@@ -27,6 +27,11 @@ class Users extends Model
         $this->request = $request;
     }
 
+    public function update_info($user_id, $where = [])
+    {
+        return M($this->table)->where(['user_id'=>$user_id])->save($where);
+    }
+
     /**
      * 获取用户的信息
      * @Autoh: 胡宝强

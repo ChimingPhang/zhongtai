@@ -639,6 +639,8 @@ class Order extends Base
                 $arr[$k]['type'] = $v['type'];
                 $arr[$k]['order_id'] = $v['order_id'];
 
+                $arr[$k]['shipping_status'] = $v['shipping_status'];//发货状态  0未发货 1 全部发货 2 部分发货
+                $arr[$k]['pay_status'] = $v['pay_status'];      //支付状态.0待支付，1已支付，2支付失败，3已退款，4拒绝退款
                 $arr[$k]['consignee'] = $v['consignee'];
                 $arr[$k]['country'] = $v['country'];
                 $arr[$k]['province'] = $v['province'];
@@ -647,11 +649,11 @@ class Order extends Base
                 $arr[$k]['twon'] = $v['twon'];
                 $arr[$k]['address'] = $v['address'];
 
-                if($v['pay_status'] == 0 || $v['pay_status'] == 2){
-                    $arr[$k]['master_order_sn'] = substr($v['master_order_sn'],0,8)."****";
-                }else{
+//                if($v['pay_status'] == 0 || $v['pay_status'] == 2){
+//                    $arr[$k]['master_order_sn'] = substr($v['master_order_sn'],0,8)."****";
+//                }else{
                     $arr[$k]['master_order_sn'] = $v['master_order_sn'];
-                }
+//                }
                 $arr[$k]['prom_type'] = $v['prom_type'];         //0 普通订单 7拍卖订单 8秒杀订单
                 $arr[$k]['is_winning'] = $v['is_winning'];      //1中奖的订单
                 if($v['order_status'] == 3){
@@ -691,7 +693,8 @@ class Order extends Base
                 break;
             //待收货订单
             case '3':
-                $order_ids = Db::table('tp_order')->alias('o')->join('order_goods og','o.order_id=og.order_id', 'left')
+                $order_ids = Db::table('tp_order')->alias('o')
+                    ->join('order_goods og','o.order_id=og.order_id', 'left')
                     ->where('o.user_id',$user_id)->where('og.is_send', 1)->where('og.is_shouhuo', 0)
                     ->group('o.order_id')->field('o.order_id')
                     ->select();
@@ -708,7 +711,8 @@ class Order extends Base
                 break;
             //已完成订单
             case '4':
-                $order_ids = Db::table('tp_order')->alias('o')->join('order_goods og','o.order_id=og.order_id', 'left')
+                $order_ids = Db::table('tp_order')->alias('o')
+                    ->join('order_goods og','o.order_id=og.order_id', 'left')
                     ->where('o.user_id',$user_id)->where('og.is_shouhuo', 1)
                     ->group('o.order_id')->field('o.order_id')
                     ->select();
@@ -767,6 +771,8 @@ class Order extends Base
                 $arr[$k]['type'] = $v['type'];
                 $arr[$k]['order_id'] = $v['order_id'];
 
+                $arr[$k]['shipping_status'] = $v['shipping_status'];//发货状态  0未发货 1 全部发货 2 部分发货
+                $arr[$k]['pay_status'] = $v['pay_status'];      //支付状态.0待支付，1已支付，2支付失败，3已退款，4拒绝退款
                 $arr[$k]['consignee'] = $v['consignee'];
                 $arr[$k]['country'] = $v['country'];
                 $arr[$k]['province'] = $v['province'];

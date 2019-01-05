@@ -771,6 +771,8 @@ class Order extends Base
                 $arr[$k]['type'] = $v['type'];
                 $arr[$k]['order_id'] = $v['order_id'];
 
+                $arr[$k]['shipping_status'] = $v['shipping_status'];//发货状态  0未发货 1 全部发货 2 部分发货
+                $arr[$k]['pay_status'] = $v['pay_status'];      //支付状态.0待支付，1已支付，2支付失败，3已退款，4拒绝退款
                 $arr[$k]['consignee'] = $v['consignee'];
                 $arr[$k]['country'] = $v['country'];
                 $arr[$k]['province'] = $v['province'];

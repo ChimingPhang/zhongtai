@@ -28,12 +28,6 @@ class Goods extends Base {
         parent::__construct();
         //自动加载页数
         !is_numeric($this->page = I('page', 1)) && $this->errorMsg(2002, 'page');
-//        $this->token = I('token')? I('token') : session('token');
-//        if (!empty($this->token)) {
-//            $user_id = $this->checkToken($this->token);
-//            if ($user_id) $this->is_login = 1;
-//        }
-//        $this->assign('is_login', $this->is_login);
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
     }
@@ -382,9 +376,8 @@ class Goods extends Base {
         $data['integral_money'] = round($data['most_point']/$point_rate,2);  //积分最高可以抵多少钱
 
         //获取这个用户还有多少积分
-        if(I('token')){
-            $user_id = $this->checkToken(I('token'));
-            $data['userIntegral'] = getIntegral($user_id);
+        if(isset($this->userInfo['user_id'])){
+            $data['userIntegral'] = getIntegral($this->userInfo['user_id']);
         }
 
         $data["banner"] = $banner;
@@ -403,8 +396,7 @@ class Goods extends Base {
 
         $this->assign('data', $data);
         $this->assign('spec_price_script', json_encode($data['spec_price']));
-        // $this->json("0000", "加载成功", $data);
-        // $this->json('200','ok', $data);
+        $this->json('200','ok', $data);
         return $this->fetch('parts/parts_detail');
     }
 

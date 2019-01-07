@@ -281,9 +281,8 @@ class Integral extends Base {
         $data['integral_money'] = round($data['most_point']/$point_rate,2);  //积分最高可以抵多少钱
 
         //获取这个用户还有多少积分
-        if(I('token')){
-            $user_id = $this->checkToken(I('token'));
-            $data['userIntegral'] = getIntegral($user_id);
+        if(isset($this->userInfo['user_id'])){
+            $data['userIntegral'] = getIntegral($this->userInfo['user_id']);
         }
 
         $data["banner"] = $banner;

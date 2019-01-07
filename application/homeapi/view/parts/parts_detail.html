@@ -1,5 +1,5 @@
 {include file="public/header" title="首页" bundle="home" hasBanner="false" activeNav="parts" /}
-<main class="o-wrapper">
+<main class="o-wrapper main-wrapper">
   <div class="container">
     <section class="parts-buy">
       <div class="product-photos__wrapper">
@@ -91,7 +91,8 @@
               </div>
               <div class="form-item-control-wrapper col-11">
                 <div class="form-item-control">
-                  <div class="product-attr__integral">可用积分 {$data.moren_integral} 积分</div>
+                  <!-- {php} print_r($data) {/php} -->
+                  <div class="product-attr__integral">可用积分 {$data.integral} 积分</div>
                   <div class="form-item form-item__inline">
                     <div class="form-item-label">
                       <label>使用</label>
@@ -214,7 +215,10 @@
       $('#integral').text(obj.integral)
     }
     function commitOrder() {
-      debugger
+      if(!item_id){
+        alert('请选择规格')
+        return
+      }
       var pay_points = $('#pay_points').text();
       var id = {$Think.get.goods_id};
       var num = $('#goods_num').val()
@@ -223,7 +227,7 @@
         if(res) {
           address_id = res.data
         } else {
-          address_id = $("#addressDefault input").val()
+          address_id = $("input[name=defaultAddress]").val()
         }
 
         Apitool.order.commitOrder({

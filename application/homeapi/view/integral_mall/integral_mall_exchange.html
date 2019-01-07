@@ -7,7 +7,7 @@
         padding:10px;
       }
     </style>
-<main class="o-wrapper">
+<main class="o-wrapper main-wrapper">
   <div class="container">
     <section class="integral-mall-exchange">
       <div class="product-photos">
@@ -55,8 +55,8 @@
                 <div class="form-item-control">
                   <ul class="product-attr-brick" id="product-color">
                     {foreach $data['spec_price'] as $item}
-                    <li class="attr-brick__item">
-                      <div class="color-name" onclick="setIntergral({$item.item_id},{$item.integral})">{$item.key_name}</div>
+                    <li class="attr-brick__item" onclick="setIntergral({$item.item_id}, {$item.integral})">
+                      <div class="color-name" >{$item.key_name}</div>
                     </li>
                     {/foreach}
                   </ul>
@@ -170,7 +170,7 @@
 
   function commitOrder() {
     var pay_points = $('#pay_points').text();
-    var id = {Think.get.goods_id};
+    var id = {$Think.get.goods_id};
     var num = $('#goods_num').val()
 
     addNewAddress(function (res) {
@@ -190,7 +190,9 @@
         pay_points: pay_points,
       }).then(function (result) {
         alert(result.message)
-        window.location.reload()
+        if(result.code=='0000'){
+          window.location.reload()
+        }
       })
     })
   }

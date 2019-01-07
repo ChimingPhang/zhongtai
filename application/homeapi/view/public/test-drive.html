@@ -1,5 +1,5 @@
 <div class="modal fade" id="testDriveForm" tabindex="-1" role="dialog" aria-labelledby="testDriveFormTitle" aria-hidden="true">
-  <div class="modal-dialog pop-up modal-dialog-centered" role="document">
+  <div class="modal-dialog pop-up modal-dialog-centered" role="document" style="overflow:visible">
     <div class="modal-content">
       <div class="pop-up-box">
         <div class="pop-up-title text-center">
@@ -145,7 +145,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group row">
+              <!-- <div class="form-group row">
                 <label class="col-sm-3 text-right col-form-label">时间选择：</label>
                 <div class="col-sm-9">
                   <div class="form-mini">
@@ -164,7 +164,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <div class="text-center pt-3 pb-3">
                 <a href="javascript:void(0)" onclick="bookDrive()"  class="btn btn-danger btn-lg btn-block" >立即预约</a>
@@ -185,7 +185,7 @@
     var province = $('#provinceList').val()
     var city = $('#cityList').val()
     var dealers_id = $('#salesList').val()
-    var sex = $('input[name="formSex"]').val()
+    var sex = $('input[name="formSex"]:checked').val()
     var month = $('#form-month').val()
     var email = $('#form-email').val()
     var day = $('#form-day').val()

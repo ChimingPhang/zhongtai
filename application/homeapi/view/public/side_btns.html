@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div class="side-btns-item">
+  <div class="side-btns-item" data-toggle="modal" data-target="#qrcodeForm">
     <div class="side-btns-item__inner">
       <img src="__STATIC__/assets/images/common/icon-kefu.png" alt="">
       <p>公众号</p>
@@ -53,6 +53,33 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="qrcodeForm" tabindex="-1" role="dialog" aria-labelledby="qrcodeForm" aria-hidden="true">
+  <div class="modal-dialog sign" role="document">
+    <div class="modal-content">
+      <div class="modal-header sign-header">
+        <span>公众号</span>
+        <button type="button" class="close">
+        </button>
+        <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+          <img src="__STATIC__/assets/images/common/icon-close.png" alt="">
+        </div>
+      </div>
+      <div class="modal-body sign-body">
+        <div class="hua text-center" style="">
+          <div>
+            <dl class="phoneWrap_f">
+              <dt><img src="__STATIC__/assets/images/qrcode.png"></dt>
+            </dl>
+            <a href="javascript:void(0)" data-dismiss="modal" aria-label="Close">关闭</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
 
 <div class="modal fade" id="locationModal"  data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="telForm" aria-hidden="true">
   <div class="modal-dialog" style="max-width:680px" role="document">

@@ -1,6 +1,6 @@
-{include file="public/header" title="搜索结果" bundle="home" hasBanner="true" /}
+{include file="public/header" title="搜索结果" bundle="home" hasBanner="false" /}
 
-<main class="o-wrapper">
+<main class="o-wrapper main-wrapper">
   <!--顶部广告-->
   {include file="public/top_ads" /}
   <div class="container">
@@ -31,6 +31,15 @@
             </ul>
           </div>
         </div>
+      <div class="loader text-center" style="display: none">
+          <div class="loader-inner line-scale-pulse-out">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       <div class="product-card-list row">
         {if $total}
           {foreach name="goods" item="data"}
@@ -47,7 +56,7 @@
                 <div class="product-card-btm clearfix">
                   <div class="float-left product-card-price">
                     <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
-                    <span>价格：<strong>{$data.price/10000}</strong>万元</span>
+                    <span>价格：<strong>{$data.price}</strong>元</span>
                   </div>
                   <a class="product-card-btn c-btn c-btn__primary float-right" href="../index/brand_models_detail.html?goods_id={$data.goods_id}">立即购买</a>
                 </div>
@@ -70,3 +79,44 @@
 </main>
 {include file="public/side_btns" /}
 {include file="public/footer" /}
+
+<script>
+  var api = '../goods/search_list'
+  function getList(page) {
+    var newUrl = api + (location.search ? location.search + '&':'?') + 'page=' + page;
+    $('.loader').show()
+    $.ajax(newUrl, {
+      type: 'POST',
+      success: function(data) {
+        var res = JSON.parse(data)
+        var arr = res.data.list
+        var html = ''
+        arr.forEach(function(element) {
+          html +=  '<div class="col col-4">\n' +
+            '            <div class="product-card">\n' +
+            '              <div class="product-card-img">\n' +
+            '                <a href="__URL__/brand_models_detail.html?goods_id='+element.goods_id+'"><img src="'+element['original_img']+'" alt=""></a>\n' +
+            '              </div>\n' +
+            '              <div class="product-card-content">\n' +
+            '                <h2 class="product-card-title">\n' +
+            '                    '+element['goods_name']+'\n' +
+            '                </h2>\n' +
+            '                <div class="product-card-intro"><strong>特点：</strong>'+element['goods_remark']+'</div>\n' +
+            '                <div class="product-card-btm clearfix">\n' +
+            '                  <div class="float-left product-card-price">\n' +
+            '                    <img src="__STATIC__/assets/images/common/icon-price.png" alt="">\n' +
+            '                    <span>价格：<strong>'+element['price']+'</strong>元</span>\n' +
+            '                  </div>\n' +
+            '                  <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail.html?goods_id='+element['goods_id']+'">立即购买</a>\n' +
+            '                </div>\n' +
+            '              </div>\n' +
+            '            </div>\n' +
+            '          </div>'
+        })
+
+          $('.loader').hide();
+        $('.product-card-list').html(html);
+      }
+    })
+  }
+</script>

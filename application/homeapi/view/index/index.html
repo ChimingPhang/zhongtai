@@ -1,13 +1,13 @@
 {include file="public/header" title="首页" hasBanner="true" activeNav="home" /}
 
 
-<main class="o-wrapper">
+<main class="o-wrapper main-wrapper hasSearch">
   <!--顶部广告-->
   {include file="public/top_ads" /}
 
   <div class="container">
     <!--三大栏目-->
-    {include file="public/three_box" /}
+    <!-- {include file="public/three_box" /} -->
 
     <!--拍卖专区-->
     {include file="index/top_auction" /}
@@ -17,7 +17,7 @@
       <div class="section-title clearfix">
         <h1>热卖车型<span class="section-subtitle">包购置税 | 送一年保险</span></h1>
 
-        <a href="#" class="float-right">查看详情》</a>
+        <a href="../index/brand_models.html?sales_sum=desc" class="float-right">查看详情》</a>
       </div>
       <div class="product-card-list row">
         {foreach name="hot_car" item="data"}

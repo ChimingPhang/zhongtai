@@ -1,5 +1,5 @@
 {include file="public/header" title="首页" bundle="home" hasBanner="false" activeNav="parts" /}
-<main class="o-wrapper">
+<main class="o-wrapper main-wrapper">
   <div class="container">
     <section class="parts-buy">
       <div class="product-photos__wrapper">
@@ -91,7 +91,8 @@
               </div>
               <div class="form-item-control-wrapper col-11">
                 <div class="form-item-control">
-                  <div class="product-attr__integral">可用积分 {$data.moren_integral} 积分</div>
+                  <!-- {php} print_r($data) {/php} -->
+                  <div class="product-attr__integral">可用积分 {$data.integral} 积分</div>
                   <div class="form-item form-item__inline">
                     <div class="form-item-label">
                       <label>使用</label>
@@ -129,6 +130,9 @@
         <div class="receiving-info">
           <h2 class="title">收货信息</h2>
           <form class="receiving-form">
+            <div id="addressDefault">
+
+            </div>
             <div class="form-layout form-layout__inline">
               <div class="form-item">
                 <div class="form-item-label">
@@ -193,24 +197,28 @@
 </main>
 
 {include file="public/footer" /}
+{if $is_login}
 {include file="public/choose-address"}
+{/if}
 <script>
-  var spec_price = {$spec_price_script};
-  function setPrice(id) {
-    var obj = null
-    spec_price.forEach(function(item) {
-      if(item.key == id) {
-        obj = item
-      }
-    })
-    $('#price').text(obj.integral_price)
-    $('#integral').text(obj.integral)
-  }
-  
-</script>
-
-<script>
+    var item_id = null
+    var spec_price = {$spec_price_script};
+    function setPrice(id) {
+      var obj = null
+      spec_price.forEach(function(item) {
+        if(item.key == id) {
+          obj = item
+        }
+      })
+      item_id = obj.item_id
+      $('#price').text(obj.integral_price)
+      $('#integral').text(obj.integral)
+    }
     function commitOrder() {
+      if(!item_id){
+        alert('请选择规格')
+        return
+      }
       var pay_points = $('#pay_points').text();
       var id = {$Think.get.goods_id};
       var num = $('#goods_num').val()
@@ -219,7 +227,7 @@
         if(res) {
           address_id = res.data
         } else {
-          address_id = $("#addressDefault input").val()
+          address_id = $("input[name=defaultAddress]").val()
         }
 
         Apitool.order.commitOrder({
@@ -231,8 +239,12 @@
           item_id: item_id,
           pay_points: pay_points,
         }).then(function (result) {
-          alert(result.message)
-          window.location.reload()
+          if(result.code==='0000'){
+            alert(result.message)
+            window.location.reload()
+          }else {
+            alert(result.message)
+          }
         })
       })
       

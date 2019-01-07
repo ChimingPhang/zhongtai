@@ -396,7 +396,7 @@ class Goods extends Base {
 
         $this->assign('data', $data);
         $this->assign('spec_price_script', json_encode($data['spec_price']));
-        $this->json('200','ok', $data);
+//        $this->json('200','ok', $data);
         return $this->fetch('parts/parts_detail');
     }
 

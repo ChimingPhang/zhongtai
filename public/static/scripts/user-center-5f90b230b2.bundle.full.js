@@ -1782,6 +1782,22 @@ instance.interceptors.response.use(function (res) {
         master_order_sn: master_order_sn,
         type: type
       });
+    },
+    cancelOrder: function cancelOrder(order_id, master_order_sn) {
+      return instance.post('/Order/delorder', {
+        master_order_sn: master_order_sn,
+        order_id: order_id
+      });
+    },
+    integralPay: function integralPay(master_order_sn) {
+      return instance.post('/Order/pointPay', {
+        master_order_sn: master_order_sn
+      });
+    },
+    deleteOrder: function deleteOrder(order_id) {
+      return instance.post('/Order/deleteOrder', {
+        order_id: order_id
+      });
     }
   },
   usercenter: {

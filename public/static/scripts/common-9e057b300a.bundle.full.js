@@ -8771,6 +8771,26 @@ $(function () {
     }
   });
   var d = new myDate["a" /* default */]();
+  var winHeight = $(document).scrollTop();
+  $(window).scroll(function () {
+    var scrollY = $(document).scrollTop(); // 获取垂直滚动的距离，即滚动了多少
+
+    if (scrollY > 80) {
+      //如果滚动距离大于550px则隐藏，否则删除隐藏类
+      $('.c-header').addClass('hiddened');
+      $('.search-box').addClass('p-fixed');
+    } else {
+      $('.c-header').removeClass('hiddened');
+      $('.search-box').removeClass('p-fixed');
+    }
+
+    if (scrollY > winHeight) {
+      //如果没滚动到顶部，删除显示类，否则添加显示类
+      $('.c-header').removeClass('showed');
+    } else {
+      $('.c-header').addClass('showed');
+    }
+  });
 });
 window.Apitool = api["a" /* default */];
 
@@ -20196,6 +20216,22 @@ instance.interceptors.response.use(function (res) {
       return instance.post('/Order/pay', {
         master_order_sn: master_order_sn,
         type: type
+      });
+    },
+    cancelOrder: function cancelOrder(order_id, master_order_sn) {
+      return instance.post('/Order/delorder', {
+        master_order_sn: master_order_sn,
+        order_id: order_id
+      });
+    },
+    integralPay: function integralPay(master_order_sn) {
+      return instance.post('/Order/pointPay', {
+        master_order_sn: master_order_sn
+      });
+    },
+    deleteOrder: function deleteOrder(order_id) {
+      return instance.post('/Order/deleteOrder', {
+        order_id: order_id
       });
     }
   },

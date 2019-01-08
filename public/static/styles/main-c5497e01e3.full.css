@@ -543,6 +543,18 @@ ul li {
   background: #fafafa;
 }
 
+.o-wrapper.hasSearch {
+  padding-top: 152px;
+}
+
+.main-wrapper {
+  padding-top: 80px;
+}
+
+.main-wrapper.hasSearch {
+  padding-top: 152px;
+}
+
 body {
   min-width: 1200px;
 }
@@ -11634,6 +11646,19 @@ label {
 .c-header {
   height: 80px;
   background: #fff;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+  transition: all .4s ease-in-out;
+}
+
+.c-header.hiddened {
+  transform: translateY(-80px);
+}
+
+.c-header.show {
+  transform: translateY(0);
 }
 
 .c-header .navbar-brand {
@@ -11643,7 +11668,7 @@ label {
   display: inline-block;
   height: 30px;
   width: 163px;
-  margin-top: 28px;
+  margin-top: 24px;
   background-image: url("../assets/images/logo.png");
   background-repeat: no-repeat;
   background-position: 0 -31px;
@@ -12675,16 +12700,20 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  bottom: 100px;
   width: 100%;
+  padding: 15px 0;
   z-index: 99;
+  position: fixed;
+  background: #f9f9f9;
+  height: 72px;
+  box-shadow: 0 3px 3px rgba(154, 154, 154, 0.211765);
 }
 
 .search-box__inner {
   background: #fff;
-  width: 690px;
+  width: 500px;
   display: flex;
+  border: 1px solid #f1f1f1;
 }
 
 .search-box input {
@@ -12696,13 +12725,13 @@ label {
 
 .search-box button {
   background: #FF5A37;
-  height: 48px;
+  height: 40px;
   outline: none;
-  width: 150px;
+  width: 100px;
   cursor: pointer;
   color: #fff;
-  font-size: 16px;
-  border: 1px solid #fff;
+  font-size: 14px;
+  border: none;
   transition: background .2s ease;
 }
 

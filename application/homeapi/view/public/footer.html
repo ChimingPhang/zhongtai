@@ -42,7 +42,7 @@
         </ul>
       </div>
       <div class="col">
-        <h5></h5>
+        <h5>商务合作</h5>
         <ul>
           <li><a href="#">众泰研发中心预约</a></li>
           <li><a href="#">众泰汽车招商加盟</a></li>
@@ -55,14 +55,20 @@
   <div class="copyright text-center">Copyright &copy; 2018 www.zhongtia.com All Rights Reserved</div>
 </footer>
 
-<script src="__STATIC__/scripts/common.bundle.js?v=20181226"></script>
+<script src="__STATIC__/scripts/common.bundle.js?v=20190108"></script>
 {notempty name="bundle"} 
-  <script src="__STATIC__/scripts/{$bundle}.bundle.js?v=20181226"></script>
+  <script src="__STATIC__/scripts/{$bundle}.bundle.js?v=20190108"></script>
 {/notempty}
 <script>
+  function getDrivelist(cb) {
+    Apitool.drive.getDrivelist().then(function(res){
+      cb(res.data)
+    })
+  }
+
+
   function getProvince(cb) {
     Apitool.drive.getProvince().then(function(res){
-      console.log(res)
       cb(res.data)
     })
   }
@@ -76,6 +82,13 @@
 
   function queryDealers(params, cb) {
     Apitool.drive.queryDealers(params.cate, params.province, params.city).then(function(res) {
+      console.log(res)
+      cb(res.data)
+    })
+  }
+
+  function querySales(params, cb) {
+    Apitool.drive.querySales(params.cate, params.province, params.city).then(function(res) {
       console.log(res)
       cb(res.data)
     })

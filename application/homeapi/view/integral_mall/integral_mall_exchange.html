@@ -201,7 +201,7 @@
     var name = $('#form-consignee').val()
     var mobile = $('#form-mobile').val()
     var address = $('#form-address').val()
-    if (name != '' || mobile != '' || address != '') {
+    if(name || mobile || address ){
       if (name == '') {
         alert('请输入收件人')
       } else if (mobile == '') {

@@ -69,14 +69,14 @@
                     <div class="select-wrapper">
                       {php}
                         if($data['integral']) {
-                          $have = (float)$data['integral'];
+                          $have = (float)$data['userIntegral'];
                           $need = (float)$data['moren_integral'];
                           $max = floor($have/$need);
                         }
                       {/php}
-                      <select class="selectpicker form-control form-control-sm" data-style="my-select">
-                        {for start="1" end="$max+1"}
-                        <option>1</option>
+                      <select class="selectpicker form-control form-control-sm" id="goods_num" data-style="my-select">
+                        {for start="1" end="$max+1" }
+                        <option>{$i}</option>
                         {/for}
                       </select>
                     </div>
@@ -92,7 +92,7 @@
               <div class="form-item-control-wrapper col-11">
                 <div class="form-item-control">
                   <!-- {php} print_r($data) {/php} -->
-                  <div class="product-attr__integral">可用积分 {$data.integral} 积分</div>
+                  <div class="product-attr__integral">可用积分 {$data.userIntegral} 积分</div>
                   <div class="form-item form-item__inline">
                     <div class="form-item-label">
                       <label>使用</label>
@@ -101,7 +101,7 @@
                       <div class="form-item-control">
                         <div class="product-attr__formItem">
                           <div class="input-wrapper">
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" id="pay_points" class="form-control form-control-sm">
                           </div>
                           <span class="formItem-des">积分</span>
                         </div>
@@ -185,7 +185,7 @@
             </div>
           </form>
           <div class="actions">
-            <a class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span id="price">-</span>元+<span  id="integral">-</span>积分）</a>
+            <button class="c-btn c-btn__primary exchange-btn" {if $is_login } onclick="commitOrder()" {else /} data-toggle="modal" data-target="#loginModal"  {/if} href="javascript:void(0)" data-price="">立即购买（<span id="price">-</span>元+<span  id="integral">-</span>积分）</button>
           </div>
         </div>
 
@@ -195,7 +195,26 @@
   </div>
 
 </main>
+<div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog sign" role="document">
+    <div class="modal-content">
+      <div class="modal-header sign-header">
+        <span>支付订单</span>
+        <button type="button" class="close">
+        </button>
+        <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+          <img src="__STATIC__/assets/images/common/icon-close.png" width="" alt="">
 
+        </div>
+      </div>
+      <div class="modal-body sign-body">
+        <div class="text-center pt-5 pb-5" id="qrcode">
+          加载中...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {include file="public/footer" /}
 {if $is_login}
 {include file="public/choose-address"}
@@ -219,7 +238,7 @@
         alert('请选择规格')
         return
       }
-      var pay_points = $('#pay_points').text();
+      var pay_points = $('#pay_points').val();
       var id = {$Think.get.goods_id};
       var num = $('#goods_num').val()
       var address_id = null
@@ -229,7 +248,7 @@
         } else {
           address_id = $("input[name=defaultAddress]").val()
         }
-
+        $('.exchange-btn').attr("disabled","true");
         Apitool.order.commitOrder({
           action: 'buy_now',
           exchange_integral: 1,
@@ -239,13 +258,18 @@
           item_id: item_id,
           pay_points: pay_points,
         }).then(function (result) {
-          if(result.code==='0000'){
+          $('.exchange-btn').removeAttr("disabled");
+          if(result.code!=='0000'){
             alert(result.message)
-            window.location.reload()
-          }else {
-            alert(result.message)
+            return
           }
+          $('#qrcodeModal').modal('show')
+          Apitool.order.payOrder(result.data, 4).then(function (res) {
+            $('#qrcode').html(res)
+            $('#qrcode').append('<p>扫一扫,微信支付</p>')
+          })
         })
+
       })
       
     }
@@ -253,7 +277,8 @@
       var name = $('#form-consignee').val()
       var mobile = $('#form-mobile').val()
       var address = $('#form-address').val()
-      if(name!='' || mobile!='' || address!=''){
+      console.log(name, mobile, address)
+      if(name || mobile || address ){
         if(name==''){
           alert('请输入收件人')
         }else if(mobile=='') {

@@ -154,9 +154,10 @@
   
   function appendOptions(id, data, isAppend) {
     var html = ''
-    data.forEach(element => {
+    for(var x in data) {
+      var element = data[x]
       html+= '<option value='+element.id+'>'+element.name+'</option>'
-    });
+    }
     if(isAppend) {
       $(id).append(html)
     } else {

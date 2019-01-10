@@ -224,13 +224,13 @@
     getProvince(function(result){
       var d=document.createDocumentFragment();
       var list = document.getElementById('provinceList')
-      result.forEach(element => {
+      for(var x in result) {
+        var element = result[x]
         var e = document.createElement('option')
         e.value = element.id
         e.innerText = element.name
         d.appendChild(e)
-      });
-      
+      }
       $('#provinceList').html(d)
     })
   }
@@ -240,12 +240,13 @@
     getCity($(event).val() || 1, function(result) {
       var d=document.createDocumentFragment();
       var list = document.getElementById('cityList')
-      result.forEach(element => {
+      for(var x in result) {
+        var element = result[x]
         var e = document.createElement('option')
         e.value = element.id
         e.innerText = element.name
         d.appendChild(e)
-      });
+      }
       
       $('#cityList').html(d)
       handleGetSales()
@@ -265,12 +266,13 @@
       var d=document.createDocumentFragment();
       var list = document.getElementById('salesList')
       if(result instanceof Array) {
-        result.forEach(function(element){
+        for(var x in result) {
+          var element = result[x]
           var e = document.createElement('option')
           e.value = element.id
           e.innerText = element.name
           d.appendChild(e)
-        });
+        };
         
       } else {
         var e = document.createElement('option')

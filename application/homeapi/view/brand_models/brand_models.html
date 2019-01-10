@@ -64,7 +64,8 @@
         var res = JSON.parse(data)
         var arr = res.data.list
         var html = ''
-        arr.forEach(function(element) {
+        for(var x in arr) {
+          var element = arr[x]
           html +=  '<div class="col col-4">\n' +
             '            <div class="product-card">\n' +
             '              <div class="product-card-img">\n' +
@@ -86,9 +87,8 @@
             '              </div>\n' +
             '            </div>\n' +
             '          </div>'
-        })
-
-          $('.loader').hide();
+        }
+        $('.loader').hide();
         $('.product-card-list').html(html);
       }
     })

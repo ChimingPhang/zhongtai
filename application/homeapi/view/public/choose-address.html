@@ -32,7 +32,8 @@
       var data = res.data
       var html = ''
       var default_id = null
-      data.forEach(elem => {
+      for(var x in data){
+        var elem = data[x]
         if(elem.is_default) {
           default_id = elem.address_id
           $('#addressDefault').show().html('<div class="clearfix">' +
@@ -49,7 +50,7 @@
           '<input type="radio" onclick="setDefaultAddress(this)" name="choosedAddress" '+ (elem.address_id == default_id ? "checked" : "")  +' value="'+elem.address_id+'">' + elem.address +
           '</label>' +
           '</li>'
-      });
+      }
       $('#addressList').html(html)
     })
   }

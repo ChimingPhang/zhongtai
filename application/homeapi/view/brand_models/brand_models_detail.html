@@ -266,7 +266,8 @@
 
   function renderList(list, type) {
     var html = ''
-    list.forEach(function (item) {
+    for(var x in list) {
+      var item = list[x]
       if (item.hasOwnProperty('sku_img') && item['sku_img']!='') { 
         html += '<li class="attr-color__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id') ? "data-itemid="+item['item_id']:'') +' data-id="'+item.id+'">' +
           '         <div class="pic-wrapper">' +
@@ -279,7 +280,7 @@
       } else {
         html += '<li class="attr-brick__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id')? "data-itemid="+item['item_id']:'') +' data-id="'+item.id+'">'+item.sku_name+'</li>'
       }
-    })
+    }
     return html;
   }
 </script>
@@ -289,13 +290,13 @@
     getProvince(function (result) {
       var d = document.createDocumentFragment();
       var list = document.getElementById('provinceList')
-      result.forEach(element => {
+      for(var x in result) {
+        var element = result[x]
         var e = document.createElement('option')
         e.value = element.id
         e.innerText = element.name
         d.appendChild(e)
-      });
-
+      }
       $('#provinceList').html(d)
     })
   }
@@ -304,12 +305,13 @@
     getCity($(event).val() || 1, function (result) {
       var d = document.createDocumentFragment();
       var list = document.getElementById('cityList')
-      result.forEach(element => {
+      for(var x in result) {
+        var element = result[x]
         var e = document.createElement('option')
         e.value = element.id
         e.innerText = element.name
         d.appendChild(e)
-      });
+      }
 
       $('#cityList').html(d)
       handleGetSales()
@@ -329,13 +331,12 @@
       var html = ''
       var list = document.getElementById('salesList')
       if (result instanceof Array) {
-        result.forEach(function (element) {
+        for(var x in result) {
+          var element = result[x]
           html += '<li class="attr-brick__item"><label>' + element.name +
-            '<input type="radio" style="display:none" name="salesChoosed" value="' + element.id +
-            '" /></label></li>'
-        });
-
-
+              '<input type="radio" style="display:none" name="salesChoosed" value="' + element.id +
+              '" /></label></li>'
+        }
       } else {
         html += '<li class="attr-brick__item">无</li>'
       }

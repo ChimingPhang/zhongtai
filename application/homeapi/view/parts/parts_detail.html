@@ -224,11 +224,12 @@
     var spec_price = {$spec_price_script};
     function setPrice(id) {
       var obj = null
-      spec_price.forEach(function(item) {
+      for(var x in spec_price) {
+        var item = spec_price[x]
         if(item.key == id) {
           obj = item
         }
-      })
+      }
       item_id = obj.item_id
       $('#price').text(obj.integral_price)
       $('#integral').text(obj.integral)

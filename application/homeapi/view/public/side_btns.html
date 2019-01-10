@@ -190,9 +190,10 @@
     }, function(data) {
       if(data instanceof Array && data.length>0) {
         var html = ''
-        data.forEach(function(element) {
+        for(var x in data) {
+          var element = data[x]
           html += '<li><h5>'+element.name+'</h5><p>'+element.address+'</p><p>'+element.mobile+'</p></li>'
-        })
+        }
         $('#dealerList').html(html)
       } else {
         $('#dealerList').html('<p class="text-center">暂无经销商</p>')

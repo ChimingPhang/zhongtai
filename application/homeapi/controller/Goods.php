@@ -19,8 +19,6 @@ class Goods extends Base {
     private static $pageNum = 9;
     //页数
     public $page = 1;
-//    public $token;
-//    public $is_login = 0;
     public $cartype_list = [];
 
     public function __construct()

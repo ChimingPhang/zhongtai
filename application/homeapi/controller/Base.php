@@ -418,6 +418,30 @@ class Base extends Controller {
     }
 
     /**
+     * 获取网站首页-顶部广告位-广告
+     * @return array|mixed
+     */
+    public function get_web_ad_top()
+    {
+        $top_ads = $this->ad_position(112,'ad_link,ad_code,ad_name','orderby desc');
+        if (isset($top_ads['result'])) return $top_ads['result'];
+
+        return [];
+    }
+
+    /**
+     * 获取网站首页-底部广告位-广告
+     * @return array|mixed
+     */
+    public function get_web_ad_footer()
+    {
+        $footer_ads = $this->ad_position(113,'ad_link,ad_code','orderby desc');
+        if (isset($footer_ads['result'])) return $footer_ads['result'];
+
+        return [];
+    }
+
+    /**
      * 根据文章ID获取文章列表
      * [categoryList description]
      * @Author   XD

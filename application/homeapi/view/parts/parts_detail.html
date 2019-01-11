@@ -68,23 +68,30 @@
                   <div class="product-attr__formItem">
                     <div class="select-wrapper">
                       {php}
-                        if($data['integral']) {
-                          $have = (float)$data['userIntegral'];
+                        if($is_login) {
+                          $have = $data['userIntegral'] ? (float)$data['userIntegral'] : 1;
                           $need = (float)$data['moren_integral'];
                           $max = floor($have/$need);
                         }
                       {/php}
+                      {if $is_login}
                       <select class="selectpicker form-control form-control-sm" id="goods_num" data-style="my-select">
                         {for start="1" end="$max+1" }
                         <option>{$i}</option>
                         {/for}
                       </select>
+                      {else /}
+                        <select class="selectpicker form-control form-control-sm" id="goods_num" data-style="my-select">
+                          <option>1</option>
+                        </select>
+                      {/if}
                     </div>
                     <span class="formItem-des">个</span>
                   </div>
                 </div>
               </div>
             </div>
+            {if $is_login}
             <div class="form-item row">
               <div class="form-item-label col-1">
                 <label>积分抵扣：</label>
@@ -111,6 +118,7 @@
                 </div>
               </div>
             </div>
+            {/if}
           </div>
         </div>
       </div>

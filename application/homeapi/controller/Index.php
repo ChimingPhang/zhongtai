@@ -38,18 +38,6 @@ class Index extends Base{
         $this->cartype_list = M('goods_category')->where(['level'=>2,'is_show'=>1])->field('id,name')->select();
         $this->assign('cartype_list', $this->cartype_list);
         //获取广告图片
-//        $footer_ads = $this->ad_position(6,'ad_link,ad_code','orderby desc');
-//        $top_ads = $this->ad_position(3,'ad_link,ad_code,ad_name','orderby desc');
-//        if (isset($top_ads['result'])) {
-//            $this->assign('top_ads', $top_ads['result']);
-//        } else {
-//            $this->assign('top_ads', []);
-//        }
-//        if (isset($footer_ads['result'])) {
-//            $this->assign('footer_ads', $footer_ads['result']);
-//        } else {
-//            $this->assign('footer_ads', []);
-//        }
         $this->assign('top_ads', $this->get_web_ad_top());
         $this->assign('footer_ads', $this->get_web_ad_footer());
     }

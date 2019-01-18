@@ -616,6 +616,8 @@ class Index extends Base{
         return $this->fetch('usercenter/user_setting');
     }
 
-    
+    public function forgot() {
+        return $this->fetch('usercenter/forgot');
+    }
 
 }

@@ -29,6 +29,9 @@
                   <div class="form-group">
                     <input type="password" v-model="loginPwd" class="form-control" placeholder="密码">
                   </div>
+                  <div class="form-group clearfix">
+                    <a href="../index/forgot.html" class="float-right">忘记密码</a>
+                  </div>
                   <div class="actions">
                     <a class="c-btn c-btn__primary login-btn" @click="login" href="javasript:void(0)">登录</a>
                   </div>
@@ -42,7 +45,7 @@
                   </div>
                   <div class="form-group input-group code-wrapper">
                     <input type="text" v-model="registerCode" class="form-control" placeholder="验证码" aria-describedby="send-code">
-                    <div class="input-group-append" style="width:94px">
+                    <div class="input-group-append" style="width:120px">
                       <span class="input-group-text text-center send-btn d-block" style="width:100%;" @click="getCode" id="send-code" v-text="codeText"></span>
                     </div>
                   </div>
@@ -57,6 +60,7 @@
                   </div>
                 </form>
               </div>
+              
             </div>
           </div>
         </div>

@@ -1,0 +1,110 @@
+{include file="public/header" title="忘记密码" hasBanner="false" hideSearch="true" /}
+<main class="o-wrapper main-wrapper" style="padding: 150px 0 300px 0;min-height: 500px">
+  <div class="container">
+    <form class="register-form position-relative" style="width:400px;margin:auto">
+      <h4 style="padding-bottom: 10px;">忘记密码</h4>
+      <p class="text-center" id="forgotMsg" style="font-size:12px;color:red;position:absolute;top:10px;width:100%;left:0;"></p>
+      <div class="form-group">
+        <input type="text" id="forgotPhone" class="form-control" placeholder="输入手机号">
+      </div>
+      <div class="form-group input-group code-wrapper">
+        <input type="text" id="forgotCode" class="form-control" placeholder="验证码" aria-describedby="send-code">
+        <div class="input-group-append" style="width:120px">
+          <a class="input-group-text text-center send-btn d-block" href="javascript:void(0)" style="width:100%;" onclick="getCode()" id="sendCode">获取验证码</a>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="password" id="forgotPwd" class="form-control" placeholder="输入新密码">
+      </div>
+      <div class="actions">
+        <a class="btn btn-block btn-danger" onclick="submitForm(this)" href="#">确定</a>
+      </div>
+    </form>
+  </div>
+</main>
+{include file="public/footer" /}
+<script>
+  var isStarted = false
+  var sendCode = $('#sendCode')
+  var timer = null
+  function countdown() {
+    var currentTime = 30
+    isStarted = true
+    timer = setInterval(function() {
+      sendCode.text(currentTime+'s')
+      currentTime--
+      if(currentTime===0) {
+        clearInterval(timer)
+        isStarted = false
+        sendCode.text('获取验证码')
+      }
+    }, 1000)
+  }
+  function isValidPhone(mobile) {
+    return mobile.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/);
+  }
+  function getCode() {
+    if(isStarted) {
+      return
+    }
+    var phone = $('#forgotPhone').val()
+
+    if(!phone) {
+      alert('请输入手机号码')
+      return
+    }
+
+    if(!isValidPhone(phone)) {
+      alert('手机格式不正确')
+      return
+    }
+    if(isStarted) {
+      return
+    }
+    Apitool.usercenter.forgotCode(phone).then(function(res) {
+      if(res.code==='0000') {
+        countdown()
+      } else {
+        alert(res.message)
+      }
+    })
+  }
+  function submitForm(e) {
+    var phone = $('#forgotPhone').val()
+    var code = $('#forgotCode').val()
+    var password = $('#forgotPwd').val()
+
+    if(!phone) {
+      alert('请输入手机号码')
+      return
+    }
+
+    if(!code) {
+      alert('请输入验证码')
+      return
+    }
+
+    if(!password) {
+      alert('请输入密码')
+      return
+    }
+
+    $(e).text('提交中...')
+
+    Apitool.usercenter.forgotPwd({
+      mobile: phone,
+      code,
+      password
+    }).then(function(res) {
+      if(res.code==='0000') {
+        alert(res.message)
+        window.location.href='../index/home.html'
+      } else {
+        alert(res.message)
+      }
+      $(e).text('确定')
+    }).catch(function() {
+      $(e).text('确定')
+    })
+  }
+</script>

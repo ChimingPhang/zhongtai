@@ -1,0 +1,57 @@
+<div class="user-info">
+  <div class="user-info__header">
+    <div class="avatar">
+      <img src="{$user.head_pic}" alt="">
+    </div>
+    <div class="phone">{$user.nickname|default=$user.mobile}</div>
+    <div class="drawer row">
+      <div class="drawer-item col-6">
+        <div class="drawer-item__top">最近浏览</div>
+        <div class="drawer-item__bottom">{$user.reg_time}</div>
+      </div>
+      <div class="drawer-item col-6">
+        <div class="drawer-item__top">我的积分</div>
+        <div class="drawer-item__bottom">{$user.pay_points}</div>
+      </div>
+    </div>
+  </div>
+  <div class="user-info__body">
+    <div class="row base-col">
+      <div class="col-5 base-col__left">出生日期:</div>
+      <div class="col-7 base-col__right">
+        {if $year }
+          {$year}/{$month}/{$day}
+        {else/}
+          未设置
+        {/if}
+      </div>
+    </div>
+    <div class="row base-col">
+      <div class="col-5 base-col__left">邮箱:</div>
+      <div class="col-7 base-col__right">{$user.email|default="未设置"}</div>
+    </div>
+  </div>
+  <div class="user-info__footer">
+    <div class="row">
+      <div class="col-6 btn-col">
+        <a class="c-btn c-btn__primary c-btn--small" href="javascript:void(0)" data-toggle="modal" data-target="#testDriveForm">
+          <img src="__STATIC__/assets/images/common/icon-test-drive.png" class="icon" width="20" height="20" alt="">
+          立即预约
+        </a>
+      </div>
+      <div class="col-6 btn-col">
+        <a class="c-btn c-btn__success c-btn--small" href="javascript:void(0)" {if !$is_sign} id="checkin" {/if}> <img
+          src="__STATIC__/assets/images/common/sign.png" class="icon" width="20" height="20" alt="">
+          <span>{if $is_sign}
+            已签到
+            {else /}
+            签到
+            {/if} </span>
+
+        </a>
+      </div>
+    </div>
+  </div>
+  <a href="__URL__/user_setting.html"><img src="__STATIC__/assets/images/common/setting.png" class="user-info__setting"
+      alt="" id="setting"></a>
+</div>

@@ -40,7 +40,7 @@
                       <div class="row">
                         <div class="col-4">
                           <div class="select-box">
-                            <select class="selectpicker form-control form-control-sm select-major sel_year" rel="{$year}" data-style="my-select"
+                            <select class="selectpicker form-control form-control-sm select-major sel_year" rel="{$year??2002}" data-style="my-select"
                               id="formYear">
                             </select>
                             <span class="select-des">年</span>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="col-4">
                           <div class="select-box">
-                            <select class="selectpicker form-control form-control-sm select-major sel_month" rel="{$month}" data-style="my-select"
+                            <select class="selectpicker form-control form-control-sm select-major sel_month" rel="{$month??1}" data-style="my-select"
                               id="formMonth">
                             </select>
                             <span class="select-des">月</span>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-4">
                           <div class="select-box">
-                            <select class="selectpicker form-control form-control-sm select-major sel_day" rel="{$day}" data-style="my-select"
+                            <select class="selectpicker form-control form-control-sm select-major sel_day" rel="{$day??1}" data-style="my-select"
                               id="formDay">
                             </select>
                             <span class="select-des">日</span>

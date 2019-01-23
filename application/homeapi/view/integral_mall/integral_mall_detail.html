@@ -1,4 +1,8 @@
-{include file="public/header" title="首页" bundle="brand-models-buy" hasBanner="false" activeNav="integral" /}
+{extend name="layout/base" /}
+{block name="title"}积分商城{/block}
+{block name="side_btns"}{/block}
+{block name="search"}{/block}
+{block name="main"}
 <main class="o-wrapper main-wrapper">
   <div class="container">
     <section class="integral-mall-detail">
@@ -86,7 +90,7 @@
                   <span class="worth">{$detail.moren_integral} 积分</span>
                 </div>
               </div>
-              <a class="c-btn c-btn__primary c-btn--large appo"  href="../integral/integral_mall_exchange.html?goods_id={$Think.get.goods_id}">
+              <a class="c-btn c-btn__primary c-btn--large appo"  href="../integral/integral_mall_exchange?goods_id={$Think.get.goods_id}">
                 立即兑换
               </a>
             </div>
@@ -103,7 +107,7 @@
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}"><img src="{$item.original_img}" width="100%" alt=""></a>
+                  <a href="../integral/integral_mall_detail?goods_id={$item.goods_id}"><img src="{$item.original_img}" width="100%" alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -117,7 +121,7 @@
                       <span>积分：<strong>{$item.moren_integral}</strong>积分</span>
                       <span>剩余：<em>{$item.store_count}</em></span>
                     </div>
-                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}">立即兑换</a>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail?goods_id={$item.goods_id}">立即兑换</a>
                   </div>
                 </div>
               </div>
@@ -132,5 +136,5 @@
   </div>
 
 </main>
-{include file="public/side_btns" /}
-{include file="public/footer" /}
+
+{/block}

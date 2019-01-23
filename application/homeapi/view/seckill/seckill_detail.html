@@ -1,296 +1,237 @@
-{include file="public/header" title="一元秒杀" bundle="false" hasBanner="false" activeNav="home" /}
+{extend name="layout/base" /}
+{block name="title"}一元秒杀{/block}
+{block name="side_btns"}{/block}
+{block name="search"}{/block}
+{block name="main"}
 
-    <main class="o-wrapper main-wrapper">
-      <div class="container">
-        <section class="one-dollar-detail">
-          <div class="product-photos">
-            <div class="car-slider">
-              <div class="view">
-                <div class="swiper-container">
-                  <div class="swiper-wrapper">
-                      {foreach $info.banner_image as $item}
-                        <div class="swiper-slide text-center">
-                          <img src="{item.ad_code}" width="100%" alt="" />
-                        </div>
-                      {/foreach}
-                  </div>
+<main class="o-wrapper main-wrapper">
+  <div class="container">
+    <section class="one-dollar-detail">
+      <div class="product-photos">
+        <div class="car-slider">
+          <div class="view">
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                {foreach $info.banner_image as $item}
+                <div class="swiper-slide text-center">
+                  <img src="{item.ad_code}" width="100%" alt="" />
                 </div>
+                {/foreach}
               </div>
-              <div class="preview">
-                <div class="preview-wrapper">
-                  <a class="arrow-left" href="#">
-                    <img src="__STATIC__/assets/images/common/icon-page-arrow-l.png" width="8" alt="">
-                  </a>
-                  <a class="arrow-right" href="#">
-                    <img src="__STATIC__/assets/images/common/icon-page-arrow-r.png" width="8" alt="">
-                  </a>
-                  <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                      <div class="swiper-slide text-center">
-                        {foreach $info.banner_image as $item}
-                        <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
-                        {/foreach}
-                      </div>
-                    </div>
+            </div>
+          </div>
+          <div class="preview">
+            <div class="preview-wrapper">
+              <a class="arrow-left" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-l.png" width="8" alt="">
+              </a>
+              <a class="arrow-right" href="#">
+                <img src="__STATIC__/assets/images/common/icon-page-arrow-r.png" width="8" alt="">
+              </a>
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide text-center">
+                    {foreach $info.banner_image as $item}
+                    <div class="car-pic" style="background-image:url({$item.ad_code})"></div>
+                    {/foreach}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="product-des card-yellowing">
-            <div class="product-dec__header">
-              <div class="form-layout">
-                <div class="form-item row">
-                  <div class="form-item-label col-1">
-                    <label>商品介绍：</label>
-                  </div>
-                  <div class="form-item-control-wrapper col-11">
-                    <div class="form-item-control">
-                      <div class="product--bling">{$info.goods_name}</div>
-                      <div class="product--gray">{$info.goods_remark}</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-item row">
-                  <div class="form-item-label col-1">
-                    <label>购买说明：</label>
-                  </div>
-                  <div class="form-item-control-wrapper col-11">
-                    <div class="form-item-control">
-                      <div class="product--bling">{$info.goods_remark}</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-item row">
-                  <div class="form-item-label col-1">
-                  </div>
-                  <div class="form-item-control-wrapper col-11">
-                    <div class="form-item-control">
-                      <div class="product-guarantee">
-                        <div class="guarantee-col">
-                          <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
-                          厂家自销
-                        </div>
-                        <div class="guarantee-col">
-                          <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
-                          4S店提车
-                        </div>
-                        <div class="guarantee-col">
-                          <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
-                          未验卷自动退
-                        </div>
-                        <div class="guarantee-col">
-                          <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
-                          过期自动退
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="product-dec__body">
-              <div class="product-actions">
-                <div class="actions__left">
-                  <div class="collection btn-collection {if $is_login}logined{/if}" {if !$is_login} data-toggle="modal" data-target="#loginModal" {/if}>
-                    <span class="icon float-left"></span>
-                    <label>收藏</label>
-                  </div>
-                  <div class="product-additional">
-                    <div class="additional-col">
-                      <span class="additional-col__center">258</span>
-                      <span class="additional-col__right">人预订</span>
-                    </div>
-                    <div class="additional-col">
-                      <span class="additional-col__left">剩余:</span>
-                      <span class="additional-col__center">258</span>
-                      <span class="additional-col__right">台</span>
-                    </div>
-                    <div class="additional-col">
-                      <span class="additional-col__left">剩余时间:</span>
-                      <span class="additional-col__center">8:38:58</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="actions__right">
-                  <div class="product-worth">
-                    <div class="worth__main">
-                      <img src="__STATIC__/assets/images/common/icon-price.png" class="icon" alt="">
-                      <span>价格:</span>
-                      <span class="worth">{$info.price}</span>
-                      <span>元</span>
-                    </div>
-                    <div class="worth__tip">（此车型可用积分兑购）</div>
-                  </div>
-                  <a class="c-btn c-btn__primary c-btn--large appo" href="#">
-                    <img src="__STATIC__/assets/images/common/appo.png" class="appo-icon" alt="">
-                    立即购买
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="section-title clearfix">
-            <h1>精品推荐</span></h1>
-          </div>
-          <div class="product-list">
-            <div class="product-card-list row">
-                {foreach $info.recommend as $item}
-                <div class="col col-4">
-                  <div class="product-card">
-                    <div class="product-card-img">
-                      <a href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}"><img src="{$item.original_img}" width="100%" alt=""></a>
-                    </div>
-                    <div class="product-card-content">
-                      <h2 class="product-card-title">
-                        {$item.goods_name}
-                        <!-- <span class="float-right">剩余时间：<strong class="color-primary">1天23时22分</strong></span> -->
-                      </h2>
-                      <div class="product-card-intro"><strong>特点：</strong>{$item.goods_remark}</div>
-                      <div class="product-card-btm clearfix">
-                        <div class="float-left product-card-price">
-                          <img src="assets/images/common/icon-integral.png" class="icon" alt="">
-                          <span>积分：<strong>{$item}</strong>积分</span>
-                          <span>剩余：<em>{$item}</em></span>
-                        </div>
-                        <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail.html?goods_id={$item.goods_id}">立即兑换</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              {/foreach}
-              <div class="col col-4">
-                <div class="product-card">
-                  <div class="product-card-img">
-                    <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
-                  </div>
-                  <div class="product-card-content">
-                    <h2 class="product-card-title">
-                      车型: T500
-                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                    </h2>
-                    <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
-                    <div class="product-card-btm clearfix">
-                      <div class="float-left product-card-price">
-                        <img src="assets/images/common/icon-price.png" class="icon" alt="">
-                        <span>价格：<strong>28</strong>万元</span>
-                      </div>
-                      <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即购买</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col col-4">
-                <div class="product-card">
-                  <div class="product-card-img">
-                    <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
-                  </div>
-                  <div class="product-card-content">
-                    <h2 class="product-card-title">
-                      车型: T500
-                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                    </h2>
-                    <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
-                    <div class="product-card-btm clearfix">
-                      <div class="float-left product-card-price">
-                        <img src="assets/images/common/icon-price.png" class="icon" alt="">
-                        <span>价格：<strong>28</strong>万元</span>
-                      </div>
-                      <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即购买</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col col-4">
-                <div class="product-card">
-                  <div class="product-card-img">
-                    <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
-                  </div>
-                  <div class="product-card-content">
-                    <h2 class="product-card-title">
-                      车型: T500
-                      <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                    </h2>
-                    <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
-                    <div class="product-card-btm clearfix">
-                      <div class="float-left product-card-price">
-                        <img src="assets/images/common/icon-price.png" class="icon" alt="">
-                        <span>价格：<strong>28</strong>万元</span>
-                      </div>
-                      <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即购买</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-      </div>
-
-    </main>
-    <footer class="o-wrapper c-footer">
-      <div class="container">
-        <div class="row c-footer-links">
-          <div class="col">
-            <h5>品牌天地</h5>
-            <ul>
-              <li><a href="#">集团概述</a></li>
-              <li><a href="#">新闻资讯</a></li>
-              <li><a href="#">技术品牌</a></li>
-              <li><a href="#">企业文化</a></li>
-              <li><a href="#">吉利教育</a></li>
-              <li><a href="#">社会责任</a></li>
-            </ul>
-          </div>
-          <div class="col">
-            <h5>热门车型</h5>
-            <ul>
-              <li><a href="#">众泰T700</a></li>
-              <li><a href="#">众泰T600</a></li>
-              <li><a href="#">众泰Z300</a></li>
-              <li><a href="#">众泰Z700</a></li>
-              <li><a href="#">众泰T700</a></li>
-              <li><a href="#">众泰T700</a></li>
-            </ul>
-          </div>
-          <div class="col">
-            <h5>购车支持</h5>
-            <ul>
-              <li><a href="#">集团概述</a></li>
-              <li><a href="#">新闻资讯</a></li>
-              <li><a href="#">技术品牌</a></li>
-              <li><a href="#">企业文化</a></li>
-              <li><a href="#">吉利教育</a></li>
-              <li><a href="#">社会责任</a></li>
-            </ul>
-          </div>
-          <div class="col">
-            <h5>车主服务</h5>
-            <ul>
-              <li><a href="#">集团概述</a></li>
-              <li><a href="#">新闻资讯</a></li>
-              <li><a href="#">技术品牌</a></li>
-              <li><a href="#">企业文化</a></li>
-              <li><a href="#">吉利教育</a></li>
-              <li><a href="#">社会责任</a></li>
-            </ul>
-          </div>
-          <div class="col">
-            <h5>商务合作</h5>
-            <ul>
-              <li><a href="#">集团概述</a></li>
-              <li><a href="#">新闻资讯</a></li>
-              <li><a href="#">技术品牌</a></li>
-              <li><a href="#">企业文化</a></li>
-              <li><a href="#">吉利教育</a></li>
-              <li><a href="#">社会责任</a></li>
-            </ul>
           </div>
         </div>
       </div>
-      <div class="copyright text-center">Copyright &copy; 2018 www.zhongtia.com All Rights Reserved</div>
-    </footer>
+      <div class="product-des card-yellowing">
+        <div class="product-dec__header">
+          <div class="form-layout">
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+                <label>商品介绍：</label>
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <div class="product--bling">{$info.goods_name}</div>
+                  <div class="product--gray">{$info.goods_remark}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+                <label>购买说明：</label>
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <div class="product--bling">{$info.goods_remark}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-item row">
+              <div class="form-item-label col-1">
+              </div>
+              <div class="form-item-control-wrapper col-11">
+                <div class="form-item-control">
+                  <div class="product-guarantee">
+                    <div class="guarantee-col">
+                      <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
+                      厂家自销
+                    </div>
+                    <div class="guarantee-col">
+                      <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
+                      4S店提车
+                    </div>
+                    <div class="guarantee-col">
+                      <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
+                      未验卷自动退
+                    </div>
+                    <div class="guarantee-col">
+                      <img src="__STATIC__/assets/images/common/icon-feature.png" class="icon" alt="">
+                      过期自动退
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="product-dec__body">
+          <div class="product-actions">
+            <div class="actions__left">
+              <div class="collection btn-collection {if $is_login}logined{/if}" {if !$is_login} data-toggle="modal"
+                data-target="#loginModal" {/if}> <span class="icon float-left"></span>
+                <label>收藏</label>
+              </div>
+              <div class="product-additional">
+                <div class="additional-col">
+                  <span class="additional-col__center">258</span>
+                  <span class="additional-col__right">人预订</span>
+                </div>
+                <div class="additional-col">
+                  <span class="additional-col__left">剩余:</span>
+                  <span class="additional-col__center">258</span>
+                  <span class="additional-col__right">台</span>
+                </div>
+                <div class="additional-col">
+                  <span class="additional-col__left">剩余时间:</span>
+                  <span class="additional-col__center">8:38:58</span>
+                </div>
+              </div>
+            </div>
+            <div class="actions__right">
+              <div class="product-worth">
+                <div class="worth__main">
+                  <img src="__STATIC__/assets/images/common/icon-price.png" class="icon" alt="">
+                  <span>价格:</span>
+                  <span class="worth">{$info.price}</span>
+                  <span>元</span>
+                </div>
+                <div class="worth__tip">（此车型可用积分兑购）</div>
+              </div>
+              <a class="c-btn c-btn__primary c-btn--large appo" href="#">
+                <img src="__STATIC__/assets/images/common/appo.png" class="appo-icon" alt="">
+                立即购买
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title clearfix">
+        <h1>精品推荐</span></h1>
+      </div>
+      <div class="product-list">
+        <div class="product-card-list row">
+          {foreach $info.recommend as $item}
+          <div class="col col-4">
+            <div class="product-card">
+              <div class="product-card-img">
+                <a href="../integral/integral_mall_detail?goods_id={$item.goods_id}"><img src="{$item.original_img}"
+                    width="100%" alt=""></a>
+              </div>
+              <div class="product-card-content">
+                <h2 class="product-card-title">
+                  {$item.goods_name}
+                  <!-- <span class="float-right">剩余时间：<strong class="color-primary">1天23时22分</strong></span> -->
+                </h2>
+                <div class="product-card-intro"><strong>特点：</strong>{$item.goods_remark}</div>
+                <div class="product-card-btm clearfix">
+                  <div class="float-left product-card-price">
+                    <img src="assets/images/common/icon-integral.png" class="icon" alt="">
+                    <span>积分：<strong>{$item}</strong>积分</span>
+                    <span>剩余：<em>{$item}</em></span>
+                  </div>
+                  <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail?goods_id={$item.goods_id}">立即兑换</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/foreach}
+          <div class="col col-4">
+            <div class="product-card">
+              <div class="product-card-img">
+                <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+              </div>
+              <div class="product-card-content">
+                <h2 class="product-card-title">
+                  车型: T500
+                  <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
+                </h2>
+                <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
+                <div class="product-card-btm clearfix">
+                  <div class="float-left product-card-price">
+                    <img src="assets/images/common/icon-price.png" class="icon" alt="">
+                    <span>价格：<strong>28</strong>万元</span>
+                  </div>
+                  <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即购买</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col-4">
+            <div class="product-card">
+              <div class="product-card-img">
+                <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+              </div>
+              <div class="product-card-content">
+                <h2 class="product-card-title">
+                  车型: T500
+                  <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
+                </h2>
+                <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
+                <div class="product-card-btm clearfix">
+                  <div class="float-left product-card-price">
+                    <img src="assets/images/common/icon-price.png" class="icon" alt="">
+                    <span>价格：<strong>28</strong>万元</span>
+                  </div>
+                  <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即购买</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col-4">
+            <div class="product-card">
+              <div class="product-card-img">
+                <a href="#"><img src="assets/images/temp/product-card-img.png" alt=""></a>
+              </div>
+              <div class="product-card-content">
+                <h2 class="product-card-title">
+                  车型: T500
+                  <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
+                </h2>
+                <div class="product-card-intro"><strong>特点：</strong>近期有传言，新款将在本月上市，关于新款，也做出了几个晋级亮点，前脸做小改动，发起机也变速器换了，外表做了晋级处理</div>
+                <div class="product-card-btm clearfix">
+                  <div class="float-left product-card-price">
+                    <img src="assets/images/common/icon-price.png" class="icon" alt="">
+                    <span>价格：<strong>28</strong>万元</span>
+                  </div>
+                  <a class="product-card-btn c-btn c-btn__primary float-right" href="#">立即购买</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  </body>
-</html>
+  </div>
+
+</main>
+{/block}

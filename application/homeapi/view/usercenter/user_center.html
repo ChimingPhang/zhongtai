@@ -1,496 +1,470 @@
-{include file="public/header" title="首页" hasBanner="false" activeNav="usercenter" hideSearch="true" /}
-    <main class="o-wrapper main-wrapper">
-      <div class="container">
-        <section class="user-center">
-          <div class="row">
-            <div class="col-3">
-              <div class="user-info">
-                <div class="user-info__header">
-                  <div class="avatar">
-                    <img src="{$user.head_pic}" alt="">
-                  </div>
-                  <div class="phone">{$user.nickname|default=$user.mobile}</div>
-                  <div class="drawer row">
-                    <div class="drawer-item col-6">
-                      <div class="drawer-item__top">最近浏览</div>
-                      <div class="drawer-item__bottom">{$user.reg_time}</div>
-                    </div>
-                    <div class="drawer-item col-6">
-                      <div class="drawer-item__top">我的积分</div>
-                      <div class="drawer-item__bottom">{$user.pay_points}</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="user-info__body">
-                  <div class="row base-col">
-                    <div class="col-5 base-col__left">出生日期:</div>
-                    <div class="col-7 base-col__right">{$user.birthday|default="未设置"}</div>
-                  </div>
-                  <div class="row base-col">
-                    <div class="col-5 base-col__left">邮箱:</div>
-                    <div class="col-7 base-col__right">{$user.email|default="未设置"}</div>
-                  </div>
-                </div>
-                <div class="user-info__footer">
-                  <div class="row">
-                    <div class="col-6 btn-col">
-                      <a class="c-btn c-btn__primary c-btn--small" href="javascript:void(0)" data-toggle="modal" data-target="#testDriveForm">
-                        <img src="__STATIC__/assets/images/common/icon-test-drive.png" class="icon" width="20" height="20" alt="">
-                        立即预约
-                      </a>
-                    </div>
-                    <div class="col-6 btn-col">
-                      <a class="c-btn c-btn__success c-btn--small"  href="javascript:void(0)" {if !$is_sign} id="checkin" {/if} >
-                        <img src="__STATIC__/assets/images/common/sign.png" class="icon" width="20" height="20" alt="">
-                        <span>{if $is_sign} 
-                            已签到
-                          {else /}
-                            签到
-                          {/if} </span>
-                        
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <a href="__URL__/user_setting.html"><img src="__STATIC__/assets/images/common/setting.png" class="user-info__setting" alt="" id="setting"></a>
+{extend name="layout/base" /}
+{block name="title"}用户中心{/block}
+{block name="search"}{/block}
+{block name="side_btns"}{/block}
+{block name="main"}
+<main class="o-wrapper main-wrapper">
+  <div class="container">
+    <section class="user-center">
+      <div class="row">
+        <div class="col-3">
+          {include file="usercenter/user_left" /}
+        </div>
+        <div class="col-9">
+          <div class="user-info-edit" id="user-info">
+            <div class="user-info-edit__header">
+              <div class="cancel-editing" id="cancel-edit">
+                <img src="__STATIC__/assets/images/common/back.png" class="icon" alt="">
+                取消编辑
               </div>
             </div>
-            <div class="col-9">
-              <div class="user-info-edit" id="user-info">
-                <div class="user-info-edit__header">
-                  <div class="cancel-editing" id="cancel-edit">
-                    <img src="__STATIC__/assets/images/common/back.png" class="icon" alt="">
-                    取消编辑
+            <div class="user-info-edit__body">
+              <form>
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-2 col-form-label col-form-label-sm u-text-right">
+                    账号昵称:
+                  </label>
+                  <div class="col-6">
+                    <input type="text" class="form-control form-control-sm" id="staticEmail">
                   </div>
                 </div>
-                <div class="user-info-edit__body">
-                  <form>
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-2 col-form-label col-form-label-sm u-text-right">
-                        账号昵称:
-                      </label>
-                      <div class="col-6">
-                        <input type="text" class="form-control form-control-sm" id="staticEmail">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-2 col-form-label col-form-label-sm u-text-right">
-                        出生年月:
-                      </label>
-                      <div class="col-6">
-                        <div class="row">
-                          <div class="col-4">
-                            <div class="select-box">
-                              <select class="selectpicker form-control form-control-sm select-major" data-style="my-select" id="year">
-                              </select>
-                              <span class="select-des">年</span>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="select-box">
-                              <select class="selectpicker form-control form-control-sm select-major" data-style="my-select" id="month">
-                              </select>
-                              <span class="select-des">月</span>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="select-box">
-                              <select class="selectpicker form-control form-control-sm select-major" data-style="my-select" id="day">
-                              </select>
-                              <span class="select-des">日</span>
-                            </div>
-                          </div>
+                <div class="form-group row">
+                  <label class="col-2 col-form-label col-form-label-sm u-text-right">
+                    出生年月:
+                  </label>
+                  <div class="col-6">
+                    <div class="row">
+                      <div class="col-4">
+                        <div class="select-box">
+                          <select class="selectpicker form-control form-control-sm select-major" data-style="my-select"
+                            id="year">
+                          </select>
+                          <span class="select-des">年</span>
                         </div>
                       </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="address" class="col-2 col-form-label col-form-label-sm u-text-right">
-                        所在地:
-                      </label>
-                      <div class="col-6">
-                        <input type="password" class="form-control form-control-sm" id="address">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="email" class="col-2 col-form-label col-form-label-sm u-text-right">
-                        邮箱:</label>
-                      <div class="col-6">
-                        <input type="password" class="form-control form-control-sm" id="email">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="email" class="col-2 col-form-label col-form-label-sm u-text-right"></label>
-                      <div class="col-6">
-                        <div class="user-info-edit__footer">
-                          <a class="c-btn c-btn__primary c-btn--small" href="javascript:;">
-                            确认编辑
-                          </a>
-                          <a class="c-btn c-btn__success c-btn--small" href="javascript:;">
-                            绑定编辑
-                          </a>
+                      <div class="col-4">
+                        <div class="select-box">
+                          <select class="selectpicker form-control form-control-sm select-major" data-style="my-select"
+                            id="month">
+                          </select>
+                          <span class="select-des">月</span>
                         </div>
                       </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div class="tabs user-main" id="user-main">
-                <ul class="nav tabs-list">
-                  <li class="nav-item tab-item active">
-                    订单中心
-                  </li>
-                  <li class="nav-item tab-item">
-                    我的服务
-                  </li>
-                </ul>
-                <div class="tabs-content">
-                  <div class="tab-pane active">
-                    <div class="user-order tabs card-default">
-                      <ul class="tabs-list">
-                        <li class="tab-item active">
-                          我的订单
-                        </li>
-                        <li class="tab-item">
-                          未支付的订单
-                        </li>
-                        <li class="tab-item">
-                          待收货的订单
-                        </li>
-                        <li class="tab-item">
-                          已完成的订单
-                        </li>
-                        <li class="tab-item">
-                          退款订单
-                        </li>
-                        <li class="tab-item">
-                          拍卖订单
-                        </li>
-                      </ul>
-                      <div class="tabs-content">
-                        {foreach $order as $key=>$order_item}
-                          <div class="tab-pane {$key=='all'?'active':''}">
-                            <div class="order-list">
-                              {notempty name="order_item"}
-                                {foreach $order_item as $item}
-                                  <div class="order-item">
-                                      <div class="order-header">
-                                        <!-- {php} print_r($item) {/php} -->
-                                        <div class="order-info">
-                                          <div class="order-info__left">订单号：</div>
-                                          <div class="order-info__right">{$item.master_order_sn}</div>
-                                        </div>
-                                        <div class="order-info">
-                                          <div class="order-info__left">订单积分：</div>
-                                          <div class="order-info__right">{$item.integral}积分</div>
-                                        </div>
-                                        <div class="order-info">
-                                          <div class="order-info__left">价格：</div>
-                                          <div class="order-info__right">{$item.order_prices}</div>
-                                        </div>
-                                        
-                                      </div>
-                                      <div class="order-body">
-                                        <div class="order-body__left">
-                                          {foreach $item.list as $vo}
-                                          <div>
-                                          <div class="car-pic" style="background-image: url({$vo.goods_img});background-position: center;background-size:contain"></div>
-                                          <div class="car-info" style="vertical-align: top;margin-top: 30px"> 
-                                            <div class="order-info">
-                                              <div class="order-info__left">{$vo.goods_name}</div>
-                                            </div>
-                                            {if $vo.spec}
-                                            <div class="car-attr">
-                                              <div class="car-attr__top">
-                                                <div class="attr-item attr-item__sm">{$vo.spec}</div>
-                                              </div>
-                                            </div>
-                                            {/if}
-                                          </div>
-                                          </div>
-                                          {/foreach}
-                                        </div>
-                                        <div class="order-body__center">
-                                          <div class="other-info">
-                                            <div class="other-info">
-                                              <div class="other-info-row">
-                                                <div class="row__left">收货地址：</div>
-                                                <div class="row__right">{$item.province} {$item.city} {$item.address}</div>
-                                              </div>
-                                              <div class="other-info-row">
-                                                <div class="row__left">收货人：</div>
-                                                <div class="row__right">{$item.consignee}</div>
-                                              </div>
-                                              <!-- <div class="other-info-row">
-                                                <div class="row__left">经销商：</div>
-                                                <div class="row__right">北京澳宝世达汽车销售有限公司</div>
-                                              </div> -->
-                                            </div>
-                                          </div>
-                                        </div>
-                                        
-                                        <div class="order-body__right">
-                                          <!-- 待支付 -->
-                                          {if $item.pay_status===0 }
-                                            {if $item.cancle_order}
-                                              <a class="c-btn c-btn__primary ml-2" onclick="delOrder(this, '{$item.order_id}')" href="javascript:void(0)">
-                                                删除订单
-                                              </a>
-                                            {else /}
-                                              <a class="c-btn c-btn__primary" onclick="payOrder('{$item.master_order_sn}')" href="javascript:void(0)">
-                                                立即支付
-                                              </a>
-                                              <a class="c-btn c-btn__primary ml-2" onclick="cancelOrder('{$item.order_id}', '{$item.master_order_sn}', this)" href="javascript:void(0)">
-                                                取消订单
-                                              </a>
-                                            {/if}
-                                          <!-- 已支付 -->
-                                          {elseif $item.pay_status==1 && !$item.shipping_status /}
-                                            <span>待发货</span>
-                                          <!-- 已发货 -->
-                                          {elseif $item.pay_status==1 && $item.shipping_status==1 && $vo.is_shouhuo==0 /}
-                                            <a class="c-btn c-btn__primary" href="javascript:void(0)">
-                                              确认收货
-                                            </a>
-                                            <a class="c-btn c-btn__primary" href="javascript:void(0)">
-                                              查看物流
-                                            </a>
-                                          {elseif $item.pay_status==1 && $item.shipping_status==1 && $vo.is_shouhuo==1 /}
-                                            <a class="c-btn c-btn__primary" href="javascript:void(0)">
-                                              去评价
-                                            </a>
-                                            <a class="c-btn c-btn__primary" href="javascript:void(0)">
-                                              申请退货
-                                            </a>
-                                          <!-- 已退款 -->
-                                          {elseif $item.pay_status=='2' /}
-                                            <span>
-                                              已取消
-                                            </span>
-                                          {elseif $item.pay_status=='3' /}
-                                            <span>
-                                              已退款
-                                            </span>
-                                          {elseif $item.pay_status=='4' /}
-                                            <span>
-                                              拒绝退款
-                                            </span>
-                                          {/if}
-                                        </div>
-                                      </div>
-                                    </div>
-                                {/foreach}
-                              {/notempty}
-                              {empty name="order_item"}
-                                <div class="text-center pt-5 pb-5" >暂无订单</div>
-                              {/empty}
-                            </div>
-                          </div>
-                        {/foreach}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane">
-                    <div class="user-service tabs card-default">
-                      <ul class="tabs-list">
-                        <li class="tab-item active">
-                          赚取积分
-                        </li>
-                        <li class="tab-item">
-                          收藏
-                        </li>
-                        <li class="tab-item">
-                          签到
-                        </li>
-                        <li class="tab-item">
-                          积分明细
-                        </li>
-                        <!-- <li class="tab-item">
-                          预约信息
-                        </li> -->
-                      </ul>
-                      <div class="tabs-content">
-                        <div class="tab-pane active">
-                          <div class="integral-des">
-                            <article class="des-chapter">
-                              <h6 class="des-title">积分说明：</h6>
-                              <p class="des-content">{$service.pointDesc.title}</p>
-                            </article>
-                            <article class="des-chapter">
-                              <h6 class="des-title">积分途径：</h6>
-                              <p class="des-content">{$service.pointDesc.content}</p>
-                            </article>
-                          </div>
-                        </div>
-                        <div class="tab-pane">
-                          <div class="collection">
-                            <div class="product-card-list row">
-                              {foreach $service.collection as $vo}
-                                <div class="col col-4">
-                                    <div class="product-card collect">
-                                      <div class="product-card-img">
-                                        <a href="#"><img src="{$vo.original_img}" alt=""></a>
-                                      </div>
-                                      <div class="product-card-content">
-                                        <h2 class="product-card-title">
-                                          {$vo.goods_name}
-                                          <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
-                                        </h2>
-                                        <div class="product-card-btm clearfix">
-                                          <div class="collection btn-collection float-left active logined" data-type="{$vo.exchange_integral}" data-id="{$vo.goods_id}">
-                                            <span class="icon float-left"></span>
-                                            <label>已收藏</label>
-                                          </div>
-                                          <span class="product-card-tip float-right">{$vo.price}元 </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                              {/foreach}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="tab-pane">
-                          <table class="table table-hover text-center user-record-table">
-                            <thead>
-                              <tr>
-                                <th scope="col" class="w-190">签到时间</th>
-                                <th scope="col" class="w-190">积分</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {foreach $service.integralLog as $row}
-                                {if $row.type_name=='签到赠送'}
-                                <tr>
-                                  <td>
-                                  {php}
-                                    echo date('Y-m-d H:i', (int) $row['create_time']);
-                                  {/php}
-                                  </td>
-                                  <td class="td-bling">+{$row.integral}</td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                                {/if}
-                              {/foreach}
-                              
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="tab-pane">
-                          <table class="table table-hover text-center user-record-table">
-                            <thead>
-                              <tr>
-                                <th scope="col" class="w-190">时间</th>
-                                <th scope="col" class="w-190">积分记录</th>
-                                <th scope="col">途径</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                                {foreach $service.integralLog as $row}
-                                <tr>
-                                  <td>
-                                    {php}
-                                      echo date('Y-m-d H:i', (int) $row['create_time']);
-                                    {/php}
-                                    </td>
-                                  <td class="td-bling">+{$row.integral}</td>
-                                  <td>{$row.type_name}</td>
-                                </tr>
-                              {/foreach}
-                            </tbody>
-                          </table>
+                      <div class="col-4">
+                        <div class="select-box">
+                          <select class="selectpicker form-control form-control-sm select-major" data-style="my-select"
+                            id="day">
+                          </select>
+                          <span class="select-des">日</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div class="form-group row">
+                  <label for="address" class="col-2 col-form-label col-form-label-sm u-text-right">
+                    所在地:
+                  </label>
+                  <div class="col-6">
+                    <input type="password" class="form-control form-control-sm" id="address">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="email" class="col-2 col-form-label col-form-label-sm u-text-right">
+                    邮箱:</label>
+                  <div class="col-6">
+                    <input type="password" class="form-control form-control-sm" id="email">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="email" class="col-2 col-form-label col-form-label-sm u-text-right"></label>
+                  <div class="col-6">
+                    <div class="user-info-edit__footer">
+                      <a class="c-btn c-btn__primary c-btn--small" href="javascript:;">
+                        确认编辑
+                      </a>
+                      <a class="c-btn c-btn__success c-btn--small" href="javascript:;">
+                        绑定编辑
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-        </section>
+          <div class="tabs user-main" id="user-main">
+            <ul class="nav tabs-list">
+              <li class="nav-item tab-item active">
+                订单中心
+              </li>
+              <li class="nav-item tab-item">
+                我的服务
+              </li>
+            </ul>
+            <div class="tabs-content">
+              <div class="tab-pane active">
+                <div class="user-order tabs card-default">
+                  <ul class="tabs-list">
+                    <li class="tab-item active">
+                      我的订单
+                    </li>
+                    <li class="tab-item">
+                      未支付的订单
+                    </li>
+                    <li class="tab-item">
+                      待收货的订单
+                    </li>
+                    <li class="tab-item">
+                      已完成的订单
+                    </li>
+                    <li class="tab-item">
+                      退款订单
+                    </li>
+                    <li class="tab-item">
+                      拍卖订单
+                    </li>
+                  </ul>
+                  <div class="tabs-content">
+                    {foreach $order as $key=>$order_item}
+                    <div class="tab-pane {$key=='all'?'active':''}">
+                      <div class="order-list">
+                        {notempty name="order_item"}
+                        {foreach $order_item as $item}
+                        <div class="order-item">
+                          <div class="order-header">
+                            <!-- {php} print_r($item) {/php} -->
+                            <div class="order-info">
+                              <div class="order-info__left">订单号：</div>
+                              <div class="order-info__right">{$item.master_order_sn}</div>
+                            </div>
+                            <div class="order-info">
+                              <div class="order-info__left">订单积分：</div>
+                              <div class="order-info__right">{$item.integral}积分</div>
+                            </div>
+                            <div class="order-info">
+                              <div class="order-info__left">价格：</div>
+                              <div class="order-info__right">{$item.order_prices}</div>
+                            </div>
 
-      </div>
+                          </div>
+                          <div class="order-body">
+                            {foreach $item.list as $vo}
+                            <div class="order-body__left">
 
-    </main>
-    <div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog sign" role="document">
-          <div class="modal-content">
-            <div class="modal-header sign-header">
-              <span>支付订单</span>
-              <button type="button" class="close">
-              </button>
-              <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
-                <img src="__STATIC__/assets/images/common/icon-close.png" width="" alt="">
-      
+                              <div>
+                                <div class="car-pic" style="background-image: url({$vo.goods_img});background-position: center;background-size:contain"></div>
+                                <div class="car-info" style="vertical-align: top;margin-top: 30px">
+                                  <div class="order-info">
+                                    <div class="order-info__left">车型:{$vo.goods_name}</div>
+                                  </div>
+                                  {if $vo.spec}
+                                  {php}
+                                  $arrspec = explode('_', $vo['spec']);
+                                  $specWords = [];
+                                  if(is_array($arrspec)){
+                                  foreach($arrspec as $key => $spec) {
+                                  array_push($specWords, explode('：', $spec)[1]);
+                                  }
+                                  }
+                                  {/php}
+                                  <div class="car-attr">
+                                    <div class="car-attr__top">
+                                      <div class="attr-item attr-item__sm" style="width:auto;padding:0 5px;">{$specWords[0]}</div>
+                                      <div class="attr-item attr-item__sm" style="width:auto;padding:0 5px;">{$specWords[1]}</div>
+                                    </div>
+                                    <div class="attr-item attr-item__lg">{$specWords[2]}</div>
+                                  </div>
+                                  {/if}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="order-body__center">
+                              <div class="other-info">
+                                <div class="other-info">
+                                  <div class="other-info-row">
+                                    <div class="row__left">提成城市：</div>
+                                    <div class="row__right">{$specWords[4]}</div>
+                                  </div>
+                                  <div class="other-info-row">
+                                    <div class="row__left">提车人：</div>
+                                    <div class="row__right">{$item.consignee}</div>
+                                  </div>
+                                  <div class="other-info-row">
+                                    <div class="row__left">经销商：</div>
+                                    <div class="row__right">{$specWords[5]}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {/foreach}
+                            <div class="order-body__right">
+                              <!-- 待支付 -->
+                              {if $item.pay_status===0 }
+                              {if $item.cancle_order}
+                              <a class="c-btn c-btn__primary ml-2" onclick="delOrder(this, '{$item.order_id}')" href="javascript:void(0)">
+                                删除订单
+                              </a>
+                              {else /}
+                              <a class="c-btn c-btn__primary" onclick="payOrder('{$item.master_order_sn}')" href="javascript:void(0)">
+                                立即支付
+                              </a>
+                              <a class="c-btn c-btn__primary ml-2" onclick="cancelOrder('{$item.order_id}', '{$item.master_order_sn}', this)"
+                                href="javascript:void(0)">
+                                取消订单
+                              </a>
+                              {/if}
+                              <!-- 已支付 -->
+                              {elseif $item.pay_status==1 && !$item.shipping_status /}
+                              <span>待发货</span>
+                              <!-- 已发货 -->
+                              {elseif $item.pay_status==1 && $item.shipping_status==1 && $vo.is_shouhuo==0 /}
+                              <a class="c-btn c-btn__primary" href="javascript:void(0)">
+                                确认收货
+                              </a>
+                              <a class="c-btn c-btn__primary" href="javascript:void(0)">
+                                查看物流
+                              </a>
+                              {elseif $item.pay_status==1 && $item.shipping_status==1 && $vo.is_shouhuo==1 /}
+                              <a class="c-btn c-btn__primary" href="javascript:void(0)">
+                                去评价
+                              </a>
+                              <a class="c-btn c-btn__primary" href="javascript:void(0)">
+                                申请退货
+                              </a>
+                              <!-- 已退款 -->
+                              {elseif $item.pay_status=='2' /}
+                              <span>
+                                已取消
+                              </span>
+                              {elseif $item.pay_status=='3' /}
+                              <span>
+                                已退款
+                              </span>
+                              {elseif $item.pay_status=='4' /}
+                              <span>
+                                拒绝退款
+                              </span>
+                              {/if}
+                            </div>
+
+                          </div>
+                        </div>
+                        {/foreach}
+                        {/notempty}
+                        {empty name="order_item"}
+                        <div class="text-center pt-5 pb-5">暂无订单</div>
+                        {/empty}
+                      </div>
+                    </div>
+                    {/foreach}
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="modal-body sign-body">
-              <div class="text-center pt-5 pb-5" id="qrcode">
-                加载中...
+              <div class="tab-pane">
+                <div class="user-service tabs card-default">
+                  <ul class="tabs-list">
+                    <li class="tab-item active">
+                      赚取积分
+                    </li>
+                    <li class="tab-item">
+                      收藏
+                    </li>
+                    <li class="tab-item">
+                      签到
+                    </li>
+                    <li class="tab-item">
+                      积分明细
+                    </li>
+                    <!-- <li class="tab-item">
+                          预约信息
+                        </li> -->
+                  </ul>
+                  <div class="tabs-content">
+                    <div class="tab-pane active">
+                      <div class="integral-des">
+                        <article class="des-chapter">
+                          <h6 class="des-title">积分说明：</h6>
+                          <p class="des-content">{$service.pointDesc.title}</p>
+                        </article>
+                        <article class="des-chapter">
+                          <h6 class="des-title">积分途径：</h6>
+                          <p class="des-content">{$service.pointDesc.content}</p>
+                        </article>
+                      </div>
+                    </div>
+                    <div class="tab-pane">
+                      <div class="collection">
+                        <div class="product-card-list row">
+                          {foreach $service.collection as $vo}
+                          <div class="col col-4">
+                            <div class="product-card collect">
+                              <div class="product-card-img">
+                                <a href="#"><img src="{$vo.original_img}" alt=""></a>
+                              </div>
+                              <div class="product-card-content">
+                                <h2 class="product-card-title">
+                                  {$vo.goods_name}
+                                  <span class="float-right">已订购：<strong class="color-primary">69213</strong>台</span>
+                                </h2>
+                                <div class="product-card-btm clearfix">
+                                  <div class="collection btn-collection float-left active logined" data-type="{$vo.exchange_integral}"
+                                    data-id="{$vo.goods_id}">
+                                    <span class="icon float-left"></span>
+                                    <label>已收藏</label>
+                                  </div>
+                                  <span class="product-card-tip float-right">{$vo.price}元 </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/foreach}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane">
+                      <table class="table table-hover text-center user-record-table">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="w-190">签到时间</th>
+                            <th scope="col" class="w-190">积分</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {foreach $service.integralLog as $row}
+                          {if $row.type_name=='签到赠送'}
+                          <tr>
+                            <td>
+                              {php}
+                              echo date('Y-m-d H:i', (int) $row['create_time']);
+                              {/php}
+                            </td>
+                            <td class="td-bling">+{$row.integral}</td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          {/if}
+                          {/foreach}
+
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="tab-pane">
+                      <table class="table table-hover text-center user-record-table">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="w-190">时间</th>
+                            <th scope="col" class="w-190">积分记录</th>
+                            <th scope="col">途径</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {foreach $service.integralLog as $row}
+                          <tr>
+                            <td>
+                              {php}
+                              echo date('Y-m-d H:i', (int) $row['create_time']);
+                              {/php}
+                            </td>
+                            <td class="td-bling">+{$row.integral}</td>
+                            <td>{$row.type_name}</td>
+                          </tr>
+                          {/foreach}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    {php} $bundle='user-center' {/php}
-    {include file="public/test-drive" /}
-    {include file="public/footer" /}
-    <script>
-      function checkin() {
-        return Apitool.usercenter.checkin()
-      }
+    </section>
 
-      $(() => {
-        $('#checkin').click(function() {
-          Apitool.usercenter.checkin().then(function(){
-            $('#checkin span').text('已签到')
-          })
-        })
+  </div>
+
+</main>
+<div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog sign" role="document">
+    <div class="modal-content">
+      <div class="modal-header sign-header">
+        <span>支付订单</span>
+        <button type="button" class="close">
+        </button>
+        <div class="close-wrapper" data-dismiss="modal" aria-label="Close">
+          <img src="__STATIC__/assets/images/common/icon-close.png" width="" alt="">
+
+        </div>
+      </div>
+      <div class="modal-body sign-body">
+        <div class="text-center pt-5 pb-5" id="qrcode">
+          加载中...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="public/test-drive" /}
+{/block}
+{block name="foot_script"}
+<script src="__STATIC__/scripts/user-center.bundle.js"></script>
+<script>
+  function checkin() {
+    return Apitool.usercenter.checkin()
+  }
+
+  $(function() {
+    $('#checkin').click(function () {
+      Apitool.usercenter.checkin().then(function () {
+        $('#checkin span').text('已签到')
       })
+    })
+  })
 
-      var item_id = null
-      function payOrder(sn) {
-        $('#qrcodeModal').modal({
-          show: true
-        });
-        $('#qrcode').html('加载中...')
-        Apitool.order.payOrder(sn, 4).then(function (res) {
-          $('#qrcode').html(res)
-          $('#qrcode').append('<p>扫一扫,微信支付</p>')
-        })
-      }
-      // 取消订单
-      function cancelOrder(id, sn, e) {
-        $(e).text('取消中...')
-        Apitool.order.cancelOrder(id, sn).then(function (res) {
-          alert(res.message)
-          if(res.code==='0000'){
-            location.reload()
-          }
-        })
-      }
+  var item_id = null
 
-      // 积分支付
-      function integralPay(sn) {
-        Apitool.order.integralPay(sn).then(function (res) {
-          alert(res.message)
-        })
+  function payOrder(sn) {
+    $('#qrcodeModal').modal({
+      show: true
+    });
+    $('#qrcode').html('加载中...')
+    Apitool.order.payOrder(sn, 4).then(function (res) {
+      $('#qrcode').html(res)
+      $('#qrcode').append('<p>扫一扫,微信支付</p>')
+    })
+  }
+  // 取消订单
+  function cancelOrder(id, sn, e) {
+    $(e).text('取消中...')
+    Apitool.order.cancelOrder(id, sn).then(function (res) {
+      alert(res.message)
+      if (res.code === '0000') {
+        location.reload()
       }
-      
-      // 删除订单
-      function delOrder(e, id) {
-        $(e).text('删除中...')
-        Apitool.order.deleteOrder(id).then(function (res) {
-          if(res.code==='0000'){
-            $(e).closest('.order-item').remove()
-          } else {
-            alert(res.message)
-          }
-        }).catch(function(){
-          $(e).text('删除订单')
-        })
-      }
+    })
+  }
 
-    </script>
+  // 积分支付
+  function integralPay(sn) {
+    Apitool.order.integralPay(sn).then(function (res) {
+      alert(res.message)
+    })
+  }
+
+  // 删除订单
+  function delOrder(e, id) {
+    $(e).text('删除中...')
+    Apitool.order.deleteOrder(id).then(function (res) {
+      if (res.code === '0000') {
+        $(e).closest('.order-item').remove()
+      } else {
+        alert(res.message)
+      }
+    }).catch(function () {
+      $(e).text('删除订单')
+    })
+  }
+</script>
+{/block}

@@ -1,3 +1,82 @@
-{include file="public/header" /}
-{__CONTENT__}
-{include file="public/footer" /}
+<!DOCTYPE html>
+<html class="no-js" lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="utf-8" />
+  <title>{block name="title"}首页{/block}-众泰商城</title>
+  <link rel="stylesheet" property="stylesheet" href="__STATIC__/styles/main.css?v=20190112" type="text/css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <script>
+    document.querySelector('html').classList.remove('no-js');
+  </script>
+  <script src="__STATIC__/scripts/vendor.js?v=20190112"></script>
+  <style>
+    #addressDefault {
+      display: none;
+      border: 1px solid #dedede;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+    .white-card {
+      background: #fff;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body class="">
+  <header class="o-wrapper c-header">
+  <div class="container clearfix">
+    <a class="navbar-brand" href="../index/home">
+      众泰汽车
+    </a>
+    <ul class="navbar-nav float-right">
+      <li><a class="nav-item {eq name=':request()->baseurl()' value='/homeapi/index/home'}active{/eq}"
+            href="../index/home">首页</a></li>
+      <li><a class="nav-item {eq name=':request()->baseurl()' value='/homeapi/index/brand_models'}active{/eq}"
+            href="../index/brand_models">品牌车型</a></li>
+      <li><a class="nav-item {eq name=':request()->baseurl()' value='/homeapi/index/integral_mall'}active{/eq}" href="../index/integral_mall">积分商城</a></li>
+      <li><a class="nav-item {eq name=':request()->baseurl()' value='/homeapi/goods/parts'}active{/eq}" href="../goods/parts?cat_id=&class_id=&page=1">精品配件</a></li>
+      <li><a class="nav-item {eq name=':request()->baseurl()' value='/homeapi/index/user_center'}active{/eq}"
+        {if !$is_login }
+          data-toggle="modal" data-target="#loginModal" 
+          href="javascript:void(0)" 
+        {else/}
+          href="../index/user_center"
+        {/if}
+        >个人中心</a></li>
+      <li>
+        {if !$is_login }
+        <div class="btn-combine"><a href="javascript:void(0)" data-toggle="modal" data-target="#loginModal" id="login">登录</a><a href="javascript:void(0)" id="register" data-toggle="modal" data-target="#loginModal"  class="color-dark"><span>注册</span></a></div>
+        {else/}
+        <a class="nav-item" id="logout" href="javascript:void(0)">退出账号</a>
+        {/if}
+      </li>
+    </ul>
+  </div>
+  {block name="search"}
+    <div class="search-box">
+      <div class="search-box__inner">
+        <input type="text" id="search" value="{$Think.get.title}" placeholder="请输入关键词，例如：众泰T500">
+        <button onclick="location.href='../goods/searchList?title=' + document.getElementById('search').value ">立即搜索</button>
+      </div>
+    </div>
+  {/block}
+</header>
+
+  {include file="public/header-nav" hasBanner="[hasBanner]" activeNav="[activeNav]" /}
+  {block name="main"}{/block}
+  {include file="public/footer" /}
+
+  {block name="side_btns"}
+  {include file="public/side_btns" hasBanner="[hasBanner]" activeNav="[activeNav]" /}
+  {/block}
+
+  {block name="foot_script"}{/block}
+</body>
+
+</html>

@@ -1,5 +1,7 @@
-{include file="public/header" title="特价拍卖" hasBanner="false" activeNav="home" /}
-
+{extend name="layout/base" /}
+{block name="title"}特价拍卖{/block}
+{block name="search"}{/block}
+{block name="main"}
 <main class="o-wrapper">
   <div class="container">
     <section class="special-auction-detail">
@@ -201,5 +203,4 @@
   </div>
 
 </main>
-
-{include file="public/footer" /}
+{/block}

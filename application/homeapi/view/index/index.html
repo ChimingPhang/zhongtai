@@ -1,5 +1,7 @@
-{include file="public/header" title="首页" hasBanner="true" activeNav="home" /}
+{extend name="layout/base" /}
+{block name="title"}商城首页{/block}
 
+{block name="main"}
 
 <main class="o-wrapper main-wrapper hasSearch">
   <!--顶部广告-->
@@ -17,14 +19,14 @@
       <div class="section-title clearfix">
         <h1>热卖车型<span class="section-subtitle">包购置税 | 送一年保险</span></h1>
 
-        <a href="../index/brand_models.html?sales_sum=desc" class="float-right">查看详情》</a>
+        <a href="../index/brand_models?sales_sum=desc" class="float-right">查看详情》</a>
       </div>
       <div class="product-card-list row">
         {foreach name="hot_car" item="data"}
         <div class="col col-4">
           <div class="product-card">
             <div class="product-card-img">
-              <a href="../index/brand_models_detail.html?goods_id={$data['goods_id']}"><img src="{$data['original_img']}" alt=""></a>
+              <a href="../index/brand_models_detail?goods_id={$data['goods_id']}"><img src="{$data['original_img']}" alt=""></a>
             </div>
             <div class="product-card-content">
               <h2 class="product-card-title">
@@ -37,7 +39,7 @@
                   <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
                   <span>价格：<strong>{$data['deposit_price']}</strong>元</span>
                 </div>
-                <a class="product-card-btn c-btn c-btn__primary float-right" href="../index/brand_models_detail.html?goods_id={$data['goods_id']}">立即购买</a>
+                <a class="product-card-btn c-btn c-btn__primary float-right" href="../index/brand_models_detail?goods_id={$data['goods_id']}">立即购买</a>
               </div>
             </div>
           </div>
@@ -45,14 +47,9 @@
         {/foreach}
       </div>
     </section>
-
     {include file="public/footer_ad" /}
 
     {include file="public/footer-feature" /}
-
   </div>
-
 </main>
-
-{include file="public/side_btns" /}
-{include file="public/footer" /}
+{/block}

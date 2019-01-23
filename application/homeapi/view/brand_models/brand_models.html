@@ -1,5 +1,6 @@
-{include file="public/header" title="首页" bundle="home" hasBanner="true" activeNav="brand" /}
-
+{extend name="layout/base" /}
+{block name="title"}品牌车型{/block}
+{block name="main"}
 <main class="o-wrapper main-wrapper hasSearch">
   <!--顶部广告-->
   {include file="public/top_ads" /}
@@ -20,7 +21,7 @@
         <div class="col col-4">
           <div class="product-card">
             <div class="product-card-img">
-              <a href="__URL__/brand_models_detail.html?goods_id={$data.goods_id}"><img src={$data['original_img']} alt=""></a>
+              <a href="__URL__/brand_models_detail?goods_id={$data.goods_id}"><img src={$data['original_img']} alt=""></a>
             </div>
             <div class="product-card-content">
               <h2 class="product-card-title">
@@ -33,7 +34,7 @@
                   <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
                   <span>价格：<strong>{$data.deposit_price}</strong>元</span>
                 </div>
-                <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail.html?goods_id={$data.goods_id}">立即购买</a>
+                <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail?goods_id={$data.goods_id}">立即购买</a>
                 <div class="collection btn-collection float-right {if $is_login}logined{/if}  {if $data.is_collect} active {/if}" {if !$is_login} data-toggle="modal" data-target="#loginModal" {/if} data-type="{$data.exchange_integral}" data-id="{$data.goods_id}">
                   <span class="icon float-left"></span>
                   <label>{if $data.is_collect}已{/if}收藏</label>
@@ -45,54 +46,57 @@
         {/foreach}
       </div>
       {include file="public/pagination" total="$total" size="9" /}
+
+      {empty name="car_list"}
+        {include file="public/empty"/}    
+      {/empty}
     </section>
 
   </div>
 
 </main>
-{include file="public/side_btns" /}
-
+{/block}
+{block name="foot_script"}
 <script>
-  var api = '../goods/car'
-  function getList(page) {
-    var newUrl = api + (location.search ? location.search + '&':'?') + 'page=' + page;
-    console.log(newUrl)
-    $('.loader').show()
-    $.ajax(newUrl, {
-      type: 'POST',
-      success: function(data) {
-        var res = JSON.parse(data)
-        var arr = res.data.list
-        var html = ''
-        for(var x in arr) {
-          var element = arr[x]
-          html +=  '<div class="col col-4">\n' +
-            '            <div class="product-card">\n' +
-            '              <div class="product-card-img">\n' +
-            '                <a href="__URL__/brand_models_detail.html?goods_id='+element.goods_id+'"><img src="'+element['original_img']+'" alt=""></a>\n' +
-            '              </div>\n' +
-            '              <div class="product-card-content">\n' +
-            '                <h2 class="product-card-title">\n' +
-            '                    '+element['goods_name']+'\n' +
-            '                  <span class="float-right">已订购:<strong class="color-primary">'+element['sales_sum']+'</strong>台</span>\n' +
-            '                </h2>\n' +
-            '                <div class="product-card-intro"><strong>特点：</strong>'+element['goods_remark']+'</div>\n' +
-            '                <div class="product-card-btm clearfix">\n' +
-            '                  <div class="float-left product-card-price">\n' +
-            '                    <img src="__STATIC__/assets/images/common/icon-price.png" alt="">\n' +
-            '                    <span>价格：<strong>'+element['deposit_price']+'</strong>元</span>\n' +
-            '                  </div>\n' +
-            '                  <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail.html?goods_id='+element['goods_id']+'">立即购买</a>\n' +
-            '                </div>\n' +
-            '              </div>\n' +
-            '            </div>\n' +
-            '          </div>'
+    var api = '../goods/car'
+    function getList(page) {
+      var newUrl = api + (location.search ? location.search + '&':'?') + 'page=' + page;
+      console.log(newUrl)
+      $('.loader').show()
+      $.ajax(newUrl, {
+        type: 'POST',
+        success: function(data) {
+          var res = JSON.parse(data)
+          var arr = res.data.list
+          var html = ''
+          for(var x in arr) {
+            var element = arr[x]
+            html +=  '<div class="col col-4">\n' +
+              '            <div class="product-card">\n' +
+              '              <div class="product-card-img">\n' +
+              '                <a href="__URL__/brand_models_detail?goods_id='+element.goods_id+'"><img src="'+element['original_img']+'" alt=""></a>\n' +
+              '              </div>\n' +
+              '              <div class="product-card-content">\n' +
+              '                <h2 class="product-card-title">\n' +
+              '                    '+element['goods_name']+'\n' +
+              '                  <span class="float-right">已订购:<strong class="color-primary">'+element['sales_sum']+'</strong>台</span>\n' +
+              '                </h2>\n' +
+              '                <div class="product-card-intro"><strong>特点：</strong>'+element['goods_remark']+'</div>\n' +
+              '                <div class="product-card-btm clearfix">\n' +
+              '                  <div class="float-left product-card-price">\n' +
+              '                    <img src="__STATIC__/assets/images/common/icon-price.png" alt="">\n' +
+              '                    <span>价格：<strong>'+element['deposit_price']+'</strong>元</span>\n' +
+              '                  </div>\n' +
+              '                  <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail?goods_id='+element['goods_id']+'">立即购买</a>\n' +
+              '                </div>\n' +
+              '              </div>\n' +
+              '            </div>\n' +
+              '          </div>'
+          }
+          $('.loader').hide();
+          $('.product-card-list').html(html);
         }
-        $('.loader').hide();
-        $('.product-card-list').html(html);
-      }
-    })
-  }
-</script>
-
-{include file="public/footer" /}
+      })
+    }
+  </script>
+{/block}

@@ -13,7 +13,7 @@
       <label>{$data['name']}:</label>
       <ul class="filter" id="type-filter">
         {foreach $data['list'] as $list}
-        <li class="{$Think.get.cat_id == $list['id'] ? 'active' : ''}"><a href="__URL__/parts.html?cat_id={$list['id']}">{$list['name']}</a></li>
+        <li class="{$Think.get.cat_id == $list['id'] ? 'active' : ''}"><a href="__URL__/parts?cat_id={$list['id']}">{$list['name']}</a></li>
         {/foreach}
       </ul>
     </div>

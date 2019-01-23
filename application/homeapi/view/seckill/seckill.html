@@ -1,5 +1,6 @@
-{include file="public/header" title="一元秒杀" bundle="home" hasBanner="true" activeNav="home" /}
-
+{extend name="layout/base" /}
+{block name="title"}一元秒杀{/block}
+{block name="main"}
 
     <main class="o-wrapper main-wrapper hasSearch">
       <!--顶部广告-->
@@ -33,7 +34,7 @@
             <div class="col col-4">
               <div class="product-card">
                 <div class="product-card-img">
-                  <a href="../seckill/seckill_detail.html?seckill_id={$data.id}"><img src={$data['original_img']} alt=""></a>
+                  <a href="../seckill/seckill_detail?seckill_id={$data.id}"><img src={$data['original_img']} alt=""></a>
                 </div>
                 <div class="product-card-content">
                   <h2 class="product-card-title">
@@ -46,14 +47,19 @@
                       <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
                       <span>价格：<strong>{$data.price}</strong>元</span>
                     </div>
-                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../seckill/seckill_detail.html?seckill_id={$data.id}">立即购买</a>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../seckill/seckill_detail?seckill_id={$data.id}">立即购买</a>
                   </div>
                 </div>
               </div>
             </div>
             {/foreach}
           </div>
+
           {include file="public/pagination" total="$total" size="9" /}
+
+          {empty name="car_list"}
+            {include file="public/empty"/}    
+          {/empty}
         </section>
 
         {include file="public/footer_ad" /}
@@ -64,5 +70,4 @@
 
 </main>
 
-{include file="public/side_btns" /}
-{include file="public/footer" /}
+{/block}

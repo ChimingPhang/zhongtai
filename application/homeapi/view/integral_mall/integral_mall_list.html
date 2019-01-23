@@ -1,4 +1,6 @@
-{include file="public/header" title="积分兑换" bundle="home" hasBanner="true" activeNav="home" /}
+{extend name="layout/base" /}
+{block name="title"}积分兑换{/block}
+{block name="main"}
     <main class="o-wrapper main-wrapper hasSearch">
       <!--顶部广告-->
       {include file="public/top_ads" /}
@@ -27,7 +29,7 @@
                 <li {if !$Think.get.sales_sum && !$Think.get.price} class="active" {/if}><a href="__URL__/integral_mall_list.html" >默认</a></li>
                 <li {if $Think.get.sales_sum } class="active" {/if}>
                   <div class="sort-wrapper">
-                    <span class="sort-txt"><a href="__URL__/integral_mall_list.html?sales_sum={$Think.get.sales_sum == 'asc' ? 'desc' : 'asc'}">销量</a></span>
+                    <span class="sort-txt"><a href="__URL__/integral_mall_list?sales_sum={$Think.get.sales_sum == 'asc' ? 'desc' : 'asc'}">销量</a></span>
                     <div class="lamp">
                       <div class="icon-arr icon-arr__up {$Think.get.sales_sum == 'asc' ? 'active' : ''}"></div>
                       <div class="icon-arr icon-arr__down {$Think.get.sales_sum == 'desc' ? 'active' : ''}"" ></div>
@@ -36,7 +38,7 @@
                 </li>
                 <li {if $Think.get.price} class="active" {/if}>
                   <div class="sort-wrapper">
-                    <span class="sort-txt"><a href="__URL__/integral_mall_list.html?price={$Think.get.price == 'asc' ? 'desc' : 'asc'}">价格</a></span>
+                    <span class="sort-txt"><a href="__URL__/integral_mall_list?price={$Think.get.price == 'asc' ? 'desc' : 'asc'}">价格</a></span>
                     <div class="lamp">
                       <div class="icon-arr icon-arr__up {$Think.get.price == 'asc' ? 'active' : ''}"></div>
                       <div class="icon-arr icon-arr__down {$Think.get.price == 'desc' ? 'active' : ''}"" ></div>
@@ -66,7 +68,7 @@
                       <span>积分：<strong>{$gd.integral}</strong>积分</span>
                       <span>剩余：<em>{$gd.store_count}</em></span>
                     </div>
-                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail.html?goods_id={$gd.goods_id}">立即兑换</a>
+                    <a class="product-card-btn c-btn c-btn__primary float-right" href="../integral/integral_mall_detail?goods_id={$gd.goods_id}">立即兑换</a>
                   </div>
                 </div>
               </div>
@@ -74,9 +76,12 @@
             {/foreach}
           </div>
           {include file="public/pagination" total="$total" size="9" /}
+          {empty name="data"}
+            {include file="public/empty"/}    
+          {/empty}
         </section>
 
       </div>
 
     </main>
-    {include file="public/footer" /}
+{/block}

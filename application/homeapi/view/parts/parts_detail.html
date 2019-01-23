@@ -1,4 +1,8 @@
-{include file="public/header" title="首页" bundle="home" hasBanner="false" activeNav="parts" /}
+{extend name="layout/base" /}
+{block name="title"}精品配件{/block}
+{block name="side_btns"}{/block}
+{block name="search"}{/block}
+{block name="main"}
 <main class="o-wrapper main-wrapper">
   <div class="container">
     <section class="parts-buy">
@@ -223,10 +227,12 @@
     </div>
   </div>
 </div>
-{include file="public/footer" /}
+{/block}
 {if $is_login}
 {include file="public/choose-address"}
 {/if}
+
+{block name="foot_script"}
 <script>
     var item_id = null
     var spec_price = {$spec_price_script};
@@ -312,3 +318,4 @@
       
     }
 </script>
+{/block}

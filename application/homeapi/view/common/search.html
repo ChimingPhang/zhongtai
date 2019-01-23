@@ -1,5 +1,6 @@
-{include file="public/header" title="搜索结果" bundle="home" hasBanner="true" /}
-
+{extend name="layout/base" /}
+{block name="title"}搜索结果{/block}
+{block name="main"}
 <main class="o-wrapper main-wrapper">
   <!--顶部广告-->
   {include file="public/top_ads" /}
@@ -46,7 +47,7 @@
           <div class="col col-4">
             <div class="product-card">
               <div class="product-card-img">
-                <a href="../index/brand_models_detail.html?goods_id={$data.goods_id}"><img src="{$data['original_img']}" alt=""></a>
+                <a href="../index/brand_models_detail?goods_id={$data.goods_id}"><img src="{$data['original_img']}" alt=""></a>
               </div>
               <div class="product-card-content">
                 <h2 class="product-card-title">
@@ -58,7 +59,7 @@
                     <img src="__STATIC__/assets/images/common/icon-price.png" alt="">
                     <span>价格：<strong>{$data.price}</strong>元</span>
                   </div>
-                  <a class="product-card-btn c-btn c-btn__primary float-right" href="../index/brand_models_detail.html?goods_id={$data.goods_id}">立即购买</a>
+                  <a class="product-card-btn c-btn c-btn__primary float-right" href="../index/brand_models_detail?goods_id={$data.goods_id}">立即购买</a>
                 </div>
               </div>
             </div>
@@ -77,9 +78,8 @@
   </div>
 
 </main>
-{include file="public/side_btns" /}
-{include file="public/footer" /}
-
+{/block}
+{block name="foot_script"}
 <script>
   var api = '../goods/search_list'
   function getList(page) {
@@ -96,7 +96,7 @@
           html +=  '<div class="col col-4">\n' +
             '            <div class="product-card">\n' +
             '              <div class="product-card-img">\n' +
-            '                <a href="__URL__/brand_models_detail.html?goods_id='+element.goods_id+'"><img src="'+element['original_img']+'" alt=""></a>\n' +
+            '                <a href="__URL__/brand_models_detail?goods_id='+element.goods_id+'"><img src="'+element['original_img']+'" alt=""></a>\n' +
             '              </div>\n' +
             '              <div class="product-card-content">\n' +
             '                <h2 class="product-card-title">\n' +
@@ -108,7 +108,7 @@
             '                    <img src="__STATIC__/assets/images/common/icon-price.png" alt="">\n' +
             '                    <span>价格：<strong>'+element['price']+'</strong>元</span>\n' +
             '                  </div>\n' +
-            '                  <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail.html?goods_id='+element['goods_id']+'">立即购买</a>\n' +
+            '                  <a class="product-card-btn c-btn c-btn__primary float-right" href="__URL__/brand_models_detail?goods_id='+element['goods_id']+'">立即购买</a>\n' +
             '                </div>\n' +
             '              </div>\n' +
             '            </div>\n' +
@@ -120,3 +120,4 @@
     })
   }
 </script>
+{/block}

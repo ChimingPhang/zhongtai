@@ -1,4 +1,8 @@
-{include file="public/header" title="首页" hasBanner="false" activeNav="brand" /}
+{extend name="layout/base" /}
+{block name="title"}{$data['goods_name']}-品牌车型{/block}
+{block name="side_btns"}{/block}
+{block name="search"}{/block}
+{block name="main"}
 <main class="o-wrapper main-wrapper">
   <div class="container">
     <section class="brand-models-buy">
@@ -214,7 +218,8 @@
   </div>
 </div>
 
-{include file="public/footer" /}
+{/block}
+{block name="foot_script"}
 <script>
   var item_id = null
   function commitOrder() {
@@ -351,3 +356,4 @@
       .siblings().removeClass('active')
   })
 </script>
+{/block}

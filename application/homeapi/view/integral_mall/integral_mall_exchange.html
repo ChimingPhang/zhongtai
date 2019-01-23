@@ -1,12 +1,7 @@
-{include file="public/header" title="首页" bundle="brand-models-buy" hasBanner="false" activeNav="integral" /}
-<style>
-  #addressDefault {
-        display: none;
-        border: 1px solid #dedede;
-        margin-bottom: 20px;
-        padding:10px;
-      }
-    </style>
+{extend name="layout/base" /}
+{block name="title"}搜索结果{/block}
+{block name="side_btns"}{/block}
+{block name="main"}
 <main class="o-wrapper main-wrapper">
   <div class="container">
     <section class="integral-mall-exchange">
@@ -156,10 +151,11 @@
   </div>
 </main>
 
-{include file="public/footer" /}
+{/block}
 {if $is_login}
 {include file="public/choose-address"}
 {/if}
+{block name="foot_script"}
 <script>
   var item_id = null
 
@@ -225,3 +221,4 @@
 
   }
 </script>
+{/block}

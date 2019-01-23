@@ -606,6 +606,7 @@ class Index extends Base{
             'mobile',       //手机号
             'pay_points',   //我的积分
             'email',
+            'nickname',
             'birthday',
         ];
         

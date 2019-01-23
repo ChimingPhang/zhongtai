@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>{block name="title"}首页{/block}-众泰商城</title>
-  <link rel="stylesheet" property="stylesheet" href="__STATIC__/styles/main.css?v=20190112" type="text/css">
+  <link rel="stylesheet" property="stylesheet" href="__STATIC__/styles/main.css?v=20190123" type="text/css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -13,7 +13,7 @@
   <script>
     document.querySelector('html').classList.remove('no-js');
   </script>
-  <script src="__STATIC__/scripts/vendor.js?v=20190112"></script>
+  <script src="__STATIC__/scripts/vendor.js?v=20190123"></script>
   <style>
     #addressDefault {
       display: none;
@@ -68,12 +68,12 @@
   {/block}
 </header>
 
-  {include file="public/header-nav" hasBanner="[hasBanner]" activeNav="[activeNav]" /}
+  {include file="public/header-nav" /}
   {block name="main"}{/block}
   {include file="public/footer" /}
 
   {block name="side_btns"}
-  {include file="public/side_btns" hasBanner="[hasBanner]" activeNav="[activeNav]" /}
+  {include file="public/side_btns" /}
   {/block}
 
   {block name="foot_script"}{/block}

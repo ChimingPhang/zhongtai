@@ -1756,6 +1756,7 @@ instance.interceptors.response.use(function (res) {
   return res.data;
 });
 /* harmony default export */ __webpack_exports__["a"] = ({
+  request: instance,
   order: {
     /**
      * @method

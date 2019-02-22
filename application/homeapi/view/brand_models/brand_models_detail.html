@@ -18,7 +18,7 @@
                 <div class="form-item-control">
                   <ul class="product-attr-color">
                     {foreach $data['spec'] as $item}
-                    <li class="attr-color__item" onclick="getCarInfo(this)" data-type="displacement" data-skulevel="1" data-id="{$item.id}" data-skuname="{$item.sku_name}">
+                    <li class="attr-color__item" onclick="getCarInfo(this)" data-noimg="true"  data-type="displacement" data-skulevel="1" data-id="{$item.id}" data-skuname="{$item.sku_name}">
                       <div class="pic-wrapper" style="background:url({$item.sku_img})">
                         <label>
                           <img src="{$item.sku_img}" class="color-pic" alt="">
@@ -39,7 +39,7 @@
                 <div class="form-item-control">
                   <ul class="product-attr-brick" id="sku-displacement" data-next="model">
                     {foreach $data['appearance']['displacement'] as $item}
-                    <li class="attr-brick__item" onclick="getCarInfo(this)" data-type="model"  data-id="{$item.id}" data-skulevel="2" data-skuname="{$item.sku_name}">{$item.sku_name}</li>
+                    <li class="attr-brick__item" onclick="getCarInfo(this)" data-type="model" data-id="{$item.id}" data-skulevel="2" data-skuname="{$item.sku_name}">{$item.sku_name}</li>
                     {/foreach}
                   </ul>
                 </div>
@@ -254,6 +254,7 @@
     var data = {}
     var type = data['type'] = $(e).data('type');
     var next = $('#sku-'+type).data('next');
+    var noimg = $(e).data('noimg')
     data['id'] = $(e).data('id');
     data['goods_id'] = {$data.goods_id};
     if(type=='province'){
@@ -261,7 +262,7 @@
     }
     Apitool.drive.getCarSpec(data).then(function (result) {
       if(result.data instanceof Array) {
-        var dom = renderList(result.data, next)
+        var dom = renderList(result.data, next, noimg ? true : false)
         $('#sku-'+type).html(dom);
       } else {
         $('#sku-'+type).html('<li class="attr-brick__item" >无数据</li>');
@@ -269,11 +270,11 @@
     })
   }
 
-  function renderList(list, type) {
+  function renderList(list, type, noImg) {
     var html = ''
     for(var x in list) {
       var item = list[x]
-      if (item.hasOwnProperty('sku_img') && item['sku_img']!='') { 
+      if (item.hasOwnProperty('sku_img') && item['sku_img']!='' && !noImg) { 
         html += '<li class="attr-color__item" onclick="getCarInfo(this)" data-type="'+type+'" '+ (item.hasOwnProperty('item_id') ? "data-itemid="+item['item_id']:'') +' data-id="'+item.id+'">' +
           '         <div class="pic-wrapper">' +
           '          <label>' +
